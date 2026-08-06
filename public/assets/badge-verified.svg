@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Verified badge placeholder">
+<circle cx="75" cy="75" r="60" fill="#fff" stroke="#0d9488" stroke-width="6"/>
+<path d="M75 45l22 8v18c0 16-11 27-22 32-11-5-22-16-22-32V53z" fill="#e6f4f2" stroke="#0d9488" stroke-width="3"/>
+<path d="M63 76l9 9 16-18" fill="none" stroke="#0d9488" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

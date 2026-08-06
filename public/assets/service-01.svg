@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 440" width="440" height="440" role="img" aria-label="Game Development Services illustration placeholder">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#164a9e"/><stop offset="1" stop-color="#3f8ae0"/></linearGradient>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.06"/></linearGradient>
+</defs>
+<rect width="440" height="440" rx="32" fill="url(#g)"/>
+<circle cx="360" cy="80" r="120" fill="#ffffff" opacity="0.08"/>
+<circle cx="70" cy="380" r="90" fill="#ffffff" opacity="0.06"/>
+<rect x="96" y="92" width="248" height="168" rx="18" fill="url(#s)" stroke="#ffffff" stroke-opacity="0.25"/>
+<rect x="120" y="120" width="120" height="14" rx="7" fill="#ffffff" opacity="0.5"/>
+<rect x="120" y="146" width="184" height="10" rx="5" fill="#ffffff" opacity="0.28"/>
+<rect x="120" y="164" width="150" height="10" rx="5" fill="#ffffff" opacity="0.28"/>
+<rect x="120" y="192" width="92" height="26" rx="13" fill="#f09d4d"/>
+<text x="220" y="315" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="26" fill="#ffffff"><tspan x="220">Game Development</tspan><tspan x="220" dy="30">Services</tspan></text>
+<text x="220" y="406" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="500" font-size="13" fill="#ffffff" opacity="0.55">Image placeholder</text>
+</svg>

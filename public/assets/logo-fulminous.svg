@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="177" height="46" viewBox="0 0 177 46" role="img" aria-label="Fulminous Software logo placeholder">
+  <g fill="#164a9e">
+    <path d="M20 3 L34 12 L34 30 L20 39 L6 30 L6 12 Z" opacity="0.12"/>
+    <path d="M20 8 L20 34 M9 15 L31 27 M31 15 L9 27" stroke="#164a9e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <circle cx="20" cy="21" r="4.4" fill="#164a9e"/>
+  </g>
+  <text x="46" y="21" font-family="Poppins, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.5" fill="#164a9e">FULMINOUS</text>
+  <text x="46" y="37" font-family="Poppins, Arial, sans-serif" font-size="9" font-weight="500" letter-spacing="5.5" fill="#164a9e">SOFTWARE</text>
+</svg>

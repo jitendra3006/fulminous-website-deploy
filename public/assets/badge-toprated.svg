@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Top Rated badge placeholder">
+<circle cx="75" cy="75" r="60" fill="#fff" stroke="#164a9e" stroke-width="6"/>
+<path d="M75 48l7 15 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2z" fill="#dfb300"/>
+<text x="75" y="112" text-anchor="middle" font-family="Poppins,Arial" font-size="11" font-weight="700" letter-spacing="1" fill="#5c5c5c">TOP RATED</text>
+</svg>

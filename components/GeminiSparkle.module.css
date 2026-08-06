@@ -1,0 +1,116 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Color shift strictly bounded between Blue, Purple, and White */
+  animation: geminiBluePurpleWhiteShift 3.6s ease-in-out infinite alternate;
+}
+
+/* 1. Main Center Star */
+.mainStar {
+  position: relative;
+  z-index: 2;
+  display: block;
+  transform-origin: 50% 50%;
+  animation:
+    geminiRotate 6s linear infinite,
+    geminiPulse 2.2s ease-in-out infinite,
+    geminiGlow 2.2s ease-in-out infinite;
+}
+
+/* 2. Top-Right Companion Star */
+.starTwo {
+  position: absolute;
+  width: 44%;
+  height: 44%;
+  top: -12%;
+  right: -12%;
+  z-index: 1;
+  display: block;
+  transform-origin: 50% 50%;
+  animation:
+    geminiRotate 5s linear infinite reverse,
+    geminiTwinkle 1.8s ease-in-out 0.35s infinite;
+}
+
+/* 3. Bottom-Left Accent Star */
+.starThree {
+  position: absolute;
+  width: 36%;
+  height: 36%;
+  bottom: -8%;
+  left: -10%;
+  z-index: 1;
+  display: block;
+  transform-origin: 50% 50%;
+  animation:
+    geminiRotate 4.5s linear infinite,
+    geminiTwinkle 2s ease-in-out 0.7s infinite;
+}
+
+/* Bounded hue-shift strictly between Blue, Purple, and Ice White */
+@keyframes geminiBluePurpleWhiteShift {
+  0% {
+    filter: hue-rotate(-30deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(0deg) brightness(1.15);
+  }
+  100% {
+    filter: hue-rotate(25deg) brightness(1.25);
+  }
+}
+
+/* Continuous rotation */
+@keyframes geminiRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Morphing scale breathing on main star */
+@keyframes geminiPulse {
+  0%, 100% {
+    transform: scale(0.92);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+/* Blue & Purple & White glowing aura */
+@keyframes geminiGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(66, 133, 244, 0.65))
+      drop-shadow(0 0 6px rgba(156, 39, 176, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.85))
+      drop-shadow(0 0 12px rgba(66, 133, 244, 0.6));
+  }
+}
+
+/* Independent twinkling fade & scale for companion stars */
+@keyframes geminiTwinkle {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper,
+  .mainStar,
+  .starTwo,
+  .starThree {
+    animation: none !important;
+  }
+}

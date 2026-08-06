@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="281" height="403" viewBox="0 0 281 403" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Client portrait placeholder">
+<defs><linearGradient id="pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#42598a"/><stop offset="1" stop-color="#243a63"/></linearGradient></defs>
+<rect width="281" height="403" fill="url(#pp)"/>
+<circle cx="140" cy="150" r="55" fill="#ffffff" opacity="0.22"/>
+<path d="M55 340c0-50 40-85 85-85s85 35 85 85z" fill="#ffffff" opacity="0.22"/>
+</svg>

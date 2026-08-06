@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="AWS Certified badge placeholder">
+<circle cx="75" cy="75" r="60" fill="#fff" stroke="#f09d4d" stroke-width="6"/>
+<text x="75" y="72" text-anchor="middle" font-family="Poppins,Arial" font-size="30" font-weight="800" fill="#164a9e">AWS</text>
+<text x="75" y="98" text-anchor="middle" font-family="Poppins,Arial" font-size="12" font-weight="700" letter-spacing="2" fill="#5c5c5c">CERTIFIED</text>
+</svg>

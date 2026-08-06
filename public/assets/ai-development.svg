@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="440" viewBox="0 0 440 440" role="img" aria-label="AI development illustration placeholder">
+  <defs>
+    <linearGradient id="aibg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c56b4"/>
+      <stop offset="1" stop-color="#0d2b60"/>
+    </linearGradient>
+  </defs>
+  <rect width="440" height="440" fill="url(#aibg)"/>
+  <g stroke="#5f8bd6" stroke-width="2" opacity="0.5" fill="none">
+    <path d="M60 120h120v90h90"/>
+    <path d="M380 300H260v-80h-70"/>
+    <circle cx="60" cy="120" r="5" fill="#8fb2e8"/>
+    <circle cx="180" cy="210" r="5" fill="#8fb2e8"/>
+    <circle cx="270" cy="210" r="5" fill="#8fb2e8"/>
+    <circle cx="380" cy="300" r="5" fill="#8fb2e8"/>
+  </g>
+  <path d="M220 150c6 40 34 68 74 74-40 6-68 34-74 74-6-40-34-68-74-74 40-6 68-34 74-74z" fill="#ffffff" opacity="0.92"/>
+  <text x="220" y="380" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff" opacity="0.9">AI</text>
+</svg>

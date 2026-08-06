@@ -1,0 +1,10 @@
+<svg width="180" height="200" viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20 20 H160 V145 L90 185 L20 145 Z" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <path d="M68 0 H112 V32 L90 46 L68 32 Z" fill="#1D68F2"/>
+  <text x="90" y="24" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="900" text-anchor="middle" letter-spacing="1">RF</text>
+  <text x="90" y="72" fill="#FFA500" font-family="sans-serif" font-size="14" text-anchor="middle">★ ★ ★ ★ ★</text>
+  <text x="90" y="96" fill="#1D68F2" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="800" text-anchor="middle">RightFirms</text>
+  <path d="M5 110 H175 L165 124 L175 138 H5 L15 124 Z" fill="#1D68F2"/>
+  <text x="90" y="129" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="800" text-anchor="middle" letter-spacing="0.5">TOP SERVICE PROVIDER</text>
+  <text x="90" y="162" fill="#1D68F2" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="800" text-anchor="middle">2025</text>
+</svg>

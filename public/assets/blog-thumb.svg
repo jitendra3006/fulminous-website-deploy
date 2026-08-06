@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="228" viewBox="0 0 375 228" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Blog article thumbnail placeholder">
+<defs><linearGradient id="bt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8eef8"/><stop offset="1" stop-color="#c9d9f2"/></linearGradient></defs>
+<rect width="375" height="228" fill="url(#bt)"/>
+<circle cx="300" cy="60" r="30" fill="#164a9e" opacity="0.18"/>
+<rect x="40" y="150" width="180" height="12" rx="6" fill="#164a9e" opacity="0.22"/>
+<rect x="40" y="172" width="120" height="12" rx="6" fill="#164a9e" opacity="0.15"/>
+<path d="M40 60h70v50H40z" fill="#164a9e" opacity="0.14"/>
+</svg>
