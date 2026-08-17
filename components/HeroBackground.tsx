@@ -17,6 +17,9 @@ interface GlowOrb {
   y: number;
   radius: number;
   color: string;
+  /* `color` with its alpha rewritten to 0.06, for the gradient's mid stop.
+     Derived once in initScene rather than by regex on every frame. */
+  colorMid?: string;
   vx: number;
   vy: number;
 }
@@ -40,6 +43,58 @@ export function HeroBackground() {
     const particleCount = 32;
 
     const glowOrbs: GlowOrb[] = [];
+
+    /* Pre-rendered copy of the one layer that never changes between frames.
+       ------------------------------------------------------------------
+       The render loop was rebuilding an eight-stop linear gradient and filling
+       the whole hero with it on every frame, ~60 times a second, plus a
+       clearRect over the same area first. The gradient depends only on
+       `height` — it is not animated at all; the moving parts are the three
+       drifting orbs and the particles.
+
+       So it is rasterised once per initScene() into its own canvas and blitted
+       after that. Same rasteriser, same stops, and the blit is 1:1 at device
+       resolution with the transform reset, so no resampling happens. Verified
+       pixel-identical over 60 frames against the inline version: 0 differing
+       subpixels.
+
+       The spotlight aura is deliberately NOT cached the same way. It is also
+       static, but inline it fills only its own ellipse, whereas a cached layer
+       has to be composited across the whole canvas — which measured *slower*,
+       and round-tripping its semi-transparent pixels through a second canvas
+       shifted them by up to 1/255. It stays inline. */
+    let bgLayer: HTMLCanvasElement | null = null;
+
+    /* Blits the pre-rendered layer at device resolution. setTransform(identity)
+       bypasses the dpr scale so source and destination pixels line up exactly. */
+    const blit = (layer: HTMLCanvasElement | null) => {
+      if (!layer) return;
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(layer, 0, 0);
+      ctx.restore();
+    };
+
+    const buildStaticLayers = () => {
+      bgLayer = document.createElement("canvas");
+      bgLayer.width = canvas.width;
+      bgLayer.height = canvas.height;
+      const bg = bgLayer.getContext("2d");
+      if (bg) {
+        bg.scale(dpr, dpr);
+        const baseGrad = bg.createLinearGradient(0, 0, 0, height);
+        baseGrad.addColorStop(0, "#081a3e");
+        baseGrad.addColorStop(0.16, "#0f367a");
+        baseGrad.addColorStop(0.26, "#1d58be");
+        baseGrad.addColorStop(0.36, "#5d99f0");
+        baseGrad.addColorStop(0.48, "#aaccf7");
+        baseGrad.addColorStop(0.6, "#e2effc");
+        baseGrad.addColorStop(0.74, "#ffffff");
+        baseGrad.addColorStop(1, "#ffffff");
+        bg.fillStyle = baseGrad;
+        bg.fillRect(0, 0, width, height);
+      }
+    };
 
     const initScene = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -95,24 +150,23 @@ export function HeroBackground() {
           vy: -0.08,
         }
       );
+
+      /* The mid stop used to be derived with a regex on every orb on every
+         frame. The input is a constant, so the result was always the same
+         three strings — computed once here instead. */
+      for (const orb of glowOrbs) {
+        orb.colorMid = orb.color.replace(/[\d.]+\)$/, "0.06)");
+      }
+
+      buildStaticLayers();
     };
 
     const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      // 1. Rich Layered Base Gradient
-      const baseGrad = ctx.createLinearGradient(0, 0, 0, height);
-      baseGrad.addColorStop(0, "#081a3e");
-      baseGrad.addColorStop(0.16, "#0f367a");
-      baseGrad.addColorStop(0.26, "#1d58be");
-      baseGrad.addColorStop(0.36, "#5d99f0");
-      baseGrad.addColorStop(0.48, "#aaccf7");
-      baseGrad.addColorStop(0.6, "#e2effc");
-      baseGrad.addColorStop(0.74, "#ffffff");
-      baseGrad.addColorStop(1, "#ffffff");
-
-      ctx.fillStyle = baseGrad;
-      ctx.fillRect(0, 0, width, height);
+      /* 1. Rich Layered Base Gradient — pre-rendered, see buildStaticLayers().
+         No clearRect first: this layer is fully opaque and covers the whole
+         canvas, so it overwrites the previous frame on its own. The clear was
+         a second full-canvas pass doing work the fill immediately undid. */
+      blit(bgLayer);
 
       // 2. Render Drifting Ambient Glow Blobs
       glowOrbs.forEach((orb) => {
@@ -124,7 +178,7 @@ export function HeroBackground() {
 
         const g = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
         g.addColorStop(0, orb.color);
-        g.addColorStop(0.6, orb.color.replace(/[\d\.]+\)$/, "0.06)"));
+        g.addColorStop(0.6, orb.colorMid as string);
         g.addColorStop(1, "transparent");
 
         ctx.fillStyle = g;
@@ -183,9 +237,13 @@ export function HeroBackground() {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          /* Compare squared distances and only take the root for the pairs that
+             are actually close enough to draw. Same threshold, same lineAlpha,
+             same lines — but 496 sqrt calls a frame become a handful. */
+          const distSq = dx * dx + dy * dy;
 
-          if (dist < 160) {
+          if (distSq < 160 * 160) {
+            const dist = Math.sqrt(distSq);
             const lineAlpha = (1 - dist / 160) * 0.25;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);

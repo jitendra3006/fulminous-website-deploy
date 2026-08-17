@@ -665,6 +665,16 @@ export function Showcase() {
                         </ul>
                       </div>
                       <div className="showcase__col--media">
+                        {/* fetchPriority="low" is the whole point of this attribute
+                            here: React hoists a <link rel="preload" as="image"> into
+                            <head> for any image it renders that is not loading="lazy",
+                            and this one is the first carousel slide — far below the
+                            fold on every viewport. It was being fetched at high
+                            priority ahead of the hero, competing with LCP for the
+                            first bytes. The hint removes the preload; it does not
+                            defer the image, which still loads eagerly in document
+                            order so the carousel can measure it. Nothing about how or
+                            where it paints changes. */}
                         <img
               decoding="async"
                           className="showcase__image"
@@ -673,6 +683,7 @@ export function Showcase() {
                           width={440}
                           height={440}
                           loading="eager"
+                          fetchPriority="low"
                         />
                       </div>
                     </div>
