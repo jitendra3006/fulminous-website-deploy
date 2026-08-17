@@ -17,85 +17,12 @@ export function ScrollGenerativeText({
   tag?: "h2" | "p" | "h3";
   id?: string;
 }) {
-  const [displayedText, setDisplayedText] = useState("");
-  const [isStarted, setIsStarted] = useState(false);
-  const [fadeOpacity, setFadeOpacity] = useState(1);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setTimeout(() => setIsStarted(true), delay);
-        } else {
-          setIsStarted(false);
-          setDisplayedText("");
-        }
-      },
-      { threshold: 0.25 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
-
-  useEffect(() => {
-    if (!isStarted) return;
-
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      if (currentIndex <= text.length) {
-        setDisplayedText(text.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(interval);
-      }
-    }, speed);
-
-    return () => clearInterval(interval);
-  }, [isStarted, text, speed]);
-
-  useEffect(() => {
-    function handleScroll() {
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      if (rect.bottom < windowHeight * 0.45) {
-        const fadeRatio = Math.max(0.2, rect.bottom / (windowHeight * 0.45));
-        setFadeOpacity(fadeRatio);
-      } else {
-        setFadeOpacity(1);
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const Component = tag;
 
   return (
-    <div
-      ref={containerRef}
-      className="scroll-generative-wrap"
-      style={{
-        opacity: fadeOpacity,
-        transform: `translateY(${(1 - fadeOpacity) * -15}px)`,
-        transition: "opacity 0.25s ease-out, transform 0.25s ease-out",
-      }}
-    >
+    <div className="scroll-generative-wrap">
       <Component className={className} id={id}>
-        {displayedText}
-        {displayedText.length < text.length && (
-          <span className="generative-caret" aria-hidden="true">
-            |
-          </span>
-        )}
+        {text}
       </Component>
     </div>
   );
@@ -183,12 +110,17 @@ export function TechPartnerIntro() {
             <h3 className="intro-card__title">
               Driving Digital Success Together: <span>Innovate, Transform, Succeed</span>
             </h3>
-            <a className="intro-card__link" href="#">
+            {/* Was href="#". The card's claim — "Driving Digital Success
+                Together" — has no page behind it here, so this is a <span>
+                with the same class rather than an invented URL.
+                .intro-card__link styles it outright and the hover animation
+                is driven by .intro-card--growth:hover, which is unaffected. */}
+            <span className="intro-card__link">
               Read More
               <svg aria-hidden="true">
                 <use href="#icon-arrow-right" />
               </svg>
-            </a>
+            </span>
           </div>
         </article>
 

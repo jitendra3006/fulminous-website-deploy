@@ -1,21 +1,31 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { isExternalHref, live } from "@/lib/site-config";
 
+/* Every href below used to be a /services/<slug> path. None of those routes
+   exist in this app — app/ is layout.tsx + page.tsx — so all sixty were
+   crawlable links into a 404, and they 404 on the live site too. They now
+   point at the real page the live site publishes for that service; each URL
+   was checked to return HTTP 200. Where the live site has no separate page
+   for a sub-service, the link goes to the closest real page rather than
+   inventing a URL, so several labels legitimately share a destination.
+
+   Replace live("/x") with a local path as each service page ships here. */
 const SLIDES_DATA = [
   {
     name: "Game Development Services",
     iconImg: "/assets/icons/Game Developemnt Services.svg",
     desc: "Top game development experts deliver amazing gaming experiences with innovative game apps and software :",
     links: [
-      { href: "/services/betting-app-development", label: "Betting App Development" },
-      { href: "/services/color-game-development", label: "Color Game Development" },
-      { href: "/services/ludo-game-development", label: "Ludo Game Development" },
-      { href: "/services/rummy-game-development", label: "Rummy Game Development" },
-      { href: "/services/bingo-game-development", label: "Bingo Game Development" },
-      { href: "/services/poker-game-development", label: "Poker Game Development" },
+      { href: live("/betting-app-development"), label: "Betting App Development" },
+      { href: live("/color-game-development"), label: "Color Game Development" },
+      { href: live("/ludo-game-app-development-company"), label: "Ludo Game Development" },
+      { href: live("/rummy-game-development-company"), label: "Rummy Game Development" },
+      { href: live("/bingo-game-development-company"), label: "Bingo Game Development" },
+      { href: live("/poker-game-development-company"), label: "Poker Game Development" },
     ],
-    imgSrc: "/assets/Game-Development-Banner.jpg",
+    imgSrc: "/assets/Game-Development-Banner.webp",
     imgAlt: "Game Development Services illustration",
   },
   {
@@ -23,14 +33,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/Software Development.svg",
     desc: "Fulminous Software helps you to access the services of dedicated teams and staff augmentation for affordable development :",
     links: [
-      { href: "/services/dedicated-development-teams", label: "Dedicated Development Teams" },
-      { href: "/services/it-staff-augmentation", label: "IT Staff Augmentation" },
-      { href: "/services/remote-development-teams", label: "Remote Development Teams" },
-      { href: "/services/project-based-hiring", label: "Project-Based Hiring" },
-      { href: "/services/technical-consulting", label: "Technical Consulting" },
-      { href: "/services/managed-development-services", label: "Managed Development Services" },
+      { href: live("/outsourcing-services"), label: "Dedicated Development Teams" },
+      { href: live("/outsourcing-services"), label: "IT Staff Augmentation" },
+      { href: live("/outsource-software-development-company"), label: "Remote Development Teams" },
+      { href: live("/outsource-software-development-company"), label: "Project-Based Hiring" },
+      { href: live("/software-development-consulting-company"), label: "Technical Consulting" },
+      { href: live("/software-consulting-development-services"), label: "Managed Development Services" },
     ],
-    imgSrc: "/assets/Software-Development-Banner.jpg",
+    imgSrc: "/assets/Software-Development-Banner.webp",
     imgAlt: "Dedicated Teams & Staff Augmentation illustration",
   },
   {
@@ -38,14 +48,16 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/Quality Assurance.svg",
     desc: "We evaluate the performance of software solutions in all aspects and provide support for enhancement :",
     links: [
-      { href: "/services/manual-testing", label: "Manual Testing" },
-      { href: "/services/automated-testing", label: "Automated Testing" },
-      { href: "/services/performance-testing", label: "Performance Testing" },
-      { href: "/services/security-testing", label: "Security Testing" },
-      { href: "/services/mobile-app-testing", label: "Mobile App Testing" },
-      { href: "/services/qa-consulting", label: "QA Consulting" },
+      /* The live site publishes one QA page, not six. All six labels point
+         at it rather than at five fabricated slugs. */
+      { href: live("/software-testing-services"), label: "Manual Testing" },
+      { href: live("/software-testing-services"), label: "Automated Testing" },
+      { href: live("/software-testing-services"), label: "Performance Testing" },
+      { href: live("/software-testing-services"), label: "Security Testing" },
+      { href: live("/software-testing-services"), label: "Mobile App Testing" },
+      { href: live("/software-testing-services"), label: "QA Consulting" },
     ],
-    imgSrc: "/assets/Quality-Assurance-IMG.png",
+    imgSrc: "/assets/Quality-Assurance-IMG.webp",
     imgAlt: "Quality Assurance illustration",
   },
   {
@@ -53,14 +65,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/E-commerce Solutions.svg",
     desc: "Now, develop custom e-commerce platforms with the assistance of our experts in various e-commerce platforms :",
     links: [
-      { href: "/services/e-commerce-website", label: "E-commerce Website" },
-      { href: "/services/marketplace-development", label: "Marketplace Development" },
-      { href: "/services/b2b-commerce-solutions", label: "B2B Commerce Solutions" },
-      { href: "/services/shopping-cart-integration", label: "Shopping Cart Integration" },
-      { href: "/services/payment-gateway-integration", label: "Payment Gateway Integration" },
-      { href: "/services/maintenance-and-support", label: "Maintenance & Support" },
+      { href: live("/ecommerce-development-services"), label: "E-commerce Website" },
+      { href: live("/ecommerce-software-development"), label: "Marketplace Development" },
+      { href: live("/b2b-ecommerce-development-agency"), label: "B2B Commerce Solutions" },
+      { href: live("/ecommerce-development-services"), label: "Shopping Cart Integration" },
+      { href: live("/ecommerce-software-development"), label: "Payment Gateway Integration" },
+      { href: live("/it-infrastructure-support-services"), label: "Maintenance & Support" },
     ],
-    imgSrc: "/assets/E-commerce-Solutions-IMG.png",
+    imgSrc: "/assets/E-commerce-Solutions-IMG.webp",
     imgAlt: "E-commerce Solutions illustration",
   },
   {
@@ -68,14 +80,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/Cloud & DevOps.svg",
     desc: "Fulminous Software offers complete cloud development solutions, bringing you maximum accessibility :",
     links: [
-      { href: "/services/cloud-migration", label: "Cloud Migration" },
-      { href: "/services/cloud-infrastructure-management", label: "Cloud Infrastructure Management" },
-      { href: "/services/devops-consulting", label: "DevOps Consulting" },
-      { href: "/services/ci-cd-implementation", label: "CI/CD Implementation" },
-      { href: "/services/containerization-and-orchestration", label: "Containerization & Orchestration" },
-      { href: "/services/performance-monitoring", label: "Performance Monitoring" },
+      { href: live("/legacy-to-cloud-modernization-services"), label: "Cloud Migration" },
+      { href: live("/it-infrastructure-support-services"), label: "Cloud Infrastructure Management" },
+      { href: live("/azure-devops-services"), label: "DevOps Consulting" },
+      { href: live("/azure-devops-services"), label: "CI/CD Implementation" },
+      { href: live("/cloud-computing-development-services"), label: "Containerization & Orchestration" },
+      { href: live("/it-infrastructure-support-services"), label: "Performance Monitoring" },
     ],
-    imgSrc: "/assets/Cloud-&-DevOps-IMG.png",
+    imgSrc: "/assets/Cloud-&-DevOps-IMG.webp",
     imgAlt: "Cloud & DevOps illustration",
   },
   {
@@ -83,14 +95,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/AI Development.svg",
     desc: "Fulminous Software develops the latest AI solutions for all your business needs :",
     links: [
-      { href: "/services/ai-development-services", label: "AI Development Services" },
-      { href: "/services/generative-ai-development", label: "Generative AI Development" },
-      { href: "/services/ai-chatbot-development", label: "AI Chatbot Development" },
-      { href: "/services/ai-powered-app-development", label: "AI-Powered App Development" },
-      { href: "/services/ai-agent-development", label: "AI Agent Development" },
-      { href: "/services/ai-consulting-services", label: "AI Consulting Services" },
+      { href: live("/enterprise-ai-development-company"), label: "AI Development Services" },
+      { href: live("/generative-ai-development-services"), label: "Generative AI Development" },
+      { href: live("/ai-chatbot-development-services"), label: "AI Chatbot Development" },
+      { href: live("/ai-powered-app-development-company"), label: "AI-Powered App Development" },
+      { href: live("/ai-agent-development-company"), label: "AI Agent Development" },
+      { href: live("/ai-consulting-services"), label: "AI Consulting Services" },
     ],
-    imgSrc: "/assets/AI-Develoment.png",
+    imgSrc: "/assets/AI-Develoment.webp",
     imgAlt: "AI Development illustration",
   },
   {
@@ -98,14 +110,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/Mobile App Development.svg",
     desc: "We develop custom mobile apps with trending features and engaging designs :",
     links: [
-      { href: "/services/mobile-app-development", label: "Mobile App Development" },
-      { href: "/services/ios-app-development", label: "iOS App Development" },
-      { href: "/services/android-app-development", label: "Android App Development" },
-      { href: "/services/dating-app-development", label: "Dating App Development" },
-      { href: "/services/cross-platform-app-development", label: "Cross-Platform App Development" },
-      { href: "/services/wearable-app-development", label: "Wearable App Development" },
+      { href: live("/mobile-application-development"), label: "Mobile App Development" },
+      { href: live("/ios-app-development"), label: "iOS App Development" },
+      { href: live("/android-app-development"), label: "Android App Development" },
+      { href: live("/dating-app-development-tinder-like-app"), label: "Dating App Development" },
+      { href: live("/cross-platform-application-development-services"), label: "Cross-Platform App Development" },
+      { href: live("/wearable-app-development-services"), label: "Wearable App Development" },
     ],
-    imgSrc: "/assets/Mobile-App-Development-IMG.png",
+    imgSrc: "/assets/Mobile-App-Development-IMG.webp",
     imgAlt: "Mobile App Development illustration",
   },
   {
@@ -113,14 +125,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/Web Development .svg",
     desc: "Now get responsive and feature-rich website solutions for your businesses :",
     links: [
-      { href: "/services/web-application-development", label: "Web Application Development" },
-      { href: "/services/e-commerce-development", label: "E-commerce Development" },
-      { href: "/services/wordpress-development", label: "Wordpress Development" },
-      { href: "/services/php-web-development", label: "PHP Web Development" },
-      { href: "/services/custom-web-development", label: "Custom Web Development" },
-      { href: "/services/progressive-web-apps-pwa", label: "Progressive Web Apps (PWA)" },
+      { href: live("/web-application-development-company"), label: "Web Application Development" },
+      { href: live("/ecommerce-development-services"), label: "E-commerce Development" },
+      { href: live("/wordpress-development-services"), label: "Wordpress Development" },
+      { href: live("/php-web-development"), label: "PHP Web Development" },
+      { href: live("/website-development-services"), label: "Custom Web Development" },
+      { href: live("/progressive-web-apps-development-services"), label: "Progressive Web Apps (PWA)" },
     ],
-    imgSrc: "/assets/Web-Development-IMG.png",
+    imgSrc: "/assets/Web-Development-IMG.webp",
     imgAlt: "Web Development illustration",
   },
   {
@@ -128,14 +140,14 @@ const SLIDES_DATA = [
     iconImg: "/assets/icons/ui-ux design.svg",
     desc: "We design highly engaging and attractive UI UX for your digital platforms :",
     links: [
-      { href: "/services/ui-ux-design", label: "UI UX Design" },
-      { href: "/services/web-design-services", label: "Web Design Services" },
-      { href: "/services/startup-website-design", label: "Startup Website Design" },
-      { href: "/services/hire-mvp-designers", label: "Hire MVP Designers" },
-      { href: "/services/mobile-app-design", label: "Mobile App Design" },
-      { href: "/services/manufacturing-web-design", label: "Manufacturing Web Design" },
+      { href: live("/ui-ux-design-services"), label: "UI UX Design" },
+      { href: live("/web-design-company"), label: "Web Design Services" },
+      { href: live("/website-design-for-startups"), label: "Startup Website Design" },
+      { href: live("/hire-mvp-designers"), label: "Hire MVP Designers" },
+      { href: live("/mobile-app-ui-ux-design-services"), label: "Mobile App Design" },
+      { href: live("/best-manufacturing-website-design-company"), label: "Manufacturing Web Design" },
     ],
-    imgSrc: "/assets/UI-UX-Design.png",
+    imgSrc: "/assets/UI-UX-Design.webp",
     imgAlt: "UI/UX Design illustration",
   },
   {
@@ -143,17 +155,25 @@ const SLIDES_DATA = [
     iconImg: "/assets/Software-Development-Services.png",
     desc: "We develop all types of software solutions that can grow your business :",
     links: [
-      { href: "/services/custom-health-software", label: "Custom Health Software" },
-      { href: "/services/legacy-software-modernization", label: "Legacy Software Modernization" },
-      { href: "/services/software-maintenance-and-support", label: "Software Maintenance & Support" },
-      { href: "/services/consulting-services", label: "Consulting Services" },
-      { href: "/services/enterprise-software-solutions", label: "Enterprise Software Solutions" },
-      { href: "/services/saas-product-development", label: "SaaS Product Development" },
+      { href: live("/custom-healthcare-software-development"), label: "Custom Health Software" },
+      { href: live("/legacy-software-modernization-services"), label: "Legacy Software Modernization" },
+      { href: live("/it-infrastructure-support-services"), label: "Software Maintenance & Support" },
+      { href: live("/software-consulting-development-services"), label: "Consulting Services" },
+      { href: live("/software-development"), label: "Enterprise Software Solutions" },
+      { href: live("/top-saas-application-development-company"), label: "SaaS Product Development" },
     ],
-    imgSrc: "/assets/Software-Development-Banner.jpg",
+    imgSrc: "/assets/Software-Development-Banner.webp",
     imgAlt: "Software Development illustration",
   },
 ];
+
+/* Those destinations live on the content site today, so they open in a new tab
+   the way the Footer's cross-site links already do — the visitor keeps the
+   homepage and the carousel they were part-way through. Derived from the href
+   rather than hard-coded, so a link that becomes a local path here
+   automatically stops opening a tab. */
+const crossSiteProps = (href: string) =>
+  isExternalHref(href) ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
 export function Showcase() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -248,8 +268,62 @@ export function Showcase() {
       return t.firstElementChild as HTMLElement;
     }
 
+    // Measured once per width: the natural height of the tallest slide. The
+    // mobile card is pinned to it so advancing the carousel never resizes the
+    // frame. Reset to 0 to force a re-measure.
+    let lockedMobileHeight = 0;
+
+    function measureTallestSlide() {
+      if (!card || !frame) return 0;
+
+      /* Measure in hidden clones of the card at the real card width, so every
+         slide is laid out under the same CSS as the live one.
+         One probe per slide, all appended before anything is read. This used to
+         reuse a single probe — write a panel in, read its height, write the
+         next — which forces the browser to flush layout once per slide, eleven
+         synchronous reflows during hydration on a phone. Each probe is
+         absolutely positioned, so they cannot affect each other's box, and the
+         heights come out identical to the one-at-a-time version. */
+      const probes: { el: HTMLElement; track: HTMLElement }[] = [];
+      const width = card.clientWidth + "px";
+
+      for (let i = 0; i < n; i++) {
+        const panel = makePanel(i);
+        if (!panel) continue;
+        const probe = document.createElement("div");
+        probe.className = "showcase__card";
+        probe.style.cssText =
+          "position:absolute;left:0;top:0;visibility:hidden;pointer-events:none;z-index:-1;";
+        probe.style.width = width;
+        const probeTrack = document.createElement("div");
+        probeTrack.className = "showcase__track";
+        probeTrack.appendChild(panel);
+        probe.appendChild(probeTrack);
+        frame.appendChild(probe);
+        probes.push({ el: probe, track: probeTrack });
+      }
+
+      // Reads only from here on: the first one flushes layout, the rest are free.
+      let tallest = 0;
+      for (const p of probes) tallest = Math.max(tallest, p.track.getBoundingClientRect().height);
+      for (const p of probes) p.el.remove();
+
+      return Math.ceil(tallest);
+    }
+
     function setCardHeight(panel: HTMLElement | null, instant?: boolean) {
       if (!card) return;
+      if (typeof window !== "undefined" && window.innerWidth < 768) {
+        if (!lockedMobileHeight) lockedMobileHeight = measureTallestSlide();
+        if (lockedMobileHeight) {
+          // The stylesheet pins mobile height with !important, so match it.
+          card.style.setProperty("height", lockedMobileHeight + "px", "important");
+        } else {
+          card.style.height = "auto";
+        }
+        return;
+      }
+      card.style.removeProperty("height");
       card.style.height = "480px";
     }
 
@@ -305,11 +379,13 @@ export function Showcase() {
       const oldPanel = track!.firstElementChild as HTMLElement;
       const newPanel = makePanel(target);
       const trans = "transform " + DUR + "ms " + EASE;
+      const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+      const initialScale = isMobile ? "scale(1)" : "scale(0.94)";
 
       if (dir === "next") {
         track!.appendChild(newPanel);
-        newPanel.style.transform = "scale(0.94)";
-        if (oldPanel) oldPanel.style.transform = "scale(1)";
+        newPanel.style.transform = initialScale;
+        if (oldPanel && !isMobile) oldPanel.style.transform = "scale(1)";
         track!.style.transition = "none";
         track!.style.transform = "translateX(0)";
         void track!.offsetWidth;
@@ -318,20 +394,24 @@ export function Showcase() {
       } else {
         if (oldPanel) track!.insertBefore(newPanel, oldPanel);
         else track!.appendChild(newPanel);
-        newPanel.style.transform = "scale(0.94)";
-        if (oldPanel) oldPanel.style.transform = "scale(1)";
+        newPanel.style.transform = initialScale;
+        if (oldPanel && !isMobile) oldPanel.style.transform = "scale(1)";
         track!.style.transition = "none";
         track!.style.transform = "translateX(-100%)";
         void track!.offsetWidth;
         track!.style.transition = trans;
         track!.style.transform = "translateX(0)";
       }
-      if (oldPanel) {
+      if (oldPanel && !isMobile) {
         oldPanel.style.transition = trans;
         oldPanel.style.transform = "scale(0.94)";
       }
-      newPanel.style.transition = trans;
-      newPanel.style.transform = "scale(1)";
+      if (!isMobile) {
+        newPanel.style.transition = trans;
+        newPanel.style.transform = "scale(1)";
+      } else {
+        newPanel.style.transform = "scale(1)";
+      }
 
       setCardHeight(newPanel, false);
       active = target;
@@ -446,6 +526,8 @@ export function Showcase() {
     const onResize = () => {
       clearTimeout(resizeT);
       resizeT = setTimeout(() => {
+        // Width changed, so the tallest slide may have too — re-measure.
+        lockedMobileHeight = 0;
         if (track && track.lastElementChild) {
           setCardHeight(track.lastElementChild as HTMLElement, true);
         }
@@ -453,7 +535,19 @@ export function Showcase() {
     };
     window.addEventListener("resize", onResize);
 
+    // Text metrics shift when the webfont swaps in, which would leave the card
+    // pinned to a height measured against the fallback font.
+    let disposed = false;
+    if (typeof document !== "undefined" && document.fonts) {
+      document.fonts.ready.then(() => {
+        if (disposed || !track) return;
+        lockedMobileHeight = 0;
+        setCardHeight(track.lastElementChild as HTMLElement, true);
+      });
+    }
+
     return () => {
+      disposed = true;
       stopAutoScroll();
       if (pauseTimer) clearTimeout(pauseTimer);
       viewportObserver.disconnect();
@@ -532,7 +626,58 @@ export function Showcase() {
             />
             <div className="showcase__frame">
               <div className="showcase__card">
-                <div className="showcase__track" />
+                <div className="showcase__track">
+                  <div className="showcase__card-inner">
+                    <div className="showcase__card-top">
+                      <div className="showcase__col--text">
+                        <span className="showcase__icon-box">
+                          {SLIDES_DATA[0].iconImg ? (
+                            <img
+              decoding="async"
+              loading="lazy"
+                              src={SLIDES_DATA[0].iconImg}
+                              alt={SLIDES_DATA[0].name}
+                              width={28}
+                              height={28}
+                              style={{ width: "28px", height: "28px", objectFit: "contain" }}
+                            />
+                          ) : (
+                            <svg className="showcase__icon">
+                              <use href={(SLIDES_DATA[0] as any).iconId} />
+                            </svg>
+                          )}
+                        </span>
+                        <h3 className="showcase__name">{SLIDES_DATA[0].name}</h3>
+                        <p className="showcase__desc">{SLIDES_DATA[0].desc}</p>
+                        <ul className="showcase__list">
+                          {SLIDES_DATA[0].links.map((link, lIndex) => (
+                            <li key={lIndex} className="showcase__bullet">
+                              <a className="showcase__link" href={link.href} {...crossSiteProps(link.href)}>
+                                <span className="showcase__link-inner">
+                                  <span className="showcase__arrow" aria-hidden="true">
+                                    ›
+                                  </span>
+                                  {link.label}
+                                </span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="showcase__col--media">
+                        <img
+              decoding="async"
+                          className="showcase__image"
+                          src={SLIDES_DATA[0].imgSrc}
+                          alt={SLIDES_DATA[0].imgAlt}
+                          width={440}
+                          height={440}
+                          loading="eager"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <button
@@ -561,7 +706,14 @@ export function Showcase() {
         </div>
 
         <div className="showcase__cta-wrap">
-          <a className="btn btn--primary services__cta" href="#services">
+          {/* Was href="#services", the id of the very section this button sits
+              in — a link to itself. It now goes to the real services index. */}
+          <a
+            className="btn btn--primary services__cta"
+            href={live("/services")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View All Services
           </a>
         </div>
@@ -579,6 +731,8 @@ export function Showcase() {
                     <span className="showcase__icon-box">
                       {slide.iconImg ? (
                         <img
+              decoding="async"
+              loading="lazy"
                           src={slide.iconImg}
                           alt={slide.name}
                           width={28}
@@ -596,7 +750,7 @@ export function Showcase() {
                     <ul className="showcase__list">
                       {slide.links.map((link, lIndex) => (
                         <li key={lIndex} className="showcase__bullet">
-                          <a className="showcase__link" href={link.href}>
+                          <a className="showcase__link" href={link.href} {...crossSiteProps(link.href)}>
                             <span className="showcase__link-inner">
                               <span className="showcase__arrow" aria-hidden="true">
                                 ›
@@ -610,6 +764,7 @@ export function Showcase() {
                   </div>
                   <div className="showcase__col--media">
                     <img
+              decoding="async"
                       className="showcase__image"
                       src={slide.imgSrc}
                       alt={slide.imgAlt}

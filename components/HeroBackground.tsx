@@ -200,8 +200,32 @@ export function HeroBackground() {
       animId = requestAnimationFrame(render);
     };
 
-    initScene();
-    render();
+    /* Deferred to the first idle slot rather than started during hydration.
+       The loop draws 32 particles plus an O(n^2) link pass every frame, and
+       running that while the browser is still laying out the page pushed real
+       measured cost into FCP/LCP and showed up as long tasks. The canvas sits
+       over the hero's CSS gradient, so nothing is missing while it waits —
+       and the 900ms cap means it always starts even where requestIdleCallback
+       does not exist (Safari) or never goes idle. */
+    let started = false;
+    const start = () => {
+      started = true;
+      initScene();
+      render();
+    };
+
+    const scheduler = window as typeof window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    let cancelStart: () => void;
+    if (typeof scheduler.requestIdleCallback === "function") {
+      const id = scheduler.requestIdleCallback(start, { timeout: 900 });
+      cancelStart = () => scheduler.cancelIdleCallback?.(id);
+    } else {
+      const id = window.setTimeout(start, 300);
+      cancelStart = () => clearTimeout(id);
+    }
 
     const handleResize = () => {
       initScene();
@@ -209,8 +233,38 @@ export function HeroBackground() {
 
     window.addEventListener("resize", handleResize);
 
+    /* The hero is position:sticky inside <main>, so it never leaves the
+       sticky range — it stays pinned behind .content-stack (z-index 20,
+       opaque white) for the entire rest of the page. Without this the
+       render loop kept running for every frame of every scroll, redrawing
+       32 particles plus their O(n^2) link pass onto a canvas nobody can
+       see. Pause it the moment the hero is off screen and pick it back up
+       when it returns; the particles carry on from where they were. */
+    let visible = true;
+    const visibility = new IntersectionObserver(
+      (entries) => {
+        const nowVisible = entries[0].isIntersecting;
+        if (nowVisible === visible) return;
+        visible = nowVisible;
+        /* `started` guards the case where the page loads already scrolled past
+           the hero: the idle start may not have run yet, and calling render()
+           before initScene() would draw an empty particle set onto a canvas
+           that has no backing size. */
+        if (visible) {
+          if (started) render();
+        } else {
+          cancelAnimationFrame(animId);
+          animId = 0;
+        }
+      },
+      { threshold: 0 }
+    );
+    visibility.observe(canvas);
+
     return () => {
       cancelAnimationFrame(animId);
+      cancelStart();
+      visibility.disconnect();
       window.removeEventListener("resize", handleResize);
     };
   }, []);

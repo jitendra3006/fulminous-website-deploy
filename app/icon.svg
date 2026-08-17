@@ -1,0 +1,9 @@
+<!-- Tab icon. The site logo (public/assets/Fulminous-Logo.png) is a 177x46
+     wordmark and turns to mush at 16px, so this is its hexagon-and-bolt mark
+     alone, filled rather than outlined because a 6px stroke disappears at
+     favicon size. Brand blue is --color-primary from styles/globals.css. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="7" fill="#164a9e" />
+  <path d="M16 4.5 26 10.25 26 21.75 16 27.5 6 21.75 6 10.25Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+  <path d="M18.4 9.2 12.1 17.4 16 17.4 14.4 23.8 20.6 15.2 16.9 15.2Z" fill="#ffffff" />
+</svg>

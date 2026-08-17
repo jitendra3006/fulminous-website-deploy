@@ -1,7 +1,33 @@
-"use client";
+/* No "use client": this file has no state, no effects and no handlers, so
+   marking it a client component only shipped and hydrated its markup for
+   nothing. ScrollGenerativeText carries its own "use client" via
+   TechPartnerIntro, so importing it from here still gives that one child a
+   client boundary — the rest of the section is now server-rendered HTML with
+   no JS attached. */
 
 import React from "react";
 import { ScrollGenerativeText } from "./TechPartnerIntro";
+import { live } from "@/lib/site-config";
+
+/* The three cards are visual placeholders — same truncated title, same excerpt,
+   and no article behind them. Their "Read More" was href="#", so each card
+   offered a crawler a link to the top of the current page and offered a reader
+   nothing. Rather than invent three article URLs, the affordance is now a
+   <span> with the identical class: .blog-card__link sets display, font and
+   colour explicitly and has no :hover rule, so the card renders exactly as
+   before. Turn these back into <a href={...}> the moment real posts are wired
+   up. The section CTA does have a real destination and keeps its link. */
+function BlogCardAffordance() {
+  return (
+    <span className="blog-card__link">
+      Read More
+      <svg className="blog-card__arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    </span>
+  );
+}
 
 export function Blogs() {
   return (
@@ -25,7 +51,14 @@ export function Blogs() {
               tag="p"
             />
           </div>
-          <a className="btn btn--primary blogs__more" href="#blogs">
+          {/* Was href="#blogs" — the id of the section this button is inside.
+              It now goes to the real blog index. */}
+          <a
+            className="btn btn--primary blogs__more"
+            href={live("/blog")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View more Blogs
           </a>
         </div>
@@ -33,9 +66,13 @@ export function Blogs() {
         <div className="blogs__grid">
           <article className="blog-card">
             <div className="blog-card__image">
+              {/* All three cards shared this one alt. Each now describes the
+                  picture it is actually on, which is what alt is for. */}
               <img
-                src="/assets/Blog-1.png"
-                alt="How to choose the right web design company"
+              decoding="async"
+              loading="lazy"
+                src="/assets/Blog-1.webp"
+                alt="Three colleagues smiling over a laptop in a bright open-plan office"
                 width={375}
                 height={228}
               />
@@ -48,20 +85,16 @@ export function Blogs() {
                 Just in the USA, there are more than 190,486 web designers and companies...
               </p>
             </div>
-            <a className="blog-card__link" href="#">
-              Read More
-              <svg className="blog-card__arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </a>
+            <BlogCardAffordance />
           </article>
 
           <article className="blog-card">
             <div className="blog-card__image blog-card__image--shadow">
               <img
-                src="/assets/Blog-2.png"
-                alt="How to choose the right web design company"
+              decoding="async"
+              loading="lazy"
+                src="/assets/Blog-2.webp"
+                alt="Hand touching a hexagonal diagram of social engineering attack types"
                 width={375}
                 height={228}
               />
@@ -74,20 +107,16 @@ export function Blogs() {
                 Just in the USA, there are more than 190,486 web designers and companies...
               </p>
             </div>
-            <a className="blog-card__link" href="#">
-              Read More
-              <svg className="blog-card__arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </a>
+            <BlogCardAffordance />
           </article>
 
           <article className="blog-card">
             <div className="blog-card__image">
               <img
-                src="/assets/Blog-3.png"
-                alt="How to choose the right web design company"
+              decoding="async"
+              loading="lazy"
+                src="/assets/Blog-3.webp"
+                alt="Team reviewing a whiteboard of sticky notes during a sprint planning session"
                 width={375}
                 height={228}
               />
@@ -100,13 +129,7 @@ export function Blogs() {
                 Just in the USA, there are more than 190,486 web designers and companies...
               </p>
             </div>
-            <a className="blog-card__link" href="#">
-              Read More
-              <svg className="blog-card__arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </a>
+            <BlogCardAffordance />
           </article>
         </div>
       </div>

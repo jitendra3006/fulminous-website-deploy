@@ -1,4 +1,5 @@
 import React from "react";
+import { SOCIAL_PROFILES, live } from "@/lib/site-config";
 
 export function Footer() {
   return (
@@ -8,8 +9,10 @@ export function Footer() {
           <div className="footer__cols">
             <div className="footer__brand">
               <img
+              decoding="async"
+              loading="lazy"
                 className="footer__logo"
-                src="/assets/Fulminous-Logo.png"
+                src="/assets/Fulminous-Logo.webp"
                 alt="Fulminous Software logo"
                 width={177}
                 height={46}
@@ -17,8 +20,17 @@ export function Footer() {
               <p className="footer__tagline">
                 We strive for excellence and focus on consistent delivery and sensible simplification.
               </p>
+              {/* All five were href="#". They now point at the company's own
+                  profiles, each of which was checked to resolve — the same
+                  URLs the Organization schema lists in sameAs, which is how a
+                  search engine ties this site to those accounts. */}
               <div className="footer__social">
-                <a href="#" aria-label="Facebook">
+                <a
+                  href={SOCIAL_PROFILES.facebook}
+                  aria-label="Fulminous Software on Facebook"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                     <path
                       fill="currentColor"
@@ -26,7 +38,12 @@ export function Footer() {
                     />
                   </svg>
                 </a>
-                <a href="#" aria-label="YouTube">
+                <a
+                  href={SOCIAL_PROFILES.youtube}
+                  aria-label="Fulminous Software on YouTube"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                     <path
                       fill="currentColor"
@@ -34,7 +51,13 @@ export function Footer() {
                     />
                   </svg>
                 </a>
-                <a href="#" aria-label="Instagram" className="footer__social-icon--dense">
+                <a
+                  href={SOCIAL_PROFILES.instagram}
+                  aria-label="Fulminous Software on Instagram"
+                  className="footer__social-icon--dense"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                     <path
                       fill="currentColor"
@@ -42,7 +65,13 @@ export function Footer() {
                     />
                   </svg>
                 </a>
-                <a href="#" aria-label="X (Twitter)" className="footer__social-icon--dense">
+                <a
+                  href={SOCIAL_PROFILES.x}
+                  aria-label="Fulminous Software on X (Twitter)"
+                  className="footer__social-icon--dense"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                     <path
                       fill="currentColor"
@@ -50,7 +79,12 @@ export function Footer() {
                     />
                   </svg>
                 </a>
-                <a href="#" aria-label="LinkedIn">
+                <a
+                  href={SOCIAL_PROFILES.linkedin}
+                  aria-label="Fulminous Software on LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
                     <path
                       fill="currentColor"
@@ -96,7 +130,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/about-us"
+                    href={live("/about-us")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -106,7 +140,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/services"
+                    href={live("/services")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -116,7 +150,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/career"
+                    href={live("/career")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -126,7 +160,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/contact-us"
+                    href={live("/contact-us")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -136,7 +170,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/portfolios"
+                    href={live("/portfolios")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -146,7 +180,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/privacy-policy"
+                    href={live("/privacy-policy")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -156,7 +190,7 @@ export function Footer() {
                 <li>
                   <a
                     className="footer__link"
-                    href="https://fulminoussoftware.com/refund-policy"
+                    href={live("/refund-policy")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -168,10 +202,17 @@ export function Footer() {
 
             <div className="footer__col">
               <h3 className="footer__heading">Contact</h3>
+              {/* Non-breaking spaces inside the brackets. With ordinary
+                  spaces the two-up footer column on a phone broke the line
+                  after the "(" — "+ 1 803 999 3940 (" then "USA )" — because
+                  that space is a legal break point. The number and the
+                  country tag now each stay whole, and the only break left is
+                  the one before the bracket. Renders identically on desktop,
+                  where the whole line fits anyway. */}
               <div className="footer__contact-block">
-                <p>+ 1 803 999 3940 ( USA )</p>
-                <p>+ 44 7867048979 ( UK )</p>
-                <p>+ 91 9680567092 ( IND )</p>
+                <p>+ 1 803 999 3940 (&nbsp;USA&nbsp;)</p>
+                <p>+ 44 7867048979 (&nbsp;UK&nbsp;)</p>
+                <p>+ 91 9680567092 (&nbsp;IND&nbsp;)</p>
               </div>
               <div className="footer__contact-block">
                 <p>help@fulminous.tech</p>
@@ -182,7 +223,9 @@ export function Footer() {
 
           <div className="footer__offices">
             <div className="office">
-              <img className="office__map" src="/assets/UK Office.png" alt="Map of UK office location" />
+              <img
+              decoding="async"
+              loading="lazy" className="office__map" src="/assets/UK Office.webp" alt="Map of UK office location" />
               <p className="office__name">UK Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> 31 Lemington Gardens, IG39TX, Seven kings, London
@@ -191,7 +234,9 @@ export function Footer() {
             </div>
             <div className="office-divider" />
             <div className="office">
-              <img className="office__map" src="/assets/USA Office.png" alt="Map of USA office location" />
+              <img
+              decoding="async"
+              loading="lazy" className="office__map" src="/assets/USA Office.webp" alt="Map of USA office location" />
               <p className="office__name">USA Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> 1113, WA Gamble Rd, Manning, South Carolina, 29102
@@ -200,7 +245,9 @@ export function Footer() {
             </div>
             <div className="office-divider" />
             <div className="office">
-              <img className="office__map" src="/assets/AUS Office.png" alt="Map of Australia office location" />
+              <img
+              decoding="async"
+              loading="lazy" className="office__map" src="/assets/AUS Office.webp" alt="Map of Australia office location" />
               <p className="office__name">AUS Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> 20 Mckinlay Ave Adelaide 5086, AUS
@@ -209,7 +256,9 @@ export function Footer() {
             </div>
             <div className="office-divider" />
             <div className="office">
-              <img className="office__map" src="/assets/IND Office.png" alt="Map of India office location" />
+              <img
+              decoding="async"
+              loading="lazy" className="office__map" src="/assets/IND Office.webp" alt="Map of India office location" />
               <p className="office__name">IND Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> B-54 Kings Rd, Nirman Nagar, Jaipur, Raj. 302019
@@ -223,9 +272,20 @@ export function Footer() {
           <p className="footer__copy">
             Copyright © 2026 Fulminous. All Rights Reserved
           </p>
+          {/* Privacy Policy and Terms both have real published pages and now
+              link to them. Disclaimer does not exist on the live site, so it
+              stays as plain text rather than becoming an invented URL —
+              .footer__legal a only overrides colour and underline, both of
+              which it already inherits, so the row looks unchanged. Wire it
+              up once the client publishes a disclaimer page. */}
           <p className="footer__legal">
-            <a href="#">Privacy Policy</a> | <a href="#">Disclaimer</a> |{" "}
-            <a href="#">Terms and Conditions</a>
+            <a href={live("/privacy-policy")} target="_blank" rel="noopener noreferrer">
+              Privacy Policy
+            </a>{" "}
+            | Disclaimer |{" "}
+            <a href={live("/term-and-conditions")} target="_blank" rel="noopener noreferrer">
+              Terms and Conditions
+            </a>
           </p>
         </div>
       </div>

@@ -15,15 +15,26 @@ export function Contact() {
                 Tell us about your project. You'll hear back from a senior engineer — not a
                 salesperson — within 24 hours.
               </p>
+              {/* Each width/height is the file's own intrinsic size. .hex-badge
+                  img is width:100%/height:100% inside an auto-height box, so
+                  these only hand the browser the aspect ratio to reserve before
+                  the file decodes — the painted size is unchanged, and the row
+                  no longer reflows as the three lazy badges arrive. */}
               <div className="hex-badges">
                 <div className="hex-badge">
-                  <img src="/assets/BusinessFirms.png" alt="BusinessFirms badge" />
+                  <img
+              decoding="async"
+              loading="lazy" src="/assets/BusinessFirms.webp" alt="BusinessFirms badge" width={355} height={400} />
                 </div>
                 <div className="hex-badge">
-                  <img src="/assets/iTRate.png" alt="iTRate badge" />
+                  <img
+              decoding="async"
+              loading="lazy" src="/assets/iTRate.webp" alt="iTRate badge" width={400} height={452} />
                 </div>
                 <div className="hex-badge">
-                  <img src="/assets/SelectedFirms.png" alt="SelectedFirms badge" />
+                  <img
+              decoding="async"
+              loading="lazy" src="/assets/SelectedFirms.webp" alt="SelectedFirms badge" width={354} height={400} />
                 </div>
               </div>
             </div>

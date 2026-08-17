@@ -2,6 +2,15 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
+import { isExternalHref, live } from "@/lib/site-config";
+
+/* Cross-site destinations open in a new tab, matching what the Footer's
+   links already do, so a visitor exploring the menu does not lose the
+   homepage. Keyed off the href so the in-page anchors that remain — #contact,
+   #services, #who-we-are and the rest, all of which do resolve to a real
+   section on this page — keep behaving as anchors. */
+const crossSiteProps = (href: string) =>
+  isExternalHref(href) ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
 const IconDiamond = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,11 +44,356 @@ const IconRibbon = () => (
   </svg>
 );
 
+const IconArrowRight = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const IconArrowLeft = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 12H5M11 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/* ------------------------------------------------------------------
+   Services and Technology are described once, here, and rendered twice:
+   as the desktop mega-dropdown and as the phone drawer's second level.
+   They used to be two hand-written copies and had already drifted — the
+   drawer was missing items the dropdown had and both were missing items
+   the live site has.
+
+   One entry per COLUMN of the desktop dropdown. A column may hold more
+   than one titled group (Frontend sits above Cloud & DevOps in the same
+   column). `hidden: true` is a column that continues the previous one:
+   desktop draws no heading and the list just carries on, so the drawer
+   folds those items back into the group before them.
+   ------------------------------------------------------------------ */
+type MegaLink = { label: string; desc: string; href: string };
+type MegaGroup = { title: string; hidden?: boolean; items: MegaLink[] };
+
+/* The hrefs here and in TECHNOLOGY_COLUMNS below were all bare fragments —
+   "#mobile-app", "#nodejs" and so on — and not one of those ids exists
+   anywhere in the DOM. Every menu item was therefore a link that scrolled
+   nowhere and gave a crawler nothing. Each now points at the real page the
+   live content site publishes for that service or stack; every URL was
+   checked to return HTTP 200. Swap live("/x") for a local path as the
+   corresponding page ships in this app. */
+const SERVICES_COLUMNS: MegaGroup[][] = [
+  [
+    {
+      title: "Browse by Services",
+      items: [
+        { label: "Mobile App Development", desc: "Native & cross-platform apps", href: live("/mobile-application-development") },
+        { label: "Web Development", desc: "Responsive web applications", href: live("/website-development-services") },
+        { label: "Cross Platform App Development", desc: "Single codebase solutions", href: live("/cross-platform-application-development-services") },
+        { label: "Ecommerce Development", desc: "Custom online store platforms", href: live("/ecommerce-development-services") },
+        { label: "UI & UX Designing", desc: "Engaging digital interfaces", href: live("/ui-ux-design-services") },
+        { label: "Digital Marketing", desc: "Campaigns that bring traffic", href: live("/digital-marketing-services") },
+        { label: "Web Design Services", desc: "Brand-led visual design", href: live("/web-design-company") },
+      ],
+    },
+  ],
+  [
+    {
+      title: "Browse by Services (continued)",
+      hidden: true,
+      items: [
+        { label: "Opensource Development", desc: "Flexible & scalable platforms", href: live("/opensource-development") },
+        { label: "Quality Assurance", desc: "Automated & manual testing", href: live("/software-testing-services") },
+        { label: "NFT Development", desc: "Web3 & blockchain solutions", href: live("/nft-development-services") },
+        { label: "App Prototype & Strategy", desc: "Wireframes & user journeys", href: live("/mvp-app-development-company") },
+        { label: "Wearable App Development", desc: "Watch & wearable experiences", href: live("/wearable-app-development-services") },
+        { label: "Progressive Web Apps", desc: "App-like installable web", href: live("/progressive-web-apps-development-services") },
+        { label: "Staff Augmentation & Dedicated Teams", desc: "Engineers who join your team", href: live("/outsourcing-services") },
+      ],
+    },
+  ],
+  [
+    {
+      title: "Browse by Services (continued)",
+      hidden: true,
+      items: [
+        { label: "IoT Development", desc: "Connected device platforms", href: live("/iot-development-services") },
+        { label: "Cloud Computing", desc: "AWS, Azure & GCP hosting", href: live("/cloud-computing-development-services") },
+        { label: "Consulting Services", desc: "Architecture & tech strategy", href: live("/software-consulting-development-services") },
+        { label: "Software Maintenance & Support", desc: "Ongoing care & SLAs", href: live("/it-infrastructure-support-services") },
+        { label: "AI Development Services", desc: "ML & LLM smart models", href: live("/enterprise-ai-development-company") },
+        { label: "Legacy Software Modernization", desc: "System upgrades & refactoring", href: live("/legacy-software-modernization-services") },
+        { label: "Mobile Game Development", desc: "Immersive gaming apps", href: live("/game-development-services") },
+      ],
+    },
+  ],
+  [
+    {
+      title: "Digital Marketing",
+      items: [
+        { label: "SEO", desc: "Search engine optimization", href: live("/seo-services") },
+        { label: "PPC", desc: "Targeted ad marketing", href: live("/pay-per-click-management-services") },
+      ],
+    },
+  ],
+];
+
+const TECHNOLOGY_COLUMNS: MegaGroup[][] = [
+  [
+    {
+      title: "Backend",
+      items: [
+        { label: "NodeJS", desc: "Event-driven backends", href: live("/nodejs-development") },
+        { label: ".NET", desc: "Enterprise Microsoft stack", href: live("/dot-net-development") },
+        { label: "PHP", desc: "Web & CMS platforms", href: live("/php-web-development") },
+        { label: "CodeIgniter", desc: "Lightweight PHP framework", href: live("/codeigniter-web-framework-development-services") },
+        { label: "CakePHP", desc: "Convention-driven PHP", href: live("/cakephp-web-framework-development-services") },
+        { label: "JavaScript", desc: "Server-side JS services", href: live("/javascript-development-services") },
+        { label: "Python", desc: "AI & data science engine", href: live("/python-development") },
+      ],
+    },
+  ],
+  [
+    {
+      title: "Frontend",
+      items: [
+        { label: "ReactJS", desc: "Interactive web interfaces", href: live("/reactjs-development") },
+        { label: "Angular", desc: "Enterprise web applications", href: live("/angularjs-development") },
+        { label: "Full Stack", desc: "End-to-end product teams", href: live("/full-stack-development-services") },
+        { label: "Mean Stack", desc: "Mongo, Express, Angular, Node", href: live("/mean-stack-development") },
+        { label: "Mern Stack", desc: "Mongo, Express, React, Node", href: live("/mern-stack-development") },
+      ],
+    },
+    {
+      title: "Cloud & DevOps",
+      items: [
+        { label: "AWS", desc: "Amazon cloud infrastructure", href: live("/aws-development-services") },
+        { label: "Azure", desc: "Microsoft cloud infrastructure", href: live("/azure-devops-services") },
+      ],
+    },
+  ],
+  [
+    {
+      title: "Mobile",
+      items: [
+        { label: "IOS", desc: "Native Apple applications", href: live("/ios-app-development") },
+        { label: "React Native", desc: "Cross-platform mobile", href: live("/react-native-development") },
+        { label: "Android", desc: "Native Google applications", href: live("/android-app-development") },
+        { label: "Java", desc: "Enterprise Android & services", href: live("/java-development-services") },
+        { label: "Hybrid", desc: "One build, every store", href: live("/hybrid-mobile-application-development-company") },
+        { label: "Flutter", desc: "Pixel-perfect mobile UI", href: live("/flutter-app-development") },
+        { label: "Ionic", desc: "Web tech in a native shell", href: live("/ionic-framework-development") },
+      ],
+    },
+  ],
+  [
+    {
+      title: "CMS",
+      items: [
+        { label: "WordPress", desc: "Popular CMS engine", href: live("/wordpress-development-services") },
+        { label: "Drupal", desc: "Structured enterprise CMS", href: live("/drupal-development") },
+        { label: "BigCommerce", desc: "Hosted commerce platform", href: live("/bigcommerce-development-services") },
+      ],
+    },
+    {
+      title: "Salesforce Development",
+      items: [
+        { label: "Consulting", desc: "CRM strategy & advisory", href: live("/salesforce-consulting") },
+        { label: "Maintenance", desc: "Ongoing org support", href: live("/salesforce-maintenance") },
+        { label: "Customization", desc: "Tailored objects & flows", href: live("/salesforce-customization") },
+        { label: "Implementation", desc: "End-to-end CRM rollout", href: live("/salesforce-implementation") },
+      ],
+    },
+  ],
+];
+
+const MEGA_ICONS = [IconRibbon, IconStar, IconTarget, IconSmileD, IconDiamond];
+
+function MegaColumns({
+  columns,
+  onLinkClick,
+  footer,
+}: {
+  columns: MegaGroup[][];
+  onLinkClick: () => void;
+  footer?: React.ReactNode;
+}) {
+  return (
+    <>
+      {columns.map((groups, ci) => (
+        <div className="mega-dropdown__col" key={ci}>
+          {groups.map((group, gi) => {
+            /* These were <h4>. The mega-dropdowns are always in the DOM —
+               CSS hides them until hover — so their four labels were the
+               first headings in the document, sitting above the hero's
+               <h1> in source order and making the outline start at level 4.
+               They are group labels for a list of links, not document
+               structure, so they are now <p>. .mega-dropdown__title sets
+               margin, font and display explicitly, so nothing moves.
+
+               The grouping is not lost: each label now labels its own <ul>
+               via aria-labelledby, which is how a navigation group is meant
+               to be announced. */
+            const titleId = `mega-${ci}-${gi}-title`;
+            return (
+            <React.Fragment key={group.title}>
+              <p
+                id={titleId}
+                className={`mega-dropdown__title${group.hidden ? " mega-dropdown__title--hidden" : ""}`}
+                aria-hidden={group.hidden || undefined}
+                style={gi > 0 ? { marginTop: "16px" } : undefined}
+              >
+                {group.title}
+              </p>
+              <ul
+                className="mega-dropdown__list"
+                aria-labelledby={group.hidden ? undefined : titleId}
+              >
+                {group.items.map((item, ii) => {
+                  const Icon = MEGA_ICONS[(ci * 3 + gi * 2 + ii) % MEGA_ICONS.length];
+                  return (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        className="mega-dropdown__item"
+                        onClick={onLinkClick}
+                        {...crossSiteProps(item.href)}
+                      >
+                        <span className="mega-dropdown__item-icon">
+                          <Icon />
+                        </span>
+                        <span className="mega-dropdown__item-text">
+                          <span className="mega-dropdown__item-title">{item.label}</span>
+                          <span className="mega-dropdown__item-desc">{item.desc}</span>
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </React.Fragment>
+            );
+          })}
+          {ci === columns.length - 1 ? footer : null}
+        </div>
+      ))}
+    </>
+  );
+}
+
+/* The drawer mirrors what the desktop mega-dropdowns open on hover: below
+   768px there is no hover, so the three parent items become accordions and
+   list the same destinations.
+
+   Contact Us is deliberately NOT in this table. On desktop it is not a nav
+   link either — it is the filled button sitting after the list, and the
+   drawer now carries that same button rather than a seventh grey row. */
+type MobileSubGroup = {
+  title: string;
+  items: { label: string; href: string }[];
+};
+
+/* Columns to drawer groups. A hidden heading means "this column continues
+   the one before it", which on a phone is simply more rows in the same
+   group — so those items are appended rather than starting a new heading. */
+function toDrawerGroups(columns: MegaGroup[][]): MobileSubGroup[] {
+  const out: MobileSubGroup[] = [];
+  for (const column of columns) {
+    for (const group of column) {
+      const items = group.items.map(({ label, href }) => ({ label, href }));
+      const previous = out[out.length - 1];
+      if (group.hidden && previous) previous.items.push(...items);
+      else out.push({ title: group.title, items });
+    }
+  }
+  return out;
+}
+
+type MobileMenuEntry = {
+  key: string;
+  label: string;
+  href: string;
+  groups?: MobileSubGroup[];
+  cta?: { label: string; href: string };
+};
+
+const MOBILE_MENU: MobileMenuEntry[] = [
+  {
+    key: "who-we-are",
+    label: "Who We Are",
+    href: "#who-we-are",
+    /* Same destinations as the desktop "Who We Are" panel further down —
+       keep the two in step. #contact stays a fragment because the Contact
+       section really is on this page; the rest had no matching id and now
+       point at the live pages that exist for them. There is no separate
+       "Our Team" page on the live site, so that item goes to /about-us,
+       which is what actually describes the company and its people. */
+    groups: [
+      {
+        title: "Company",
+        items: [
+          { label: "About Us", href: live("/about-us") },
+          { label: "Our Team", href: live("/about-us") },
+          { label: "Career", href: live("/career") },
+          { label: "Contact Us", href: "#contact" },
+        ],
+      },
+      {
+        title: "Why Fulminous",
+        items: [
+          { label: "Client Reviews", href: live("/client-reviews") },
+          { label: "Our Clients", href: live("/our-clients") },
+          { label: "Our Partners", href: live("/our-partners") },
+          { label: "Awards & Memberships", href: live("/fulminous-software-awards-recognition") },
+        ],
+      },
+      {
+        title: "Partner With Us",
+        items: [
+          { label: "Associate Partnership", href: live("/associate-partnership") },
+          { label: "Strategic Partnership", href: live("/strategic-partnership") },
+          { label: "Referral Partnership", href: live("/referral-partnership") },
+        ],
+      },
+    ],
+    cta: { label: "About Fulminous", href: live("/about-us") },
+  },
+  {
+    key: "services",
+    label: "Services",
+    href: "#services",
+    groups: toDrawerGroups(SERVICES_COLUMNS),
+    cta: { label: "View More Services", href: live("/services") },
+  },
+  {
+    key: "technology",
+    label: "Technology",
+    href: "#technology",
+    groups: toDrawerGroups(TECHNOLOGY_COLUMNS),
+    cta: { label: "All Technologies", href: live("/technologylist") },
+  },
+  /* Blogs and Portfolio are the two menu items with no dropdown. Their
+     #blogs / #portfolio fragments do resolve to real sections on this page,
+     which is what the drawer is for, so they stay as anchors. */
+  { key: "blogs", label: "Blogs", href: "#blogs" },
+  { key: "portfolio", label: "Portfolio", href: "#portfolio" },
+];
+
 export function Navbar() {
   const { isOpen, toggleMenu, closeMenu } = useMobileMenu();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  /* Which second-level panel is showing, or null for the top-level list. The
+     drawer drills rather than expands, so this is a location, not an
+     open/closed flag — only one level is ever on screen. */
+  const [drilledInto, setDrilledInto] = useState<string | null>(null);
   const ignoreScrollUntil = useRef<number>(0);
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  /* True while the panel on screen was opened by a click rather than by hover.
+     A hovered panel closes when the pointer leaves it; a clicked one is pinned
+     and stays until it is dismissed on purpose — Escape, a click outside, a
+     link, or a second click on the same parent. Without this, a tap opened the
+     panel and then the pointer sitting anywhere but on it closed it again. */
+  const pinnedRef = useRef(false);
+  const navRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const levelsRef = useRef<HTMLDivElement>(null);
 
   const cancelClose = useCallback(() => {
     if (closeTimerRef.current) {
@@ -57,10 +411,14 @@ export function Navbar() {
 
   const handleNavMouseEnter = (menuName: string) => {
     cancelClose();
+    /* Hovering a different parent moves the panel, and the new one is a hover
+       panel again — the pin belongs to the click, not to the menu. */
+    if (menuName !== activeDropdown) pinnedRef.current = false;
     setActiveDropdown(menuName);
   };
 
   const handleNavMouseLeave = () => {
+    if (pinnedRef.current) return;
     scheduleClose(200);
   };
 
@@ -69,32 +427,76 @@ export function Navbar() {
   };
 
   const handleDropdownMouseLeave = () => {
+    if (pinnedRef.current) return;
     scheduleClose(200);
   };
 
-  const handleTopNavClick = (menuName: string) => {
+  /* A click on "Services"/"Technology"/"Who We Are" used to do two things at
+     once: open the panel and follow its own href to the section. The jump
+     scrolled the page, and the scroll listener further down closes whatever
+     panel is open — so the panel opened and shut itself, which is the whole of
+     why it would not stay put. Tapping a parent is now a disclosure: it opens
+     and pins the panel and does not navigate. The second click on the same
+     parent is the one that goes to the section, so nothing is unreachable —
+     and on desktop, where hover has already opened the panel by the time you
+     press, the first click still navigates exactly as it did. */
+  const handleTopNavClick = (e: React.MouseEvent, menuName: string) => {
     cancelClose();
-    ignoreScrollUntil.current = Date.now() + 1000;
-    setActiveDropdown(menuName);
     closeMenu();
+
+    if (activeDropdown !== menuName) {
+      e.preventDefault();
+      pinnedRef.current = true;
+      setActiveDropdown(menuName);
+      return;
+    }
+
+    pinnedRef.current = false;
+    ignoreScrollUntil.current = Date.now() + 1000;
+    setActiveDropdown(null);
   };
 
   const handleNavKeyDown = (e: React.KeyboardEvent, menuName: string) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       cancelClose();
-      setActiveDropdown(activeDropdown === menuName ? null : menuName);
+      const opening = activeDropdown !== menuName;
+      pinnedRef.current = opening;
+      setActiveDropdown(opening ? menuName : null);
     } else if (e.key === "Escape") {
       e.preventDefault();
       cancelClose();
+      pinnedRef.current = false;
       setActiveDropdown(null);
     }
   };
 
   const handleLinkClick = () => {
     cancelClose();
+    pinnedRef.current = false;
     setActiveDropdown(null);
     closeMenu();
+  };
+
+  /* Drill in. The whole business of pinning the tapped row against the layout
+     shift of a collapsing accordion is gone with the accordion itself: only
+     one level is on screen at a time, the incoming one starts at its own
+     scroll origin, and nothing under the finger can move because nothing on
+     the outgoing level is being resized. */
+  const openLevel = (key: string) => {
+    setDrilledInto(key);
+    const level = levelsRef.current?.querySelector<HTMLElement>(
+      `#mobile-submenu-${key}`
+    );
+    if (level) level.scrollTop = 0;
+  };
+
+  const backToRoot = () => {
+    setDrilledInto(null);
+    const root = levelsRef.current?.querySelector<HTMLElement>(
+      ".mobile-drawer__level--root"
+    );
+    if (root) root.scrollTop = 0;
   };
 
   const updateDropdownPositions = () => {
@@ -111,7 +513,8 @@ export function Navbar() {
 
       const isWhoWeAre = dropdown.classList.contains("mega-dropdown--who-we-are");
       const isTech = dropdown.classList.contains("mega-dropdown--technology");
-      const targetMaxWidth = isWhoWeAre ? 840 : isTech ? 1120 : 1060;
+      // Keep in step with the width declared on each --modifier in the CSS.
+      const targetMaxWidth = isWhoWeAre ? 840 : isTech ? 1120 : 1320;
 
       const dropdownWidth = Math.min(targetMaxWidth, vw - margin * 2);
       const idealLeft = itemCenter - dropdownWidth / 2;
@@ -129,10 +532,104 @@ export function Navbar() {
     });
   };
 
+  /* Below 1024px the panel is capped to the screen and scrolls inside itself,
+     so one left halfway down reopens showing its middle — the headings above
+     the fold gone and the first rows cut off at the top edge. Every open starts
+     at the top of the panel. */
+  useEffect(() => {
+    if (!activeDropdown) return;
+    const panel = navRef.current?.querySelector<HTMLElement>(
+      ".site-nav__item--has-dropdown.is-open .mega-dropdown"
+    );
+    if (panel) panel.scrollTop = 0;
+  }, [activeDropdown]);
+
+  /* Reopening should land on the top-level list, not on whatever you drilled
+     into last time. */
+  useEffect(() => {
+    if (isOpen) return;
+    setDrilledInto(null);
+    const root = levelsRef.current?.querySelector<HTMLElement>(
+      ".mobile-drawer__level--root"
+    );
+    if (root) root.scrollTop = 0;
+  }, [isOpen]);
+
+  /* Backspace-style: Escape from a sub-level goes back a step rather than
+     closing outright. useMobileMenu's own Escape handler closes the drawer,
+     so this one stops the event reaching it while there is a level to pop. */
+  useEffect(() => {
+    if (!isOpen || !drilledInto) return;
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      backToRoot();
+    };
+    window.addEventListener("keydown", onEscape, true);
+    return () => window.removeEventListener("keydown", onEscape, true);
+  }, [isOpen, drilledInto]);
+
+  /* The panel is a modal, so it holds focus while it is open and hands it
+     back on the way out. The toggle is deliberately part of the loop: it is
+     the X now, so a keyboard user has to be able to tab to it — it just lives
+     in the header rather than inside the panel. */
+  useEffect(() => {
+    if (!isOpen) return;
+    const overlay = navRef.current;
+    if (!overlay) return;
+
+    const opener = document.activeElement as HTMLElement | null;
+    overlay
+      .querySelector<HTMLElement>(".mobile-drawer__row")
+      ?.focus({ preventScroll: true });
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const nodes = [
+        toggleRef.current,
+        ...Array.from(
+          overlay.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")
+        ).filter(
+          /* Only the level on screen is reachable — the others are
+             visibility:hidden and must not be counted as a tab stop. */
+          (el) => {
+            const level = el.closest(".mobile-drawer__level");
+            if (!level) return true;
+            return level.classList.contains("mobile-drawer__level--root")
+              ? !drilledInto
+              : level.classList.contains("is-active");
+          }
+        ),
+      ].filter(Boolean) as HTMLElement[];
+      if (!nodes.length) return;
+
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey && (active === first || active === document.body)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleTab);
+    return () => {
+      document.removeEventListener("keydown", handleTab);
+      if (opener && document.contains(opener)) {
+        opener.focus({ preventScroll: true });
+      }
+    };
+  }, [isOpen, drilledInto]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         cancelClose();
+        pinnedRef.current = false;
         setActiveDropdown(null);
       }
     };
@@ -141,6 +638,7 @@ export function Navbar() {
       const header = document.querySelector(".site-header");
       if (header && !header.contains(event.target as Node)) {
         cancelClose();
+        pinnedRef.current = false;
         setActiveDropdown(null);
       }
     };
@@ -150,6 +648,7 @@ export function Navbar() {
         return;
       }
       cancelClose();
+      pinnedRef.current = false;
       setActiveDropdown(null);
     };
 
@@ -174,19 +673,26 @@ export function Navbar() {
   return (
     <header className="site-header">
       <div className="site-header__inner">
-        <a className="site-header__logo" href="#" aria-label="Fulminous Software home">
+        {/* Was href="#", which changes the URL fragment and scrolls nowhere.
+            The homepage is a real destination and is what a logo should link
+            to — it is also the link crawlers use to confirm the site root. */}
+        <a className="site-header__logo" href="/" aria-label="Fulminous Software home">
           <img
-            src="/assets/Fulminous-Logo.png"
+            src="/assets/Fulminous-Logo.webp"
             alt="Fulminous Software logo"
             width={177}
             height={46}
           />
         </a>
 
+        {/* Sits in the header, above the panel, and stays visible and live the
+            whole time the menu is open — so the three lines you pressed are
+            the X you press to leave. There is no second close button. */}
         <button
+          ref={toggleRef}
           className="site-header__toggle"
           type="button"
-          aria-label="Toggle navigation menu"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
           aria-controls="primary-nav"
           onClick={toggleMenu}
@@ -197,11 +703,141 @@ export function Navbar() {
         </button>
 
         <nav
+          ref={navRef}
           className={`site-nav ${isOpen ? "is-open" : ""}`}
           id="primary-nav"
           aria-label="Primary"
         >
-          <ul className="site-nav__list">
+          {/* Mobile Navigation Drawer (renders on mobile <1024px) */}
+          <div
+            className="mobile-drawer__content"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+          >
+            <div
+              ref={levelsRef}
+              className={`mobile-drawer__levels ${drilledInto ? "is-drilled" : ""}`}
+            >
+              {/* ---- Level 1 ---- */}
+              <div className="mobile-drawer__level mobile-drawer__level--root">
+                <ul className="mobile-drawer__list">
+                  {MOBILE_MENU.map((entry) =>
+                    entry.groups ? (
+                      <li key={entry.key}>
+                        <button
+                          type="button"
+                          className="mobile-drawer__row"
+                          aria-haspopup="true"
+                          aria-expanded={drilledInto === entry.key}
+                          aria-controls={`mobile-submenu-${entry.key}`}
+                          onClick={() => openLevel(entry.key)}
+                        >
+                          <span className="mobile-drawer__row-label">{entry.label}</span>
+                          <span className="mobile-drawer__row-arrow">
+                            <IconArrowRight />
+                          </span>
+                        </button>
+                      </li>
+                    ) : (
+                      /* Blogs and Portfolio have no dropdown on desktop
+                         either, so they go straight somewhere — and carry no
+                         arrow, because nothing is going to slide in. */
+                      <li key={entry.key}>
+                        <a
+                          className="mobile-drawer__row"
+                          href={entry.href}
+                          onClick={handleLinkClick}
+                        >
+                          <span className="mobile-drawer__row-label">{entry.label}</span>
+                        </a>
+                      </li>
+                    )
+                  )}
+                </ul>
+
+                {/* No footer. The copyright and the three social discs were
+                    the last thing in the panel and the least useful — they
+                    put a second, quieter cluster of links directly above the
+                    one action this menu is actually for. The pinned Contact
+                    Us button closes the panel on its own. */}
+              </div>
+
+              {/* ---- Level 2, one per parent ---- */}
+              {MOBILE_MENU.filter((entry) => entry.groups).map((entry) => (
+                <div
+                  key={entry.key}
+                  id={`mobile-submenu-${entry.key}`}
+                  className={`mobile-drawer__level mobile-drawer__level--sub ${
+                    drilledInto === entry.key ? "is-active" : ""
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="mobile-drawer__back"
+                    onClick={backToRoot}
+                  >
+                    <IconArrowLeft />
+                    <span>{entry.label}</span>
+                  </button>
+
+                  <div className="mobile-drawer__sub-scroll">
+                    {entry.groups!.map((group) => (
+                      <div className="mobile-drawer__subgroup" key={group.title}>
+                        <p className="mobile-drawer__subgroup-title">{group.title}</p>
+                        <ul className="mobile-drawer__sublist">
+                          {/* Keyed on the label, not the href: "About Us" and
+                              "Our Team" both resolve to /about-us now, and two
+                              siblings cannot share a key. */}
+                          {group.items.map((item) => (
+                            <li key={item.label}>
+                              <a
+                                className="mobile-drawer__sublink"
+                                href={item.href}
+                                onClick={handleLinkClick}
+                                {...crossSiteProps(item.href)}
+                              >
+                                {item.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+
+                    {entry.cta && (
+                      /* Same class and same arrow glyph the desktop
+                         mega-dropdown uses for "View More Services", so the
+                         button is the shared one, not a look-alike that can
+                         drift from it. */
+                      <a
+                        className="btn--outline-primary mobile-drawer__subcta"
+                        href={entry.cta.href}
+                        onClick={handleLinkClick}
+                        {...crossSiteProps(entry.cta.href)}
+                      >
+                        {entry.cta.label} &rarr;
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Pinned under both levels: the header's own Contact Us button,
+                same classes, reachable without scrolling to find it. */}
+            <div className="mobile-drawer__actions">
+              <a
+                className="btn btn--primary mobile-drawer__contact-cta"
+                href="#contact"
+                onClick={handleLinkClick}
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+
+          <ul className="site-nav__list desktop-only-nav">
             {/* WHO WE ARE */}
             <li
               className={`site-nav__item site-nav__item--has-dropdown ${activeDropdown === "who-we-are" ? "is-open" : ""}`}
@@ -213,7 +849,7 @@ export function Navbar() {
                 href="#who-we-are"
                 aria-haspopup="true"
                 aria-expanded={activeDropdown === "who-we-are"}
-                onClick={() => handleTopNavClick("who-we-are")}
+                onClick={(e) => handleTopNavClick(e, "who-we-are")}
                 onKeyDown={(e) => handleNavKeyDown(e, "who-we-are")}
               >
                 Who We Are <span className="chevron">▾</span>
@@ -226,10 +862,15 @@ export function Navbar() {
                 <div className="mega-dropdown__inner">
                   {/* Col 1: Company */}
                   <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Company</h4>
-                    <ul className="mega-dropdown__list">
+                    {/* <h4> before: a nav group label, not document
+                        structure, and it sat above the hero's <h1> in source
+                        order. See the note in MegaColumns above — the same
+                        change, hand-written here because this panel is not
+                        driven by the shared table. */}
+                    <p id="mega-who-company" className="mega-dropdown__title">Company</p>
+                    <ul className="mega-dropdown__list" aria-labelledby="mega-who-company">
                       <li>
-                        <a href="#about-us" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/about-us")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconRibbon /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">About Us</span>
@@ -238,7 +879,9 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#our-team" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        {/* The live site has no separate team page; /about-us
+                            is where the company and its people are described. */}
+                        <a href={live("/about-us")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconStar /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Team</span>
@@ -247,7 +890,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#career" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/career")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconTarget /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Career</span>
@@ -269,10 +912,10 @@ export function Navbar() {
 
                   {/* Col 2: Why Fulminous */}
                   <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Why Fulminous</h4>
-                    <ul className="mega-dropdown__list">
+                    <p id="mega-who-why" className="mega-dropdown__title">Why Fulminous</p>
+                    <ul className="mega-dropdown__list" aria-labelledby="mega-who-why">
                       <li>
-                        <a href="#reviews" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/client-reviews")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconDiamond /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Client Reviews</span>
@@ -281,7 +924,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#clients" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/our-clients")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconSmileD /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Clients</span>
@@ -290,7 +933,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#partners" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/our-partners")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconTarget /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Partners</span>
@@ -299,7 +942,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#awards" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/fulminous-software-awards-recognition")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconRibbon /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Awards &amp; Memberships</span>
@@ -312,10 +955,10 @@ export function Navbar() {
 
                   {/* Col 3: Partner With Us */}
                   <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Partner With Us</h4>
-                    <ul className="mega-dropdown__list">
+                    <p id="mega-who-partner" className="mega-dropdown__title">Partner With Us</p>
+                    <ul className="mega-dropdown__list" aria-labelledby="mega-who-partner">
                       <li>
-                        <a href="#associate-partnership" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/associate-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconStar /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Associate Partnership</span>
@@ -324,7 +967,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#strategic-partnership" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/strategic-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconDiamond /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Strategic Partnership</span>
@@ -333,7 +976,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href="#referral-partnership" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/referral-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-icon"><IconTarget /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Referral Partnership</span>
@@ -358,7 +1001,7 @@ export function Navbar() {
                 href="#services"
                 aria-haspopup="true"
                 aria-expanded={activeDropdown === "services"}
-                onClick={() => handleTopNavClick("services")}
+                onClick={(e) => handleTopNavClick(e, "services")}
                 onKeyDown={(e) => handleNavKeyDown(e, "services")}
               >
                 Services <span className="chevron">▾</span>
@@ -369,173 +1012,22 @@ export function Navbar() {
                 onMouseLeave={handleDropdownMouseLeave}
               >
                 <div className="mega-dropdown__inner">
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Browse by Services</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#mobile-app" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Mobile App Development</span>
-                            <span className="mega-dropdown__item-desc">Native &amp; cross-platform apps</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#web-dev" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Web Development</span>
-                            <span className="mega-dropdown__item-desc">Responsive web applications</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#cross-platform" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Cross Platform Apps</span>
-                            <span className="mega-dropdown__item-desc">Single codebase solutions</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#ecommerce" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Ecommerce Solutions</span>
-                            <span className="mega-dropdown__item-desc">Custom online store platforms</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#ui-ux" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">UI &amp; UX Designing</span>
-                            <span className="mega-dropdown__item-desc">Engaging digital interfaces</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title mega-dropdown__title--hidden" aria-hidden="true">Solutions</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#opensource" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Opensource Development</span>
-                            <span className="mega-dropdown__item-desc">Flexible &amp; scalable platforms</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#qa" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Quality Assurance</span>
-                            <span className="mega-dropdown__item-desc">Automated &amp; manual testing</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#nft" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">NFT Development</span>
-                            <span className="mega-dropdown__item-desc">Web3 &amp; blockchain solutions</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#prototype" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">App Prototype &amp; Strategy</span>
-                            <span className="mega-dropdown__item-desc">Wireframes &amp; user journeys</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#staff" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Dedicated Teams</span>
-                            <span className="mega-dropdown__item-desc">Staff augmentation &amp; experts</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title mega-dropdown__title--hidden" aria-hidden="true">Services Col 3</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#cloud" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Cloud Computing</span>
-                            <span className="mega-dropdown__item-desc">AWS, Azure &amp; GCP hosting</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#ai-dev" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">AI Development</span>
-                            <span className="mega-dropdown__item-desc">ML &amp; LLM smart models</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#legacy" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Legacy Modernization</span>
-                            <span className="mega-dropdown__item-desc">System upgrades &amp; refactoring</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#game" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Game Development</span>
-                            <span className="mega-dropdown__item-desc">Immersive gaming apps</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Digital Marketing</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#seo" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">SEO &amp; Growth</span>
-                            <span className="mega-dropdown__item-desc">Search engine optimization</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#ppc" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">PPC Campaigns</span>
-                            <span className="mega-dropdown__item-desc">Targeted ad marketing</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                    <a className="btn--outline-primary mega-dropdown__btn" href="#services" onClick={handleLinkClick} style={{ marginTop: "16px", display: "inline-block" }}>
-                      View More Services &rarr;
-                    </a>
-                  </div>
+                  <MegaColumns
+                    columns={SERVICES_COLUMNS}
+                    onLinkClick={handleLinkClick}
+                    footer={
+                      <a
+                        className="btn--outline-primary mega-dropdown__btn"
+                        href={live("/services")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={handleLinkClick}
+                        style={{ marginTop: "16px", display: "inline-block" }}
+                      >
+                        View More Services &rarr;
+                      </a>
+                    }
+                  />
                 </div>
               </div>
             </li>
@@ -551,7 +1043,7 @@ export function Navbar() {
                 href="#technology"
                 aria-haspopup="true"
                 aria-expanded={activeDropdown === "technology"}
-                onClick={() => handleTopNavClick("technology")}
+                onClick={(e) => handleTopNavClick(e, "technology")}
                 onKeyDown={(e) => handleNavKeyDown(e, "technology")}
               >
                 Technology <span className="chevron">▾</span>
@@ -562,167 +1054,7 @@ export function Navbar() {
                 onMouseLeave={handleDropdownMouseLeave}
               >
                 <div className="mega-dropdown__inner">
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Backend</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#nodejs" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">NodeJS &amp; Express</span>
-                            <span className="mega-dropdown__item-desc">Event-driven backends</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#dotnet" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">.NET &amp; C# Solutions</span>
-                            <span className="mega-dropdown__item-desc">Enterprise Microsoft stack</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#php" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">PHP &amp; Laravel</span>
-                            <span className="mega-dropdown__item-desc">Web &amp; CMS platforms</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#python" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Python &amp; Django</span>
-                            <span className="mega-dropdown__item-desc">AI &amp; data science engine</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Frontend</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#reactjs" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">ReactJS &amp; Next.js</span>
-                            <span className="mega-dropdown__item-desc">Interactive web interfaces</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#angular" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Angular Framework</span>
-                            <span className="mega-dropdown__item-desc">Enterprise web applications</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#fullstack" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">MERN &amp; MEAN Stack</span>
-                            <span className="mega-dropdown__item-desc">End-to-end web stack</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                    <h4 className="mega-dropdown__title" style={{ marginTop: "16px" }}>Cloud &amp; DevOps</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#aws" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">AWS &amp; Azure Cloud</span>
-                            <span className="mega-dropdown__item-desc">Cloud infrastructure</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">Mobile</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#ios" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">iOS (Swift)</span>
-                            <span className="mega-dropdown__item-desc">Native Apple applications</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#android" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Android (Kotlin)</span>
-                            <span className="mega-dropdown__item-desc">Native Google applications</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#react-native" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">React Native</span>
-                            <span className="mega-dropdown__item-desc">Cross-platform mobile</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#flutter" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Flutter Development</span>
-                            <span className="mega-dropdown__item-desc">Pixel-perfect mobile UI</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="mega-dropdown__col">
-                    <h4 className="mega-dropdown__title">CMS</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#wordpress" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">WordPress &amp; WooCommerce</span>
-                            <span className="mega-dropdown__item-desc">Popular CMS engine</span>
-                          </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#headless" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Strapi / Sanity CMS</span>
-                            <span className="mega-dropdown__item-desc">Headless API content</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                    <h4 className="mega-dropdown__title" style={{ marginTop: "16px" }}>Salesforce Development</h4>
-                    <ul className="mega-dropdown__list">
-                      <li>
-                        <a href="#salesforce" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
-                          <span className="mega-dropdown__item-text">
-                            <span className="mega-dropdown__item-title">Salesforce Services</span>
-                            <span className="mega-dropdown__item-desc">CRM implementation</span>
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                  <MegaColumns columns={TECHNOLOGY_COLUMNS} onLinkClick={handleLinkClick} />
                 </div>
               </div>
             </li>
@@ -740,7 +1072,7 @@ export function Navbar() {
           </ul>
 
           <a
-            className="btn btn--primary site-nav__cta"
+            className="btn btn--primary site-nav__cta desktop-only-nav"
             href="#contact"
             onClick={handleLinkClick}
           >

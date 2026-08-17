@@ -1,6 +1,15 @@
-"use client";
+/* No "use client".
+   ------------------------------------------------------------------
+   Nothing in this file is interactive: GenerativeText below renders its
+   `text` straight out — the `speed` and `delay` props are vestigial, from
+   when it typed the string on a timer — and there is no state, no effect and
+   no handler anywhere in the section. The directive was still here, along
+   with an import of useState/useEffect/useRef that was never called, which
+   put the whole section in the client bundle and made React hydrate every
+   node of it for no behaviour.
+   The markup it renders is identical either way. */
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 
 function GenerativeText({
   text,
@@ -17,92 +26,12 @@ function GenerativeText({
   tag?: "h2" | "p";
   id?: string;
 }) {
-  const [displayedText, setDisplayedText] = useState("");
-  const [isStarted, setIsStarted] = useState(false);
-  const [fadeOpacity, setFadeOpacity] = useState(1);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setTimeout(() => setIsStarted(true), delay);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [delay]);
-
-  useEffect(() => {
-    if (!isStarted) return;
-
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      if (currentIndex <= text.length) {
-        setDisplayedText(text.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(interval);
-      }
-    }, speed);
-
-    return () => clearInterval(interval);
-  }, [isStarted, text, speed]);
-
-  useEffect(() => {
-    let ticking = false;
-    function handleScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        ticking = false;
-        const el = containerRef.current;
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-
-        if (rect.bottom < windowHeight * 0.4) {
-          const fadeRatio = Math.max(0.25, rect.bottom / (windowHeight * 0.4));
-          setFadeOpacity((prev) => (Math.abs(prev - fadeRatio) > 0.02 ? fadeRatio : prev));
-        } else {
-          setFadeOpacity((prev) => (prev !== 1 ? 1 : prev));
-        }
-      });
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const Component = tag;
 
   return (
-    <div
-      ref={containerRef}
-      className="generative-text-wrap"
-      style={{
-        opacity: fadeOpacity,
-        transform: `translateY(${(1 - fadeOpacity) * -12}px)`,
-        transition: "opacity 0.25s ease-out, transform 0.25s ease-out",
-      }}
-    >
-      <Component className={`${className} ${isStarted ? "is-generating" : ""}`} id={id}>
-        {displayedText}
-        {displayedText.length < text.length && (
-          <span className="generative-caret" aria-hidden="true">
-            |
-          </span>
-        )}
-        <span style={{ opacity: 0, pointerEvents: "none", userSelect: "none" }}>
-          {text.slice(displayedText.length)}
-        </span>
+    <div className="generative-text-wrap">
+      <Component className={className} id={id}>
+        {text}
       </Component>
     </div>
   );
@@ -135,7 +64,9 @@ export function Industries() {
             <div className="industries__cards">
               <article className="industry-card">
                 <div className="industry-card__icon-wrap">
-                  <img className="industry-card__icon" src="/assets/icons/HealthCare.svg" alt="HealthCare" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                  <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/HealthCare.svg" alt="HealthCare" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
                 </div>
                 <div className="industry-card__text">
                   <h3 className="industry-card__title">HealthCare</h3>
@@ -147,7 +78,9 @@ export function Industries() {
 
               <article className="industry-card">
                 <div className="industry-card__icon-wrap">
-                  <img className="industry-card__icon" src="/assets/icons/Banking & Finance.svg" alt="Banking & Finance" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                  <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/Banking & Finance.svg" alt="Banking & Finance" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
                 </div>
                 <div className="industry-card__text">
                   <h3 className="industry-card__title">Banking &amp; Finance</h3>
@@ -159,7 +92,9 @@ export function Industries() {
 
               <article className="industry-card">
                 <div className="industry-card__icon-wrap">
-                  <img className="industry-card__icon" src="/assets/icons/Real-Estate.svg" alt="Real Estate" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                  <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/Real-Estate.svg" alt="Real Estate" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
                 </div>
                 <div className="industry-card__text">
                   <h3 className="industry-card__title">Real Estate</h3>
@@ -174,7 +109,9 @@ export function Industries() {
           <div className="industries__row industries__grid">
             <article className="industry-card">
               <div className="industry-card__icon-wrap">
-                <img className="industry-card__icon" src="/assets/icons/Travel & Hospitality.svg" alt="Travel & Hospitality" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/Travel & Hospitality.svg" alt="Travel & Hospitality" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Travel &amp; Hospitality</h3>
@@ -186,7 +123,9 @@ export function Industries() {
 
             <article className="industry-card">
               <div className="industry-card__icon-wrap">
-                <img className="industry-card__icon" src="/assets/icons/Media & Entertainment.svg" alt="Media & Entertainment" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/Media & Entertainment.svg" alt="Media & Entertainment" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Media &amp; Entertainment</h3>
@@ -198,7 +137,9 @@ export function Industries() {
 
             <article className="industry-card">
               <div className="industry-card__icon-wrap">
-                <img className="industry-card__icon" src="/assets/icons/E-commerce & Retail.svg" alt="E-commerce & Retail" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/E-commerce & Retail.svg" alt="E-commerce & Retail" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">E-commerce &amp; Retail</h3>
@@ -210,7 +151,9 @@ export function Industries() {
 
             <article className="industry-card">
               <div className="industry-card__icon-wrap">
-                <img className="industry-card__icon" src="/assets/icons/Education & e-Learning.svg" alt="Education & e-Learning" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/Education & e-Learning.svg" alt="Education & e-Learning" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Education &amp; e-Learning</h3>
@@ -222,7 +165,9 @@ export function Industries() {
 
             <article className="industry-card">
               <div className="industry-card__icon-wrap">
-                <img className="industry-card__icon" src="/assets/icons/Food & Restaurant.svg" alt="Food & Restaurant" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+                <img
+              decoding="async"
+              loading="lazy" className="industry-card__icon" src="/assets/icons/Food & Restaurant.svg" alt="Food & Restaurant" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Food &amp; Restaurant</h3>
@@ -266,10 +211,15 @@ export function Industries() {
         <div className="reviews-bar__inner">
           <div className="reviews-bar__card">
             <div className="review-stat">
+              {/* This alt said "GoodFirms rating" and the GoodFirms image
+                  below said "Clutch rating" — the two were describing each
+                  other's badge, and neither described Clutch. */}
               <img
+              decoding="async"
+              loading="lazy"
                 className="review-stat__logo"
-                src="/assets/upwork.png"
-                alt="GoodFirms rating"
+                src="/assets/upwork.webp"
+                alt="Upwork 4.9 out of 5 review rating"
                 width={347}
                 height={68}
               />
@@ -284,7 +234,7 @@ export function Industries() {
                   <span className="trustpilot-card-title">Trustpilot</span>
                 </div>
                 <div className="trustpilot-card-score">
-                  <div className="stars" role="img" aria-label="Rated 5 out of 5 stars">
+                  <div className="stars" role="img" aria-label="Rated 4.9 out of 5 stars">
                     <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
                       <use href="#icon-star" />
                     </svg>
@@ -301,16 +251,18 @@ export function Industries() {
                       <use href="#icon-star" />
                     </svg>
                   </div>
-                  <span className="trustpilot-card-text">5.0, 50 Review</span>
+                  <span className="trustpilot-card-text">4.9/5 Review</span>
                 </div>
               </div>
             </div>
 
             <div className="review-stat">
               <img
+              decoding="async"
+              loading="lazy"
                 className="review-stat__logo"
-                src="/assets/GoodFirms.png"
-                alt="Clutch rating"
+                src="/assets/GoodFirms.webp"
+                alt="GoodFirms 4.9 out of 5 review rating"
                 width={253}
                 height={39}
               />

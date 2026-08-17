@@ -61,3 +61,12 @@ lighthouse-report.json
 
 # Vercel
 .vercel
+
+# Pre-optimisation image masters. scripts/optimize-images.js moves the
+# originals here after re-encoding them into public/assets as WebP, so they
+# stay on disk to re-run from without being deployed or committed.
+.image-originals/
+
+# Second build output, used when a production build has to run while the dev
+# server is up (NEXT_DIST_DIR=.next-build). See next.config.mjs.
+.next-build/

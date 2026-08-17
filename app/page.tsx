@@ -32,8 +32,8 @@ export default function HomePage() {
           <Domains />
           <Industries />
           <Testimonials />
-          <Blogs />
           <Cases />
+          <Blogs />
           <Contact />
         </div>
       </main>

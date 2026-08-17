@@ -52,8 +52,10 @@ export function Testimonials() {
             </article>
             <article className="tphoto tphoto--h403">
               <img
+              decoding="async"
+              loading="lazy"
                 className="tphoto__img"
-                src="/assets/Brett McCammon.png"
+                src="/assets/Brett McCammon.webp"
                 alt="Portrait of Brett McCammon"
               />
               <div className="tphoto__meta">
@@ -66,8 +68,10 @@ export function Testimonials() {
           <div className="testimonials__col">
             <article className="tphoto tphoto--h403">
               <img
+              decoding="async"
+              loading="lazy"
                 className="tphoto__img"
-                src="/assets/Heung jun Kwon.png"
+                src="/assets/Heung jun Kwon.webp"
                 alt="Portrait of Heung jun Kwon"
               />
               <div className="tphoto__meta">
@@ -147,8 +151,10 @@ export function Testimonials() {
             </article>
             <article className="tphoto tphoto--h427">
               <img
+              decoding="async"
+              loading="lazy"
                 className="tphoto__img"
-                src="/assets/Kwame Duah.png"
+                src="/assets/Kwame Duah.webp"
                 alt="Portrait of Kwame Duah"
               />
               <div className="tphoto__meta">
@@ -161,8 +167,10 @@ export function Testimonials() {
           <div className="testimonials__col">
             <article className="tphoto tphoto--h401">
               <img
+              decoding="async"
+              loading="lazy"
                 className="tphoto__img"
-                src="/assets/Carla Vernón.png"
+                src="/assets/Carla Vernón.webp"
                 alt="Portrait of Carla Vernón"
               />
               <div className="tphoto__meta">

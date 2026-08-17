@@ -1,4 +1,24 @@
 import React from "react";
+import { live } from "@/lib/site-config";
+
+/* Each case row's "Read More" was href="#": a crawlable link to the top of the
+   current page, and nothing to read. There is no case-study route in this app
+   and no per-project page on the live site for Trailmates, Bingo or HotelOps,
+   so rather than invent three URLs the affordance is a <span> carrying the same
+   class. .case-link sets display, font and colour outright and every hover rule
+   that touches it is class-based (.case-row:hover .case-link svg and friends),
+   so the arrow still slides on hover exactly as before. The section CTA points
+   at the real portfolio index. */
+function CaseAffordance() {
+  return (
+    <span className="case-link">
+      Read More
+      <svg aria-hidden="true">
+        <use href="#icon-arrow-right" />
+      </svg>
+    </span>
+  );
+}
 
 export function Cases() {
   return (
@@ -15,7 +35,13 @@ export function Cases() {
               create for businesses.
             </p>
           </div>
-          <a className="btn btn--primary cases__more" href="#portfolio">
+          {/* Was href="#portfolio" — the id of this very section. */}
+          <a
+            className="btn btn--primary cases__more"
+            href={live("/portfolios")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View Case studies
           </a>
         </div>
@@ -25,11 +51,17 @@ export function Cases() {
             <article className="case-row">
               <div className="case-thumb case-thumb--green">
                 <div className="case-thumb__shots">
-                  <img className="case-thumb__shot case-thumb__shot--back-l" src="/assets/Trailmates-16.jpg" alt="" />
-                  <img className="case-thumb__shot case-thumb__shot--back-r" src="/assets/Trailmates-18.jpg" alt="" />
                   <img
+              decoding="async"
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/assets/Trailmates-16.webp" alt="" />
+                  <img
+              decoding="async"
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/assets/Trailmates-18.webp" alt="" />
+                  <img
+              decoding="async"
+              loading="lazy"
                     className="case-thumb__shot case-thumb__shot--front"
-                    src="/assets/Trailmates-1.jpg"
+                    src="/assets/Trailmates-1.webp"
                     alt="Trailmates app screenshot"
                   />
                 </div>
@@ -44,12 +76,7 @@ export function Cases() {
                   complete app solution for connecting travelers, planning activities, and amazing
                   outdoor experiences.
                 </p>
-                <a className="case-link" href="#">
-                  Read More
-                  <svg aria-hidden="true">
-                    <use href="#icon-arrow-right" />
-                  </svg>
-                </a>
+                <CaseAffordance />
               </div>
             </article>
 
@@ -58,9 +85,15 @@ export function Cases() {
             <article className="case-row">
               <div className="case-thumb case-thumb--orange">
                 <div className="case-thumb__shots">
-                  <img className="case-thumb__shot case-thumb__shot--back-l" src="/assets/Bingo-2.jpg" alt="" />
-                  <img className="case-thumb__shot case-thumb__shot--back-r" src="/assets/Bingo-3.jpg" alt="" />
                   <img
+              decoding="async"
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/assets/Bingo-2.webp" alt="" />
+                  <img
+              decoding="async"
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/assets/Bingo-3.webp" alt="" />
+                  <img
+              decoding="async"
+              loading="lazy"
                     className="case-thumb__shot case-thumb__shot--front"
                     src="/assets/Bingo-1.webp"
                     alt="Bingo game app screenshot"
@@ -76,12 +109,7 @@ export function Cases() {
                   A highly engaging and profitable bingo game app developed by Fulminous Software.
                   The ultimate proof of our excellence in modern game development services.
                 </p>
-                <a className="case-link" href="#">
-                  Read More
-                  <svg aria-hidden="true">
-                    <use href="#icon-arrow-right" />
-                  </svg>
-                </a>
+                <CaseAffordance />
               </div>
             </article>
 
@@ -91,11 +119,17 @@ export function Cases() {
           <div className="cases__featured">
             <div className="case-thumb case-thumb--blue">
               <div className="case-thumb__shots">
-                <img className="case-thumb__shot case-thumb__shot--back-l" src="/assets/HotelOps-2.jpg" alt="" />
-                <img className="case-thumb__shot case-thumb__shot--back-r" src="/assets/HotelOps-1.jpg" alt="" />
                 <img
+              decoding="async"
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/assets/HotelOps-2.webp" alt="" />
+                <img
+              decoding="async"
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/assets/HotelOps-1.webp" alt="" />
+                <img
+              decoding="async"
+              loading="lazy"
                   className="case-thumb__shot case-thumb__shot--front"
-                  src="/assets/HotelOps-3.jpg"
+                  src="/assets/HotelOps-3.webp"
                   alt="HotelOps website screenshot"
                 />
               </div>
@@ -111,12 +145,7 @@ export function Cases() {
                 objectives with a wide variety of instructions <br />
                 and recipes.
               </p>
-              <a className="case-link" href="#">
-                Read More
-                <svg aria-hidden="true">
-                  <use href="#icon-arrow-right" />
-                </svg>
-              </a>
+              <CaseAffordance />
             </div>
           </div>
         </div>
