@@ -6,6 +6,7 @@ import { Showcase } from "@/components/Showcase";
 import { Partners } from "@/components/Partners";
 import { Domains } from "@/components/Domains";
 import { Industries } from "@/components/Industries";
+import { FulminousAiBanner } from "@/components/FulminousAiBanner";
 import { Testimonials } from "@/components/Testimonials";
 import { Blogs } from "@/components/Blogs";
 import { Cases } from "@/components/Cases";
@@ -31,6 +32,7 @@ export default function HomePage() {
           <Partners />
           <Domains />
           <Industries />
+          <FulminousAiBanner />
           <Testimonials />
           <Cases />
           <Blogs />

@@ -1,3 +1,299 @@
+/* The @font-face layer lives at the top of this file rather than in its own
+   stylesheet because Next emits an @import as a separate CSS chunk instead of
+   inlining it, and a second render-blocking <link> is exactly what moving off
+   next/font was meant to remove. Everything down to the "DESIGN TOKENS"
+   banner is generated from Google Fonts binaries — see the block comment
+   directly below before editing any of it by hand. */
+
+/* Self-hosted webfonts — @font-face layer.
+   ==================================================================
+   These are the exact same woff2 files next/font/google emitted for
+   Poppins, Figtree and Inter (latin + latin-ext subsets), lifted out of
+   .next/static/media and checked in under public/fonts. Same families,
+   same weights, same `display: swap`, same unicode-ranges, so every
+   glyph on the page rasterises identically to before.
+
+   Why they moved out of next/font
+   -------------------------------
+   next/font marks the files it wants preloaded as *.p.woff2 and then
+   records them in .next/server/next-font-manifest.json, which is what
+   makes the router emit <link rel="preload" as="font"> into <head>.
+   That manifest was arriving empty:
+
+       { "pages": {}, "app": {}, "appUsingSizeAdjust": false, ... }
+
+   NextFontManifestPlugin finds the loader modules with
+   `mod.request.includes("/next-font-loader/index.js?")` — a forward-slash
+   literal — and on Windows the request is spelled with backslashes, so the
+   test never matches and no font is ever registered. Result: zero font
+   preloads in the served HTML, and Poppins was not discovered until the
+   159 kB stylesheet had downloaded and the h1 had been laid out. The h1 is
+   the LCP element, so that discovery delay landed directly on LCP.
+
+   Hard-coding the URLs under /fonts makes the preloads in app/layout.tsx
+   exact and platform-independent, and keeping the block here — concatenated
+   into globals.css rather than @imported, because Next emits an @import as a
+   CSS chunk of its own — removes the second render-blocking stylesheet
+   next/font used to add. Filenames encode family, weight and subset and never
+   change content, so next.config.mjs serves /fonts immutable for a year.
+
+   The three *Fallback* faces at the bottom are next/font's
+   `adjustFontFallback` output, copied verbatim: they re-metric local
+   Arial to the webfont's proportions so the swap does not move any text.
+   Dropping them is what would put CLS back on the board.
+   ================================================================== */
+
+/* ---- Poppins ---- */
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/poppins-300-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/poppins-300-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/poppins-400-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/poppins-400-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/poppins-500-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/poppins-500-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/poppins-600-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/poppins-600-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/poppins-700-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/poppins-700-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/poppins-800-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/poppins-800-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+
+/* ---- Figtree ---- */
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Figtree";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/fonts/figtree-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+
+/* ---- Inter ---- */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/inter-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-variable-latin.woff2") format("woff2");
+  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/inter-variable-latin-ext.woff2") format("woff2");
+  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
+}
+
+/* ---- Metric-compatible fallbacks (next/font adjustFontFallback output) ---- */
+@font-face {
+  font-family: "Poppins Fallback";
+  src: local("Arial");
+  ascent-override: 93.62%;
+  descent-override: 31.21%;
+  line-gap-override: 8.92%;
+  size-adjust: 112.16%;
+}
+@font-face {
+  font-family: "Figtree Fallback";
+  src: local("Arial");
+  ascent-override: 94.32%;
+  descent-override: 24.82%;
+  line-gap-override: 0.00%;
+  size-adjust: 100.72%;
+}
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial");
+  ascent-override: 90.49%;
+  descent-override: 22.56%;
+  line-gap-override: 0.00%;
+  size-adjust: 107.06%;
+}
+
+/* The three tokens globals.css builds --font-display / --font-body /
+   --font-util / --font-ui out of. next/font used to hand these out through
+   the generated .__variable_* classes on <html>; the names below are the
+   only thing that changed, and each still resolves to
+   "<family>", "<family> Fallback", …, Arial, sans-serif. */
+:root {
+  --font-poppins: "Poppins", "Poppins Fallback";
+  --font-figtree: "Figtree", "Figtree Fallback";
+  --font-inter: "Inter", "Inter Fallback";
+}
+
 /* ============================================================
    DESIGN TOKENS
    ============================================================ */
@@ -9,7 +305,13 @@
   --color-star: #dfb300;
   --color-text: #333333;
   --color-text-muted: #5c5c5c;
-  --color-text-soft: #979197;
+  /* 4.78:1 on white, up from 3.08:1. #979197 failed WCAG AA (1.4.3 wants 4.5:1
+     for body copy) and Lighthouse flagged every line of it. The hue is kept —
+     still a neutral grey with the same faint magenta cast, R and B equal and G
+     five lower — so the type reads the same weight, just dark enough to be
+     legible. Only .feature-item__desc uses this token, so the change is
+     confined to the tech-stack descriptions in the Domains section. */
+  --color-text-soft: #767176;
   --color-text-alt: #554d56;
   --color-text-clutch: #17313b;
   --color-black: #000000;
@@ -110,6 +412,12 @@
   --z-toggle: 1100;
   --header-height: 79px;
 
+  /* One rhythm between stacked sections. 150px is what .tech-partner__inner
+     already used between its intro, stats and showcase blocks; every section in
+     .content-stack sits flush against its neighbour, so each carries half of it
+     as vertical padding and adjacent pairs sum back to 150. */
+  --section-gap: 150px;
+
   /* Transitions & Motion Tokens */
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 180ms;
@@ -147,8 +455,19 @@ body {
   color: var(--color-text);
   background-color: var(--color-white);
   line-height: var(--lh-normal);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Font smoothing is deliberately left at the browser default.
+     ------------------------------------------------------------------
+     This used to force `-webkit-font-smoothing: antialiased` and
+     `-moz-osx-font-smoothing: grayscale`. Both are no-ops on Windows and
+     Linux — they only do anything on macOS, where they switch text off
+     subpixel antialiasing and onto a lighter grayscale pass. That thins every
+     stroke, and thinner strokes at the same font-size read as smaller type,
+     which is why the Mac looked like it was rendering a smaller font than
+     Windows at identical CSS pixel sizes. Dropping the two lines leaves macOS
+     on its own default and brings its weight back in line with Windows.
+     Nothing changes on Windows, since neither property was ever applied
+     there. Sizes and spacing are untouched — this is purely how the existing
+     glyphs are rasterised. */
 }
 
 img,
@@ -285,8 +604,14 @@ button {
 }
 
 .site-header__logo img {
+  /* height: auto, not 46px. The mark is 373x92, so 177 wide is 43.66 tall;
+     pinning it to 46 stretched it and cost the Best Practices
+     image-aspect-ratio audit. The logo is 2.3px shorter now and undistorted.
+     The width/height attributes on the element carry the same 373x92 ratio,
+     so the box is reserved correctly before the file decodes and this costs
+     no layout shift. */
   width: 177px;
-  height: 46px;
+  height: auto;
 }
 
 @media (min-width: 768px) {
@@ -2208,7 +2533,7 @@ button {
   position: relative;
   z-index: 1;
   margin-top: 0;
-  padding: 100px 0;
+  padding: calc(var(--section-gap) / 2) 0;
   border-radius: 0;
   background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 28.365%, #ffffff 42.308%, #f4f8ff 100%);
 }
@@ -2224,11 +2549,18 @@ button {
   gap: 150px;
 }
 
+/* 40px between the heading and its subtext, up from 16.
+   ------------------------------------------------------------------
+   With the title's leading as loose as it was (below), 16px here meant the two
+   lines of a wrapped heading were pushed further apart than the heading was
+   from the paragraph under it. Nothing grouped, so the whole block read as one
+   evenly spaced run of lines. Tight leading inside the heading plus a wider gap
+   after it is what separates the two. */
 .section-head {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-16);
+  gap: 40px;
   width: 100%;
   text-align: center;
 }
@@ -2238,7 +2570,11 @@ button {
   font-family: var(--font-display);
   font-weight: var(--fw-semibold);
   font-size: var(--fs-36);
-  line-height: var(--lh-normal);
+  /* 1.2, not --lh-normal. `normal` resolves to about 1.53 for this face, which
+     is body-copy leading applied to a 36px display heading — it put 55px
+     between the two lines of this title. The phone block already overrode this
+     to 1.3 for the same reason; desktop was the one place still using it. */
+  line-height: 1.2;
   color: var(--color-text);
 }
 
@@ -2252,10 +2588,6 @@ button {
   color: var(--color-text-muted);
 }
 
-.section-head__underline {
-  width: 142px;
-  height: 10px;
-}
 
 .intro {
   display: flex;
@@ -2367,9 +2699,12 @@ button {
   color: var(--color-primary);
 }
 
+/* Slide only — the arrow keeps its accent colour on hover, so it stays the
+   colour the reference shows it in. Three rules used to repaint it blue here
+   (this one, .intro-card--growth:hover and .cases__featured:hover); all three
+   now just move it. */
 .intro-card__panel:hover .intro-card__link svg {
   transform: translateX(6px);
-  stroke: var(--color-primary);
 }
 
 .intro-card__eyebrow {
@@ -2407,7 +2742,8 @@ button {
 .intro-card__link svg {
   width: 20px;
   height: 20px;
-  stroke: var(--color-text);
+  /* Accent orange, matching the reference. */
+  stroke: var(--color-accent);
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
@@ -2421,7 +2757,6 @@ button {
 
 .intro-card--growth:hover .intro-card__link svg {
   transform: translateX(6px);
-  stroke: var(--color-primary);
 }
 
 .intro-card--about {
@@ -2572,13 +2907,14 @@ button {
   padding: 30px 40px;
   border-radius: var(--radius-24);
   text-align: center;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, background-color 0.4s ease;
+  /* No hover state on these, on request — the tiles are a readout, not
+     something to interact with. The lift, the blue shadow and the plus-sign
+     kick are all gone, and the transition that carried them with them: it only
+     existed for that hover. The scroll-in entrance is unaffected, because
+     .reveal declares its own transition and sits later in this sheet, so it was
+     already the one driving the tiles in. */
 }
 
-.stat:hover {
-  transform: translateY(-8px) scale(1.04);
-  box-shadow: 0 16px 40px rgba(22, 74, 158, 0.2);
-}
 
 .stat--light {
   background: var(--color-surface);
@@ -2606,12 +2942,8 @@ button {
   font-size: 36.12px;
   color: var(--color-accent);
   display: inline-block;
-  transition: transform 0.3s ease;
 }
 
-.stat:hover .stat__plus {
-  transform: scale(1.25) rotate(8deg);
-}
 
 .stat__label {
   margin: 0;
@@ -2805,7 +3137,7 @@ button {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding: 60px var(--gutter) 0;
+  padding: calc(var(--section-gap) / 2) var(--gutter);
 }
 
 .trusted__title {
@@ -2837,7 +3169,12 @@ button {
 
   /* SECTION 1: Intro Text & Visual Growth Card */
   .section-head {
-    gap: 12px;
+    /* 24px, up from 12. Same inversion the desktop rule had, just smaller: at
+       this type size the heading's own lines sit about 29px apart, so a 12px
+       gap put the paragraph closer to the heading than the heading's two lines
+       were to each other. Scaled down from the desktop 32px rather than
+       matching it, because the type is smaller here. */
+    gap: 24px;
     width: 100%;
     padding-inline: 4px;
     text-align: center;
@@ -3045,26 +3382,57 @@ button {
 }
 
 .partners {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
+/* A column now, holding the copy above the badge row. Stacking them inside this
+   element rather than making the row a sibling of it is deliberate: the inline
+   padding here is the section's measure, and it is not one value — it is
+   var(--gutter) at most widths but overridden at a couple of breakpoints. A row
+   that lived outside had to restate that arithmetic and drifted by a few pixels
+   wherever the override applied. Inside, both children take the same content
+   box by construction, and this `gap` is what separates them. */
 .partners__inner {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--gutter);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 40px;
+  /* 90px between the copy and the badge row, up from 40.
+     ------------------------------------------------------------------
+     Measured, the section had two very different gaps: 174px above the heading
+     (the marquee's own 24px of bottom padding plus the 150px section rhythm)
+     against 74px from the paragraph to the first badge (this gap plus the
+     row's 10px track padding and the card's 24px). 90px here brings the lower
+     one to ~124px, which closes most of that difference without growing the
+     section as much as matching 174px outright would, and without touching the
+     section rhythm every other seam depends on. The phone override below keeps
+     its own tighter 28px. */
+  gap: 90px;
 }
 
+/* Full width, on request, now that the badges run underneath instead of
+   beside. The 479px cap existed to leave room for the badge wall in the same
+   row; with the wall gone that column just left the heading wrapping over
+   three lines against a half-empty section. The reveal animation is untouched
+   — useAnimationObserver still tags .partners__intro and .partners__title, so
+   the copy fades in exactly as it did. */
+/* Centred, on request, which also puts this block on the same footing as the
+   other centred section heads (.section-head, .domains__head): a column with
+   align-items:center and text-align:center. The reveal animation is untouched
+   — useAnimationObserver still tags .partners__intro and .partners__title, and
+   the accent rule below is a pseudo-element of the title, so it fades in with
+   it rather than needing its own pass. */
 .partners__intro {
-  width: 479px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-24);
   color: var(--color-text);
+  text-align: center;
 }
 
 .partners__title {
@@ -3076,6 +3444,19 @@ button {
   color: var(--color-text);
 }
 
+/* The decoration: one short rule under the heading, drawn from the two brand
+   colours already in the tokens rather than a new one. A pseudo-element so the
+   markup and the copy stay exactly as they were. */
+.partners__title::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin: var(--space-16) auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+}
+
 .partners__text {
   margin: 0;
   font-family: var(--font-display);
@@ -3083,106 +3464,117 @@ button {
   font-size: var(--fs-20);
   line-height: 36px;
   color: var(--color-text);
+  /* Uncapped, the paragraph ran the full 1512px of the section — around 150
+     characters a line, well past what is comfortable to read. Capped to a
+     normal measure and centred by the column above. */
+  max-width: 760px;
 }
 
+/* A static wall of certificates: five, five, four, centred.
+   ------------------------------------------------------------------
+   This has now been three layouts. It began as a two-column wall pinned
+   beside the heading that the page scroll translated upwards, became a
+   continuously revolving full-width row on the same terms as the client-logo
+   marquee above it, and is now — on request — simply the badges, laid out and
+   standing still, with the heading and copy centred above them.
+
+   flex-wrap rather than a grid, and that is the whole trick to the shape. A
+   grid stretches its last row across the same five tracks and leaves the
+   fourteenth badge in a row of four hanging to the left; wrapping flex items
+   with justify-content: center hands the short last row back its own
+   centring, which is what gives 5 / 5 / 4 sitting symmetrically under the
+   paragraph. max-width is exactly five cards plus the four gaps between them,
+   so the count per row is a property of the box rather than something the
+   window width happens to produce.
+
+   The cards themselves are untouched at 205px, 36px radius and 24px padding,
+   and the 28px rhythm is the same number it always was — it has just moved
+   from each card's margin-right onto the container's `gap`, which is what a
+   wrapping layout needs so the trailing card does not push the row off
+   centre. The plate behind each badge is back, matching the phone layout.
+
+   Nothing here animates any more, and that is the point of the change beyond
+   how it looks: the revolving row needed a cloned copy of all fourteen cards
+   (28 in the DOM, half of them aria-hidden) and an infinite compositor
+   animation running for the whole visit. Both are gone — see Partners.tsx,
+   where the effect that built the clone went with them. */
 .awards {
-  height: 540px;
-  flex-shrink: 0;
-  /* No inner scrolling any more — the track is translated instead, so this is
-     purely the clipping window. */
-  overflow: hidden;
   position: relative;
+  width: 100%;
+  /* 5 * 200 + 4 * 28. */
+  max-width: 1112px;
+  margin-inline: auto;
   display: flex;
-  gap: 28px;
-  padding: 10px 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* 28px, back down from the 70px the plate-free version needed. Each badge
+     sits on its own plate again, and the plate edge is what separates one
+     from the next — a 70px gap on top of that reads as the row falling apart.
+     Still fluid so the five-up row holds down to the phone breakpoint. */
+  --award-gap: clamp(14px, 2vw, 28px);
+  gap: var(--award-gap);
 }
 
-/* Desktop only: display:contents below 1024px (see the phone block) so the
-   existing awards grid keeps the cards as its direct items. */
-.awards__track {
-  display: flex;
-  gap: 28px;
-  /* Essential: .awards is a flex container with a fixed 540px height, so the
-     default align-items:stretch would squash the track to the visible height.
-     Its measured height would then equal the window, the travel distance would
-     compute to zero and the column would never move. flex-start lets it keep
-     its full natural height and overflow behind .awards' clip. */
-  align-self: flex-start;
-  will-change: transform;
-}
-
-.partners__runway {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .partners__inner {
-    position: sticky;
-    top: var(--pin-top, 110px);
-  }
-
-  /* Height is set from JS via --pin-extra: the exact distance the awards
-     column still has to travel, which is also the sticky pin's travel. */
-  .partners__runway {
-    display: block;
-    height: var(--pin-extra, 0px);
-  }
-}
-
-.awards::-webkit-scrollbar {
-  display: none;
-}
-
+/* The track and the two column wrappers are pure structure now — they exist
+   because the markup groups the badges in two columns, which the pinned
+   layout needed. display:contents drops both boxes so all fourteen cards are
+   direct flex items of .awards and wrap as one sequence. */
+.awards__track,
 .awards__col {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  flex-shrink: 0;
+  display: contents;
 }
-
-.awards__col--offset {
-  margin-top: 95px;
-}
-
 .award-card {
-  width: 205px;
-  height: 205px;
-  flex-shrink: 0;
-  border-radius: 36px;
-  background: #f4f6fb;
+  /* Five to a row at any width, without a media query per step: the basis is
+     an exact fifth of the container once the four gaps are taken out, and the
+     0.02px trim absorbs the sub-pixel rounding that would otherwise tip the
+     fifth card onto its own line. max-width stops it growing past the design
+     size on a very wide window — past that point the row simply centres with
+     more air around it. */
+  flex: 0 0 calc((100% - 4 * var(--award-gap)) / 5 - 0.02px);
+  max-width: 200px;
+  /* Square without a fixed height, so the box follows the fluid width. */
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* The plate, matching the reference and the phone grid: a flat #f4f6fb
+     rounded square, no shadow and no border. It is what gives the row its
+     grid and what stops a mostly-white badge — Goodfirms, RightFirms,
+     RankWatch — dissolving into the section ground behind it.
+
+     The padding is fluid rather than the flat 24px it used to be, because the
+     card is fluid now: at full width it is a 200px plate holding a 152px
+     badge, and at the tablet end it is a ~150px plate that would have had
+     almost nothing left inside it at 24px a side. */
+  background: #f4f6fb;
+  border-radius: 36px;
+  padding: clamp(12px, 1.7vw, 24px);
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
 }
 
+/* No shadow behind the badge, on request — the lift alone marks the hover.
+   There were three sources: this one, a second hover shadow in the
+   min-width:768px block that actually won on desktop, and a resting shadow on
+   phones. All three are gone, so the plate reads flat at every width and in
+   every state. */
+/* Lifts on hover exactly as the client logos above do — same scale, same 6px
+   rise, so the two rows answer the pointer identically. */
 .award-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 16px 36px rgba(22, 74, 158, 0.14);
+  transform: scale(1.1) translateY(-6px);
 }
 
-/* Scroll-driven entrance for the tablet award wall (see the 768-1023.98px
-   block). Animates `translate`, not `transform`, so it never fights the
-   hover scale above. */
-@keyframes awardRise {
-  from {
-    opacity: 0;
-    translate: 0 20px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-
+/* width/height 100% rather than auto + max-*. With `auto` each badge painted
+   at its own intrinsic size, so the wall came out ragged: the AWS hexagon ships
+   at 314px and filled its box, RightFirms ships at 180 and sat visibly small
+   next to it, and the wide short marks — GoodFirms at 400x113 — looked smaller
+   still. Filling the box and letting object-fit keep the aspect ratio sizes
+   every badge to the same square, which is what makes the row read as one set.
+   Nothing is upscaled past its source except RightFirms, and that one is an
+   SVG. */
 .award-card img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -3222,35 +3614,29 @@ button {
     margin: 0;
   }
 
+  /* The phone keeps the two-column grid it always had: 2-up, 140px-tall
+     plates. The desktop wall above is a centred wrapping row of 205px cards,
+     which is far too wide for a phone, so this is a real override rather than
+     a tweak — only the display mode, the track size and the rhythm change.
+
+     .awards__track and .awards__col are dissolved here for the same reason as
+     on desktop: the markup groups the badges into two columns that no current
+     layout uses, and display:contents lets .awards own all fourteen cards
+     directly, as grid items rather than flex items. */
   .awards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
     width: 100%;
     max-width: 440px;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
     margin-inline: auto;
     padding: 0 0 40px;
     box-sizing: border-box;
   }
 
-  .awards::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Dissolve the desktop pin wrapper so .awards' grid still owns the cards. */
-  .awards__track {
-    display: contents;
-  }
-
+  .awards__track,
   .awards__col {
     display: contents;
-  }
-
-  .awards__col--offset {
-    margin-top: 0;
   }
 
   .award-card {
@@ -3277,7 +3663,7 @@ button {
 }
 
 .domains {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
 .domains__inner {
@@ -4295,7 +4681,7 @@ button {
 }
 
 .industries {
-  padding: 90px 0 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
 .industries__inner {
@@ -4493,7 +4879,7 @@ button {
 }
 
 .cta-quote {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
   background: radial-gradient(60% 80% at 50% 55%, rgba(37, 176, 247, 0.06), rgba(255, 255, 255, 0) 70%);
 }
 
@@ -4583,95 +4969,1113 @@ button {
   color: var(--color-text-muted);
 }
 
-.reviews-bar {
-  padding: 0 0 90px;
+/* ============================================================
+   FULMINOUS AI BANNER
+   ------------------------------------------------------------
+   Full-bleed band in the slot the Upwork / Trustpilot / GoodFirms
+   review row used to hold. The supplied clip fills the left of
+   the band behind the design's navy; a white chevron panel cuts
+   into it from the right and carries the pitch and its two CTAs.
+
+   THE SHAPE IS A ZIGZAG, AND IT IS CUT TWICE
+   ------------------------------------------------------------
+   Traced off the approved design pixel by pixel: it is not a
+   plain arrowhead. The white panel's left edge runs down-left to
+   a point at mid-height, back down-right to a corner at about
+   two-thirds, then down-left again to the bottom edge. Three
+   diagonals, all at the same pitch of 1.53px across per 1px down
+   (57° off horizontal), and the two turns are what make it read
+   as a bolt rather than a chevron.
+
+   --ai-chev is that whole geometry, and both the white panel and
+   the blue shape behind it are clipped with it, so the two edges
+   cannot drift apart at any width.
+
+     --ai-tip     where the point sits across the band. A
+                  percentage, so it holds its place in the
+                  composition as the band widens.
+     --ai-run1/2/3  tip→shoulder, tip→corner, corner→foot, all
+                  horizontal and all in pixels: as percentages the
+                  diagonals would flatten towards horizontal on a
+                  wide screen and the zigzag would stop reading.
+     --ai-h1/h2   the heights of the point and of the corner.
+
+   WHY THE BLUE ONLY SHOWS ON THE MIDDLE DIAGONAL
+   ------------------------------------------------------------
+   Because the design offsets the blue copy *downwards*, not
+   sideways, and on a zigzag that is not the same thing. The middle
+   diagonal faces down-left while the two outer ones face up-left,
+   so one translation puts the blue outside the panel along the
+   middle segment and tucks it behind the panel along the other
+   two. That is where the design's single blue stroke comes from,
+   and it is why this is one offset shape rather than a stroke
+   painted onto one segment: 10px down gives the 15px band the
+   design has, because a 1.53 pitch turns 10px of drop into 15px
+   of sideways travel.
+
+   The copy sits in the panel's second column, which starts to the
+   right of where the upper diagonal crosses the top of the text —
+   the constraint that decides the column split, not taste.
+
+   THE TINT
+   ------------------------------------------------------------
+   The clip's own key is a cool teal and the design's ground is
+   indigo. mix-blend-mode: color takes hue and saturation from the
+   tint and luminosity from the frame underneath, so the scene
+   changes key with all of its detail intact. A flat translucent
+   wash over the top was tried first and only greyed it out.
+   MOTION
+   ------------------------------------------------------------
+   The clip is the artwork's motion and the component owns when it
+   runs. Everything here is the band's own one-way reveal, gated on
+   .is-armed / .is-in — see the note at the top of the component
+   for why the copy is not part of the artwork's gesture.
+   ============================================================ */
+.ai-banner {
+  /* Outer spacing only — nothing inside this banner is touched. It carries no
+     padding of its own, so its two boundaries were the only pair on the page
+     still at half the rhythm (75px) while every other pair was 150px. This
+     margin supplies the missing half on each side. */
+  margin-block: calc(var(--section-gap) / 2);
+  --ai-tip: 42.6%;
+  --ai-h1: 48.5%;
+  --ai-h2: 66.5%;
+  --ai-run1: 564px;
+  --ai-run2: 209px;
+  --ai-run3: 390px;
+  /* Both turns are rounded in the design — the traced boundary curves through
+     them rather than kinking. A polygon has no radius, so each turn is walked as
+     five points off a real 18px circle: the two tangent points where the arc
+     leaves the diagonals (--ai-ax/--ai-ay), two more a quarter of the sweep in
+     (--ai-bx/--ai-by), and the apex (--ai-mx). Three points was tried first and
+     the flat facet across the point was plainly visible; at five, the 28.5° steps
+     leave the arc within half a pixel of the circle. */
+  --ai-ax: 23px;
+  --ai-ay: 15px;
+  --ai-bx: 17px;
+  --ai-by: 9px;
+  --ai-mx: 15px;
+  --ai-shoulder: calc(var(--ai-tip) + var(--ai-run1));
+  --ai-corner: calc(var(--ai-tip) + var(--ai-run2));
+  --ai-foot: calc(var(--ai-tip) + var(--ai-run2) - var(--ai-run3));
+  --ai-chev: polygon(
+    var(--ai-shoulder) 0,
+    100% 0,
+    100% 100%,
+    var(--ai-foot) 100%,
+    calc(var(--ai-corner) - var(--ai-ax)) calc(var(--ai-h2) + var(--ai-ay)),
+    calc(var(--ai-corner) - var(--ai-bx)) calc(var(--ai-h2) + var(--ai-by)),
+    calc(var(--ai-corner) - var(--ai-mx)) var(--ai-h2),
+    calc(var(--ai-corner) - var(--ai-bx)) calc(var(--ai-h2) - var(--ai-by)),
+    calc(var(--ai-corner) - var(--ai-ax)) calc(var(--ai-h2) - var(--ai-ay)),
+    calc(var(--ai-tip) + var(--ai-ax)) calc(var(--ai-h1) + var(--ai-ay)),
+    calc(var(--ai-tip) + var(--ai-bx)) calc(var(--ai-h1) + var(--ai-by)),
+    calc(var(--ai-tip) + var(--ai-mx)) var(--ai-h1),
+    calc(var(--ai-tip) + var(--ai-bx)) calc(var(--ai-h1) - var(--ai-by)),
+    calc(var(--ai-tip) + var(--ai-ax)) calc(var(--ai-h1) - var(--ai-ay))
+  );
+  /* How far out to the right the panel and its edge are still held before the
+     band reveals. Set by .is-armed below and taken back to 0 by .is-in, so the
+     transition on transform carries them home. */
+  --ai-slide: 0px;
+  /* How far the clip's own box hangs off the left of the scene box. The scene
+     box runs to the chevron's shoulder, but the panel covers most of its right
+     half — so the clip's centre, and with it the two figures and the ring, was
+     landing on the diagonal rather than in the wedge the reader can actually
+     see. Hanging the clip out to the left moves its centre half of this,
+     leaving the wedge's own middle on the platform. Pulled rather than
+     translated because a translate would open a gap on the far side; a wider
+     box is still filled by object-fit. */
+  --ai-pull: 160px;
+
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-height: 760px;
+  /* What the scene sits on, and what shows anywhere the clip has not painted —
+     while it loads, and behind its own letterboxing at extreme ratios.
+
+     Ramped to nothing across the bottom stretch. This does NOT fade the clip:
+     the scene is its own opaque layer on top, so the picture keeps full
+     strength to its edge — the washed-out foot that appeared earlier came from
+     a mask on the scene itself, which has been removed.
+
+     What this fixes is the faint dark row along the band's bottom on the panel
+     side. .ai-banner__panel is clipped by the chevron, and the antialiasing on
+     that clip boundary leaves the last row fractionally transparent — enough
+     for a flat navy behind it to read as a line. With the navy already ramped
+     out by then, the sliver picks up the page instead and there is nothing to
+     see. */
+  background-color: transparent;
+  background-image: linear-gradient(
+    180deg,
+    #0d1740 0%,
+    #0d1740 88%,
+    rgba(13, 23, 64, 0) 100%
+  );
+  /* `clip`, not `hidden`. The chevron's edge layer is offset past the band's
+     left bound and has to be trimmed, but `hidden` would make this a scroll
+     container — the note on .content-stack above explains what that costs, and
+     this sits inside it. */
+  overflow: clip;
 }
 
-.reviews-bar__inner {
+/* ---- the scene --------------------------------------------------------- */
+/* Only as wide as the chevron's shoulder: everything right of that is white
+   panel from the top of the band to the bottom, so a full-bleed scene would be
+   painting frames nobody can see. Stopping there is also what fixes the crop —
+   at the design width the box comes out at very nearly 16:9, so the clip lands
+   in it whole and at its own size instead of being blown up and cut. */
+.ai-banner__scene {
+  position: absolute;
+  inset: 0;
+  right: auto;
+  width: calc(var(--ai-shoulder) + 2px);
+  /* Without this the tint's blend would reach past the band and pick up the
+     page behind it. */
+  isolation: isolate;
+  /* Four pixels, not a fade.
+     ------------------------------------------------------------------
+     The clip stays at full strength — an earlier version ramped its whole
+     bottom fifth and visibly washed the picture out, which is not wanted. What
+     this ramp is for is a two-pixel grey line that ran along the band's last
+     row from the chevron's point to x=1384 and then stopped, which is what made
+     it look like half a line.
+
+     It needed two layers to appear, confirmed by hiding each in turn: the panel
+     is clipped by the chevron and the antialiasing on that clip leaves its final
+     row fractionally transparent, and the picture sits directly behind it. So
+     the dark clip read through the panel's own edge. It ended at 1384 because
+     that is exactly where the scene box ends — past there the translucent row
+     had only the ramped-out section background behind it, which is why the line
+     covered part of the width and not all of it.
+
+     Taking the last few pixels of the picture to nothing leaves nothing dark
+     under that row. The ramp has to *finish* a pixel early rather than at 100%:
+     ending it exactly on the edge still left the final row about a quarter
+     opaque, which was enough of the dark clip to keep the line. At this size it
+     is not a visible fade; the picture still reads as meeting its edge. */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 calc(100% - 5px),
+    rgba(0, 0, 0, 0) calc(100% - 1px)
+  );
+  mask-image: linear-gradient(
+    180deg,
+    #000 calc(100% - 5px),
+    rgba(0, 0, 0, 0) calc(100% - 1px)
+  );
+  pointer-events: none;
+}
+
+/* The clip and its poster frame are the same box: the poster attribute means a
+   reader on reduced motion, or one whose browser refuses autoplay, still gets
+   the scene rather than a flat navy slab.
+
+   Framing is the scene box's job, above, so all this layer has left to carry is
+   the reveal's push-in through --ai-zoom. object-position holds the platform and
+   both figures against whatever the box's ratio does crop as the band narrows. */
+.ai-banner__video {
+  --ai-zoom: 1;
+
+  position: absolute;
+  inset: 0;
+  /* Wider than the scene box by --ai-pull, all of it off the left edge, which
+     is what carries the framing left. Wide enough that the band is still
+     covered at the entrance zoom and through the wake's breath. */
+  left: calc(var(--ai-pull) * -1);
+  width: calc(100% + var(--ai-pull));
+  /* The media reset near the foot of this file caps every video at max-width:
+     100%, which quietly clipped the width above back to the scene box while
+     leaving the offset in place — the clip pulled left and came up --ai-pull
+     short on the right, as a bare wedge of ground beside the chevron. */
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 46%;
+  /* The blend keeps the clip's own luminosity, which is brighter than the
+     design's ground; this is what takes the navy back down to it. */
+  filter: brightness(1.08) contrast(1.03) saturate(1.04);
+  transform: scale(var(--ai-zoom));
+}
+
+.ai-banner__tint {
+  position: absolute;
+  inset: 0;
+  background: #2a3596;
+  mix-blend-mode: color;
+  opacity: 0.66;
+}
+
+/* Sinks the scene's corners and its left edge so the band reads as one field
+   rather than a rectangle of video pasted onto it. */
+.ai-banner__vignette {
+  position: absolute;
+  inset: 0;
+  /* Sampled off the design: #262b78 at the top, #283691 by the bottom. The
+     vertical pass is that shift, the radial only sinks the corners, and both are
+     much lighter than they were — the ground reads as indigo, not as black. */
+  background:
+    radial-gradient(78% 66% at 36% 46%, rgba(8, 16, 58, 0) 0%, rgba(10, 16, 56, 0.18) 100%),
+    linear-gradient(90deg, rgba(10, 16, 56, 0.12) 0%, rgba(10, 16, 56, 0) 28%),
+    linear-gradient(180deg, rgba(24, 20, 78, 0.26) 0%, rgba(38, 58, 160, 0.18) 100%);
+}
+
+/* ---- the chevron ------------------------------------------------------- */
+/* Two flat shapes rather than a stroke on one: a border on a clipped element is
+   clipped away with everything else, and an SVG stroke scaled non-uniformly to
+   the band would thin out along the diagonals. See the note at the top on why
+   the offset is downwards and what that does on a zigzag. */
+.ai-banner__edge {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  clip-path: var(--ai-chev);
+  /* The design's own blue, sampled off it: #394fa2, with a little lift above and
+     fall below so the stroke is not a flat bar. */
+  background: linear-gradient(180deg, #4a60b4 0%, #394fa2 52%, #2f4390 100%);
+  /* Faded out before the foot. This stroke is translated 10px down, so its own
+     box runs past the band and the section's `clip` cuts it off — which left a
+     1-2px blue row sitting under the panel's fade at the very last pixel.
+     Reaching full transparency at 90% rather than 100% means the ramp is
+     finished before the cut, so there is nothing left to clip. Masking is safe
+     here where it was not on the panel: this span is decorative and holds no
+     copy. */
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 90%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 74%, transparent 90%);
+  /* Trails the panel slightly on the way in, which is what makes the two read
+     as stacked sheets instead of one shape with a thick border. */
+  transform: translate3d(calc(var(--ai-slide) * 1.45), 10px, 0);
+  transition: transform 1.05s var(--ease-premium);
+  pointer-events: none;
+}
+
+.ai-banner__panel {
+  position: relative;
+  z-index: 2;
+  /* Stretched by the band, so the chevron's percentages map to the full height
+     however tall the copy turns out to be. */
+  flex: 1;
+  display: grid;
+  align-items: center;
+  clip-path: var(--ai-chev);
+  /* Flat in the design, and the value it lands on is a token the site already
+     has — but ramped to nothing across the bottom stretch so the panel's foot
+     fades instead of ending on a line. This is the pale line that shows under
+     the right-hand half of the band: #f4f8ff against the page's white is
+     faint, but it is a step, and a step reads as an edge.
+
+     Ramped on the background rather than masking the element, because a mask
+     would take the copy and the two buttons down with it — they sit inside this
+     box.
+
+     It ramps to opaque white, not to zero alpha. Fading to transparent was
+     tried and came out wrong in a way worth recording: the section's own navy
+     background runs the full width, and the panel is what covers it on this
+     side — so as the panel went transparent the navy showed through and the
+     foot got *darker* instead of lighter (measured 244,248,255 heading to
+     201,210,232). Ending on the page's own white keeps the navy hidden and
+     lands on the colour underneath the section. */
+  background-color: transparent;
+  background-image: linear-gradient(
+    180deg,
+    var(--color-surface-alt) 0%,
+    var(--color-surface-alt) 86%,
+    #ffffff 100%
+  );
+  transform: translate3d(var(--ai-slide), 0, 0);
+  transition: transform 0.95s var(--ease-premium);
+}
+
+.ai-banner__inner {
   width: 100%;
-  max-width: var(--container-max);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
+  display: grid;
+  /* The column split and the top padding are one decision. The eyebrow card sits
+     at 13% of the band and reaches into the copy's column, so the copy has to
+     start below it — hence the lopsided padding, which pushes the centred block
+     down without making the band taller. Starting that low is also what lets the
+     column begin at 62%: the diagonal the copy has to clear is the one at the
+     *bottom* of the text, and at this height it lands near 60% of the band. */
+  grid-template-columns: minmax(0, 60%) minmax(0, 1fr);
+  padding-block: 250px 72px;
 }
 
-.reviews-bar__card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 90px;
-  flex-wrap: wrap;
-  border-radius: 34px;
+.ai-banner__content {
+  grid-column: 2;
+  max-width: 620px;
+  padding-inline: 4px 48px;
+}
+
+/* ---- the eyebrow card -------------------------------------------------- */
+/* Straddles the upper diagonal: over the scene on its left, over the panel on
+   its right. Sibling of the panel, not a child — the panel's clip-path would cut
+   it in half along the very edge it is there to bridge. */
+.ai-banner__tab {
+  position: absolute;
+  z-index: 3;
+  /* Measured off the design: the card clears the band's top by 11% of its height
+     and starts 220px right of the point, which is what sits it across the upper
+     diagonal — over the scene on its left, over the panel on its right. */
+  top: 9.5%;
+  left: calc(var(--ai-tip) + 220px);
+  margin: 0;
+  padding: 14px 34px;
+  border-radius: 20px;
   background: var(--color-white);
-  box-shadow: 0 0 25px rgba(240, 157, 77, 0.15);
+  box-shadow: 0 20px 48px rgba(6, 14, 52, 0.32);
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  font-style: italic;
+  font-size: 35px;
+  line-height: 1.1;
+  color: var(--color-accent);
+  white-space: nowrap;
+  /* The x half is only used where the card is centred on a stacked band; the y
+     and the scale are the entrance. All three go through one transform so none of
+     them overwrites the others. */
+  transform: translate(var(--ai-tab-x, 0px), var(--ai-tab-y, 0px)) scale(var(--ai-tab-s, 1));
 }
 
-.review-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-8);
+/* One block per line, so the headline can arrive a line at a time. */
+.ai-banner__line {
+  display: block;
 }
 
-.review-stat__logo {
-  object-fit: contain;
-}
-
-.review-stat__row {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.review-stat__score {
-  font-family: var(--font-ui);
-  font-weight: var(--fw-semibold);
-  font-size: var(--fs-22);
+.ai-banner__title {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  font-size: var(--fs-36);
+  line-height: 1.35;
   color: var(--color-black);
 }
 
-.review-stat--blue {
-  width: 382px;
-  height: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
-  border-radius: var(--radius-24);
-  background: var(--color-primary);
+.ai-banner__lead {
+  margin: 0 0 28px;
+  font-family: var(--font-display);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-20);
+  line-height: 1.55;
+  color: var(--color-text-muted);
 }
 
-.trustpilot-card-inner {
+/* Stacked, and both to the width of the wider one: the two labels differ by 60px,
+   so left-aligned natural widths read as a mistake where a matched column reads
+   as a decision. The cap is what stops them running the width of the copy. */
+.ai-banner__actions {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  max-width: 320px;
+}
+
+/* ---- the light: entrance, and first touch ------------------------------ */
+/* Three one-shot layers, all decoration, all pointer-events: none. Each one runs
+   twice over the band's life: once as part of the entrance, and again — faster,
+   and closer together — the first time the reader touches the band.
+
+   Each layer has a second set of keyframes for the touch, identical in shape and
+   named differently, and that is not duplication for its own sake: re-timing a
+   running animation does not restart it. Point .is-woken at the same keyframes
+   with a shorter duration and the browser keeps the old start time, so a pass
+   that finished during the entrance stays finished and nothing plays. Only a
+   change of animation-name starts a new one. */
+
+/* A light pass across the scene. */
+.ai-banner__scan {
+  position: absolute;
+  inset: 0;
+  /* A soft body with a brighter line through the middle: a flat band at one alpha
+     reads as a smudge over a scene this busy. */
+  background: linear-gradient(
+    102deg,
+    rgba(140, 200, 255, 0) 34%,
+    rgba(158, 208, 255, 0.32) 46%,
+    rgba(232, 244, 255, 0.78) 50%,
+    rgba(158, 208, 255, 0.32) 54%,
+    rgba(140, 200, 255, 0) 66%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* A glint travelling the chevron's diagonals. The edge layer's own clip is what
+   shapes it: everything in this bar that is not inside the offset band sits
+   behind the panel, so what shows is light running along the edge itself. */
+.ai-banner__edge::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 44%;
+  background: linear-gradient(
+    100deg,
+    rgba(214, 232, 255, 0) 20%,
+    rgba(228, 241, 255, 0.92) 50%,
+    rgba(214, 232, 255, 0) 80%
+  );
+  filter: blur(5px);
+  opacity: 0;
+  transform: translateX(-130%);
+}
+
+/* A bloom at the chevron's point, half of it behind the panel, so the light
+   reads as coming off the tip into the open navy rather than as a disc. */
+.ai-banner__pulse {
+  position: absolute;
+  z-index: 1;
+  left: var(--ai-tip);
+  top: var(--ai-h1);
+  width: 660px;
+  aspect-ratio: 1;
+  margin: -330px 0 0 -330px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(154, 200, 255, 0.7) 0%,
+    rgba(76, 128, 248, 0.34) 34%,
+    rgba(40, 80, 220, 0) 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes aiBannerScan {
+  0% {
+    opacity: 0;
+    transform: translateX(-62%);
+  }
+  22% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(62%);
+  }
+}
+
+@keyframes aiBannerGlint {
+  0% {
+    opacity: 0;
+    transform: translateX(-130%);
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(250%);
+  }
+}
+
+@keyframes aiBannerBloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.24);
+  }
+  24% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* The touch versions. Same shapes, different names — see the note above on why a
+   name change is the only thing that starts an animation over. */
+@keyframes aiBannerScanWake {
+  0% {
+    opacity: 0;
+    transform: translateX(-62%);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(62%);
+  }
+}
+
+@keyframes aiBannerGlintWake {
+  0% {
+    opacity: 0;
+    transform: translateX(-130%);
+  }
+  16% {
+    opacity: 1;
+  }
+  84% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(250%);
+  }
+}
+
+@keyframes aiBannerBloomWake {
+  0% {
+    opacity: 0;
+    transform: scale(0.24);
+  }
+  22% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+/* The chevron itself taking the light. The glint travelling the edge is a small
+   moving highlight; this is the edge as a whole coming up under it, and between
+   them the diagonals read as lit rather than as a blue shape that happens to
+   have something sliding past. */
+@keyframes aiBannerEdgeGlow {
+  0% {
+    filter: none;
+  }
+  34% {
+    filter: brightness(1.5) saturate(1.12);
+  }
+  100% {
+    filter: none;
+  }
+}
+
+@keyframes aiBannerEdgeGlowWake {
+  0% {
+    filter: none;
+  }
+  30% {
+    filter: brightness(1.58) saturate(1.14);
+  }
+  100% {
+    filter: none;
+  }
+}
+
+/* The copy coming back through blur on first touch. Brief: opaque again by 55%,
+   so nothing the reader is looking at is missing for more than a third of a
+   second. */
+@keyframes aiBannerTextWake {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    filter: blur(7px);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Same beat as the text, minus the transform — see the note where it is used. */
+@keyframes aiBannerCardWake {
+  0% {
+    opacity: 0;
+    filter: blur(7px);
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+@keyframes aiBannerCardLift {
+  0% {
+    box-shadow: 0 20px 48px rgba(6, 14, 52, 0.32);
+  }
+  40% {
+    box-shadow: 0 30px 68px rgba(6, 14, 52, 0.44);
+  }
+  100% {
+    box-shadow: 0 20px 48px rgba(6, 14, 52, 0.32);
+  }
+}
+
+/* The scene's own answer to being touched: it leans in and settles back. */
+@keyframes aiBannerBreathe {
+  0% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.045);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---- the entrance, and the way back out -------------------------------- */
+/* Everything above leaves the band in its finished state. The held-back state
+   exists only under .is-armed, which the component adds on mount, so a visitor
+   with scripts off or a failed hydration reads the band normally.
+
+   .is-in is on while the band is in view and comes off when it leaves, so the
+   band builds when the reader arrives and unbuilds behind them. Which direction
+   a transition runs decides whose timing it uses — the destination state's — and
+   that is what the split below is for: the .is-armed rules carry a short, flat
+   0.42s with no delay, and the .is-armed.is-in rules override duration and delay
+   per element. Going in, the band arrives in sequence over 1.6s; going out, the
+   whole thing fades together in under half a second. Staggering the way out only
+   ever looked like the page was breaking.
+
+   The build order: the scene fades up out of a push-in, the edge cuts in from the
+   right with the panel just behind it, light runs across the scene and then along
+   the edge, the tip blooms where the two diagonals meet, and the copy arrives over
+   the top of that — eyebrow card, headline line by line, lead, buttons. */
+.ai-banner.is-armed {
+  --ai-slide: 104px;
+}
+
+.ai-banner.is-armed.is-in {
+  --ai-slide: 0px;
+}
+
+.ai-banner.is-armed .ai-banner__scene {
+  opacity: 0;
+  transition: opacity 0.42s var(--ease-premium);
+}
+
+.ai-banner.is-armed.is-in .ai-banner__scene {
+  opacity: 1;
+  transition-duration: 0.9s;
+}
+
+/* Only the zoom moves — the framing is the composition's, not the gesture's. */
+.ai-banner.is-armed .ai-banner__video {
+  --ai-zoom: 1.14;
+
+  transition: transform 0.42s var(--ease-premium);
+}
+
+.ai-banner.is-armed.is-in .ai-banner__video {
+  --ai-zoom: 1;
+
+  transition-duration: 1.7s;
+}
+
+/* The shape retracts with the copy rather than long after it: the base rules
+   carry the entrance durations, and these two cut them for the way out. */
+.ai-banner.is-armed .ai-banner__edge,
+.ai-banner.is-armed .ai-banner__panel {
+  transition-duration: 0.5s;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__edge {
+  transition-duration: 1.05s;
+  transition-delay: 0.06s;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__panel {
+  transition-duration: 0.95s;
+  transition-delay: 0.14s;
+}
+
+/* Held back, and on the way out. Flat timing, no delays: this is the state the
+   band returns to when it scrolls away. */
+.ai-banner.is-armed .ai-banner__tab,
+.ai-banner.is-armed .ai-banner__line,
+.ai-banner.is-armed .ai-banner__lead,
+.ai-banner.is-armed .ai-banner__actions {
+  opacity: 0;
+  transition: opacity 0.42s var(--ease-premium), transform 0.42s var(--ease-premium);
+}
+
+.ai-banner.is-armed .ai-banner__tab {
+  --ai-tab-y: -26px;
+  --ai-tab-s: 0.9;
+}
+
+.ai-banner.is-armed .ai-banner__line,
+.ai-banner.is-armed .ai-banner__lead,
+.ai-banner.is-armed .ai-banner__actions {
+  transform: translate3d(0, 22px, 0);
+}
+
+/* Arrived. Everything from here is the forward direction only. */
+.ai-banner.is-armed.is-in .ai-banner__tab,
+.ai-banner.is-armed.is-in .ai-banner__line,
+.ai-banner.is-armed.is-in .ai-banner__lead,
+.ai-banner.is-armed.is-in .ai-banner__actions {
+  opacity: 1;
+  transition-duration: 0.66s;
+}
+
+/* The card is the one thing that overshoots. It is the band's label and it lands
+   with the artwork's last beat, so a little bounce on it reads as arrival; the
+   same easing on the headline would just look unsteady. */
+.ai-banner.is-armed.is-in .ai-banner__tab {
+  --ai-tab-y: 0px;
+  --ai-tab-s: 1;
+
+  transition: opacity 0.7s var(--ease-premium) 0.5s,
+    transform 0.7s cubic-bezier(0.34, 1.46, 0.64, 1) 0.5s;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__line,
+.ai-banner.is-armed.is-in .ai-banner__lead,
+.ai-banner.is-armed.is-in .ai-banner__actions {
+  transform: none;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__line:first-child {
+  transition-delay: 0.62s;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__line:last-child {
+  transition-delay: 0.72s;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__lead {
+  transition-delay: 0.84s;
+}
+
+.ai-banner.is-armed.is-in .ai-banner__actions {
+  transition-delay: 0.96s;
+}
+
+.ai-banner.is-in .ai-banner__scan {
+  animation: aiBannerScan 1.7s var(--ease-premium) 0.35s both;
+}
+
+.ai-banner.is-in .ai-banner__edge {
+  animation: aiBannerEdgeGlow 1.5s var(--ease-premium) 0.5s both;
+}
+
+.ai-banner.is-in .ai-banner__edge::after {
+  animation: aiBannerGlint 1.5s var(--ease-premium) 0.6s both;
+}
+
+.ai-banner.is-in .ai-banner__pulse {
+  animation: aiBannerBloom 1.5s var(--ease-premium) 0.85s both;
+}
+
+/* ---- first touch ------------------------------------------------------- */
+/* The band answers the reader once: pointer entering it, a tap, a click, or a
+   keyboard reaching the CTAs. Not the same three lights fired together — the
+   whole band regenerates in sequence, the way it arrived: the edge takes the
+   light, a pass crosses the scene, the tip blooms, and the copy comes back
+   through blur a line at a time. It reads as the interface answering rather than
+   as a flash.
+
+   Once per visit to the band. It is cleared when the band scrolls away — along
+   with .is-in, so the next arrival builds and can be answered again. A band that
+   flashed every time the cursor crossed it on the way somewhere else would be
+   noise, not response. */
+.ai-banner.is-woken .ai-banner__scan {
+  animation: aiBannerScanWake 1.15s var(--ease-premium) 0.12s both;
+}
+
+.ai-banner.is-woken .ai-banner__edge {
+  animation: aiBannerEdgeGlowWake 1.05s var(--ease-premium) 0s both;
+}
+
+.ai-banner.is-woken .ai-banner__edge::after {
+  animation: aiBannerGlintWake 0.95s var(--ease-premium) 0.05s both;
+}
+
+.ai-banner.is-woken .ai-banner__pulse {
+  animation: aiBannerBloomWake 1.2s var(--ease-premium) 0.26s both;
+}
+
+.ai-banner.is-woken .ai-banner__video {
+  animation: aiBannerBreathe 1.7s var(--ease-premium) both;
+}
+
+/* The card cannot take the shared text keyframes: its transform carries the
+   centring offset the stacked band puts on it, and an animation on transform
+   would drop that. Opacity, blur and its own shadow lift instead. */
+.ai-banner.is-woken .ai-banner__tab {
+  animation: aiBannerCardWake 0.62s var(--ease-premium) 0.18s both,
+    aiBannerCardLift 1.4s var(--ease-premium) 0.18s both;
+}
+
+.ai-banner.is-woken .ai-banner__line:first-child {
+  animation: aiBannerTextWake 0.62s var(--ease-premium) 0.3s both;
+}
+
+.ai-banner.is-woken .ai-banner__line:last-child {
+  animation: aiBannerTextWake 0.62s var(--ease-premium) 0.4s both;
+}
+
+.ai-banner.is-woken .ai-banner__lead {
+  animation: aiBannerTextWake 0.62s var(--ease-premium) 0.52s both;
+}
+
+.ai-banner.is-woken .ai-banner__actions {
+  animation: aiBannerTextWake 0.62s var(--ease-premium) 0.64s both;
+}
+.ai-banner__btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-}
-
-.trustpilot-card-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.trustpilot-card-title {
+  padding: 14px 26px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
   font-family: var(--font-display);
   font-weight: var(--fw-semibold);
-  font-size: 28px;
-  color: #ffffff;
+  font-size: var(--fs-16);
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  transition: background var(--transition-fast), color var(--transition-fast),
+    border-color var(--transition-fast), transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-.trustpilot-card-score {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.ai-banner__btn--primary {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
-.trustpilot-card-text {
-  font-family: var(--font-display);
-  font-weight: var(--fw-medium);
-  font-size: 16px;
-  color: #ffffff;
+.ai-banner__btn--primary:hover {
+  border-color: var(--color-primary-dark);
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(22, 74, 158, 0.35);
+}
+
+/* Outlined, over the panel itself — the design gives it no fill of its own. */
+.ai-banner__btn--ghost {
+  border-color: var(--color-primary);
+  background: transparent;
+  color: var(--color-black);
+}
+
+.ai-banner__btn--ghost:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(22, 74, 158, 0.25);
+}
+
+/* The component never fetches the clip under this query, so the poster frame is
+   the artwork and the only things left to switch off are the band's own reveal
+   and the push-in it rides in on. */
+@media (prefers-reduced-motion: reduce) {
+  .ai-banner.is-armed {
+    --ai-slide: 0px;
+  }
+
+  .ai-banner.is-armed .ai-banner__video,
+  .ai-banner.is-armed .ai-banner__tab,
+  .ai-banner.is-armed .ai-banner__line,
+  .ai-banner.is-armed .ai-banner__lead,
+  .ai-banner.is-armed .ai-banner__actions {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .ai-banner__edge,
+  .ai-banner__panel,
+  .ai-banner.is-armed .ai-banner__scene {
+    transition: none;
+  }
+
+  /* The light is the one thing here that is animation rather than transition, and
+     it is decoration end to end — under this query it simply does not run. Same
+     specificity as the rules that start it, and later in the file, so these win
+     without needing !important. */
+  .ai-banner.is-in .ai-banner__scan,
+  .ai-banner.is-woken .ai-banner__scan,
+  .ai-banner.is-in .ai-banner__edge,
+  .ai-banner.is-woken .ai-banner__edge,
+  .ai-banner.is-in .ai-banner__edge::after,
+  .ai-banner.is-woken .ai-banner__edge::after,
+  .ai-banner.is-in .ai-banner__pulse,
+  .ai-banner.is-woken .ai-banner__pulse,
+  .ai-banner.is-woken .ai-banner__video,
+  .ai-banner.is-woken .ai-banner__tab,
+  .ai-banner.is-woken .ai-banner__line,
+  .ai-banner.is-woken .ai-banner__lead,
+  .ai-banner.is-woken .ai-banner__actions {
+    animation: none;
+  }
+
+  .ai-banner.is-armed .ai-banner__scene {
+    opacity: 1;
+  }
+}
+
+/* Below the design width the band's height tracks the viewport, and the zigzag
+   comes in with it: the point moves left and all three runs shrink to the same
+   1.53 pitch against the shorter band, so the shape holds its angle instead of
+   stretching out. */
+@media (max-width: 1439.98px) {
+  .ai-banner {
+    --ai-tip: 38%;
+    --ai-run1: 410px;
+    --ai-run2: 152px;
+    --ai-run3: 283px;
+    /* Same job as on the full band, against a wedge that is narrower here — so
+       the pull is smaller too, or the platform overshoots to the left. */
+    --ai-pull: 120px;
+    min-height: clamp(500px, 46vw, 760px);
+  }
+
+  .ai-banner__inner {
+    grid-template-columns: minmax(0, 56%) minmax(0, 1fr);
+    /* Same lopsided padding as the desktop band, scaled to the smaller eyebrow
+       card sitting on a shorter band. */
+    padding-block: 175px 56px;
+  }
+
+  .ai-banner__content {
+    padding-inline: 4px 32px;
+  }
+
+  .ai-banner__tab {
+    top: 9%;
+    left: calc(var(--ai-tip) + 150px);
+    padding: 12px 26px;
+    border-radius: 17px;
+    font-size: 29px;
+  }
+
+  .ai-banner__title {
+    font-size: 30px;
+    line-height: 1.3;
+  }
+
+  .ai-banner__lead {
+    margin-bottom: 22px;
+    font-size: var(--fs-18);
+  }
+
+  .ai-banner__actions {
+    gap: 14px;
+  }
+
+  .ai-banner__btn {
+    padding: 13px 24px;
+  }
+}
+
+/* Under 1200px there is not enough width left of the chevron for the scene to
+   read, and there is not enough right of it for the copy. The band stacks: the
+   scene takes a strip of its own, the eyebrow card straddles the seam where it
+   straddled the diagonal, and the copy sits centred beneath. */
+@media (max-width: 1199.98px) {
+  .ai-banner {
+    /* Referenced by the eyebrow card, which has to sit on the seam and cannot
+       read the strip's height any other way. */
+    --ai-scene-h: clamp(280px, 46vw, 430px);
+    --ai-tab-x: -50%;
+    /* The strip is full width with no chevron over it, so the clip is centred
+       on its own box again and has nothing to be pulled clear of. */
+    --ai-pull: 0px;
+
+    display: block;
+    min-height: 0;
+  }
+
+  /* Full width again: there is no chevron left to stop short of. */
+  .ai-banner__scene {
+    position: relative;
+    inset: auto;
+    width: auto;
+    height: var(--ai-scene-h);
+  }
+
+  .ai-banner__video {
+    object-position: 50% 44%;
+  }
+
+  /* All three are the chevron, and the chevron is what has just been abandoned —
+     the edge, the glint it carries, and the bloom at its tip. What is left of the
+     light here is the pass across the scene, which needs no chevron to read. */
+  .ai-banner__edge,
+  .ai-banner__pulse {
+    display: none;
+  }
+
+  .ai-banner__panel {
+    clip-path: none;
+    transform: none;
+  }
+
+  .ai-banner__tab {
+    top: calc(var(--ai-scene-h) - 30px);
+    left: 50%;
+  }
+
+  .ai-banner__inner {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 56px 56px;
+  }
+
+  .ai-banner__content {
+    grid-column: 1;
+    max-width: 640px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    text-align: center;
+  }
+
+  .ai-banner__actions {
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ai-banner {
+    --ai-scene-h: clamp(220px, 56vw, 320px);
+  }
+
+  .ai-banner__tab {
+    top: calc(var(--ai-scene-h) - 24px);
+    padding: 10px 24px;
+    border-radius: 14px;
+    font-size: 26px;
+  }
+
+  .ai-banner__inner {
+    padding-block: 44px 40px;
+  }
+
+  .ai-banner__title {
+    margin-bottom: 14px;
+    font-size: 26px;
+    line-height: 1.35;
+  }
+
+  .ai-banner__lead {
+    margin-bottom: 22px;
+    font-size: var(--fs-18);
+  }
+
+  .ai-banner__actions {
+    gap: 12px;
+  }
+
+  .ai-banner__btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 767.98px) {
@@ -4818,26 +6222,10 @@ button {
     transform: translateY(-2px) scale(1.01);
     box-shadow: 0 14px 34px rgba(22, 74, 158, 0.35);
   }
-
-  .reviews-bar__card {
-    gap: 32px;
-    padding: 30px 24px;
-  }
-
-  .review-stat--blue {
-    width: 100%;
-    max-width: 340px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .review-stat--blue:active {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(22, 74, 158, 0.3);
-  }
 }
 
 .testimonials {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
 .testimonials__inner {
@@ -5086,7 +6474,7 @@ button {
 }
 
 .blogs {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
 .blogs__inner {
@@ -5303,7 +6691,7 @@ button {
 }
 
 .cases {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
 .cases__inner {
@@ -5541,7 +6929,8 @@ button {
 .case-link svg {
   width: 24px;
   height: 24px;
-  stroke: var(--color-text);
+  /* Accent orange, matching the reference. */
+  stroke: var(--color-accent);
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
@@ -5654,7 +7043,6 @@ button {
 
 .cases__featured:hover .case-link svg {
   transform: translateX(6px);
-  stroke: #015fff;
 }
 
 .case-row {
@@ -5810,7 +7198,7 @@ button {
 }
 
 .contact {
-  padding: 90px 0;
+  padding: calc(var(--section-gap) / 2) 0;
 }
 
 .contact__inner {
@@ -6022,8 +7410,13 @@ button {
   }
 }
 
+/* Leading edge carries the same half-rhythm as the sections above, so the
+   contact -> footer boundary totals --section-gap like every other pair. The
+   footer sits outside .content-stack, which is why it was missed at 90px and
+   read as a mismatch. The 40px tail is its own inner spacing above the
+   copyright line and is unchanged. */
 .footer {
-  padding: 90px 0 40px;
+  padding: calc(var(--section-gap) / 2) 0 40px;
 }
 
 .footer__inner {
@@ -6766,14 +8159,6 @@ button {
   box-shadow: 0 0 0 1px rgba(22, 74, 158, 0.28), 0 18px 40px rgba(22, 74, 158, 0.16);
 }
 
-.award-card {
-  transition: box-shadow 0.35s ease;
-}
-
-.award-card:hover {
-  box-shadow: 0 14px 32px rgba(22, 74, 158, 0.16);
-}
-
 .domain-tab:hover {
   box-shadow: 0 10px 26px rgba(22, 74, 158, 0.14);
 }
@@ -6849,12 +8234,82 @@ a:focus-visible {
   padding-inline: var(--gutter);
 }
 
+/* Air between the intro copy and the top of the first card, at every width.
+   The decorative orange arc used to sit at the foot of .section-head and was
+   carrying this separation by accident; with the arc gone the paragraph ran
+   almost straight into the card. Scoped to .showcase because
+   TechPartnerIntro uses .section-head too and its spacing never changed.
+   The phone block overrides this to 18px — same intent, smaller type. */
+.showcase .section-head {
+  margin-bottom: 32px;
+}
+
 .showcase__bg {
   display: none;
 }
 
+/* Prev/next controls, shown on request.
+   ------------------------------------------------------------------
+   The buttons and their click handlers were already here — the markup carries
+   both, and the effect in Showcase.tsx binds onPrevClick/onNextClick to them.
+   The only thing stopping them was this rule, which hid them outright. So this
+   is presentation only: no new behaviour, and the keyboard arrow-key handling
+   on .showcase__stage is untouched.
+
+   Absolutely positioned against .showcase__stage (which is position:relative)
+   so they sit outside the flow and adding them cannot shift the carousel.
+   They stay hidden below 1024px, where the later breakpoint blocks turn the
+   carousel into a stacked column and there is no sideways travel to drive. */
 .showcase__nav {
-  display: none !important;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(22, 74, 158, 0.16);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-primary);
+  box-shadow: 0 6px 18px rgba(22, 74, 158, 0.12);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+/* Out in the page margin, so the cards keep their original width.
+   ------------------------------------------------------------------
+   Two earlier attempts were wrong in opposite directions: at left/right 0 the
+   buttons sat on top of the outer cards, and reserving inline padding on the
+   stage moved them clear but shrank the carousel. This puts them outside the
+   container instead, in the empty strip the centred layout already leaves.
+
+   The offset is clamped to whatever that strip actually measures. --gutter is a
+   clamp(24px, 4vw, 64px), so it is ~60px at 1512 but only ~41px at 1024; a flat
+   -56px would have pushed a 48px button past the viewport edge at the narrow
+   end and added a horizontal scrollbar. Taking min() of the two means the
+   button lands in the margin at wide widths and sits flush to the edge at
+   narrow ones, but never crosses it. */
+.showcase__nav--prev {
+  left: calc(-1 * min(56px, var(--gutter)));
+}
+
+.showcase__nav--next {
+  right: calc(-1 * min(56px, var(--gutter)));
+}
+
+.showcase__nav svg {
+  width: 22px;
+  height: 22px;
+}
+
+.showcase__nav:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 10px 26px rgba(22, 74, 158, 0.24);
 }
 
 .showcase__dots {
@@ -6862,8 +8317,15 @@ a:focus-visible {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 20px auto 36px;
+  /* 0, not 10px. Each dot is a 24px target now (see .showcase__dot), so the
+     spacing is the targets' own transparent area and any gap on top of it
+     would push them further apart than the design wants. Zero here puts the
+     dots on an exact 24px pitch. */
+  gap: 0;
+  /* Flipped: 20px above / 36px below was spacing for a row that sat between the
+     heading and the cards. Now that it sits under the carousel, the larger
+     space belongs above it, separating it from the cards. */
+  margin: 36px auto 20px;
   padding: 0;
 }
 
@@ -6871,36 +8333,62 @@ a:focus-visible {
   display: flex;
 }
 
+/* The dot you see is 8px; the thing you click is 24px.
+   ------------------------------------------------------------------
+   WCAG 2.5.8 and the Lighthouse target-size audit both want a 24x24 pointer
+   target, and a row of 8px dots on a 10px gap failed on both counts at once —
+   too small, and too close for the spacing exception to rescue them.
+
+   The button itself has to carry the size. An invisible ::after hit area is
+   the tempting fix and it does not work: axe measures getBoundingClientRect()
+   on the element, which a pseudo-element does not grow, so the audit still
+   scores the original 8x8 even though the dot is genuinely easier to hit. So
+   the button becomes a 24px transparent square and the paint moves to
+   ::before, which keeps the visible dot exactly the size, colour and scale it
+   has always been.
+
+   The one thing that does move: ten 24px targets cannot overlap, so the row is
+   240px wide where it used to be 170px. That is inherent — targets that meet
+   the minimum cannot sit on a 18px pitch — and it is the only visible
+   consequence of the fix. */
 .showcase__dot {
-  width: 8px;
-  height: 8px;
-  min-width: 8px;
-  min-height: 8px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
   padding: 0;
   margin: 0;
   border: none;
-  border-radius: 50%;
-  background-color: #D8DEE8;
+  background-color: transparent;
   cursor: pointer;
   box-shadow: none;
   outline: none;
   flex-shrink: 0;
-  transform: scale(1);
-  transform-origin: center center;
-  transition: background-color 250ms ease, transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: grid;
+  place-items: center;
   -webkit-font-smoothing: antialiased;
 }
 
-.showcase__dot:hover {
+.showcase__dot::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #D8DEE8;
+  /* The active scale lives here rather than on the button, or it would grow
+     the tap target along with the paint and put the targets back into overlap. */
+  transform: scale(1);
+  transform-origin: center center;
+  transition: background-color 250ms ease, transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase__dot:hover::before {
   background-color: #BAC5D6;
 }
 
-.showcase__dot.is-active {
-  width: 8px;
-  height: 8px;
+.showcase__dot.is-active::before {
   background-color: #164a9e;
   transform: scale(1.375);
-  box-shadow: none;
 }
 
 .showcase__stage {
@@ -7200,6 +8688,17 @@ a:focus-visible {
   z-index: 5;
 }
 
+/* The phone-only slider arrows that flank "View All Services".
+   ------------------------------------------------------------
+   Hidden here rather than only shown in the phone query, because the pair is
+   new markup: from 768px up the round .showcase__nav buttons beside the card
+   are the controls, and these must not appear next to them. Nothing above
+   767.98px renders, so no desktop box moves. The visible styling lives in the
+   max-width: 767.98px block, next to the rule that hides .showcase__nav. */
+.showcase__cta-nav {
+  display: none;
+}
+
 .showcase .services__cta {
   display: inline-flex;
   align-items: center;
@@ -7245,31 +8744,74 @@ a:focus-visible {
     margin-inline: auto;
   }
 
+  /* 18, not the base 32: the type and the card are both smaller here, so the
+     same visual separation needs less of it. */
+  .showcase .section-head {
+    margin-bottom: 18px;
+  }
+
+  /* No gap here: the base rule sets 0 and the 24px targets provide the pitch.
+     Only the row's own margins and padding are a phone concern. */
   .showcase__dots {
     display: flex !important;
     justify-content: center;
     align-items: center;
-    gap: 8px;
     margin: 16px auto 24px;
     padding: 0 12px;
     flex-wrap: wrap;
   }
 
-  .showcase__dot {
-    width: 8px;
-    height: 8px;
-    min-width: 8px;
-    min-height: 8px;
-  }
-
-  .showcase__dot.is-active {
-    background-color: var(--color-primary, #164a9e);
-    transform: scale(1.35);
-  }
-
+  /* The 24px dot targets are a base rule now — see .showcase__dot near the
+     top of the Showcase section. This block used to carry its own copy of the
+     whole treatment because the fix landed on phones first; the desktop row
+     had the same failure and now shares the same rules. The only thing that
+     changed in the move is the active dot's scale, 1.35 here against the
+     base 1.375 — two tenths of a pixel on an 8px circle. */
   .showcase__peek,
   .showcase__nav {
     display: none !important;
+  }
+
+  /* ...and the pair beside the button takes over. Same circle, border, shadow
+     and chevron as .showcase__nav, 44px instead of 48 so the three controls
+     and the button still fit across a 320px screen. 44 also clears the 24px
+     minimum touch target with room to spare. */
+  .showcase__cta-nav {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(22, 74, 158, 0.16);
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: 0 6px 18px rgba(22, 74, 158, 0.12);
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+      color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .showcase__cta-nav svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .showcase__cta-nav:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  /* The row is three items now. The gap spaces them; the auto margins on the
+     button were what centred it as an only child and would now shove the two
+     arrows out to the edges. */
+  .showcase__cta-wrap {
+    gap: 12px;
+  }
+
+  .showcase .services__cta {
+    margin: 0;
   }
 
   .showcase__carousel {
@@ -7590,8 +9132,18 @@ a:focus-visible {
   transition: filter 0.35s ease, opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+/* No drop-shadow on hover, on request — the mark alone should light up.
+   ------------------------------------------------------------------
+   The shadow was not a background, but it read as one. Several of these logo
+   files ship with an opaque white plate baked into the image rather than a
+   transparent one. Against this section's near-white background that plate is
+   invisible at rest, but a drop-shadow traces the image's actual rectangle, so
+   hovering one of those files outlined the plate and a white card appeared
+   behind the logo — while transparent files like Visual Objects showed only
+   the mark. Dropping the shadow makes every logo behave like the transparent
+   ones. The colour, lift and scale are unchanged. */
 .marquee__item:hover .marquee__logo {
-  filter: grayscale(0) drop-shadow(0 8px 18px rgba(37, 176, 247, 0.35));
+  filter: grayscale(0);
   opacity: 1;
   transform: scale(1.1) translateY(-6px);
 }
@@ -8469,6 +10021,7 @@ canvas {
     max-width: 100%;
   }
 
+  /* Wide phones fit a third column, which is what this always did. */
   .awards {
     max-width: 100%;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -8775,10 +10328,6 @@ canvas {
   .industries {
     padding-top: 36px;
     padding-bottom: 24px;
-  }
-
-  .reviews-bar {
-    padding-bottom: 48px;
   }
 
   .footer {
@@ -9590,34 +11139,15 @@ canvas {
     line-height: 1.6;
   }
 
-  /* The ratings card carries no padding of its own — on desktop the three
-     stats sit in one row and the 240px Trustpilot box sets the height, so the
-     logos end up centred with room above and below them. Here the row wraps:
-     Upwork goes to a line of its own and lands flush against the top edge of
-     the card, ™ and all, with GoodFirms and Trustpilot flush against the
-     bottom. Inset the contents — the same 30/24 the phone layout uses. */
-  .reviews-bar__card {
-    padding: 30px 24px;
-  }
-
-  .awards {
-    /* 150 + 28 + 150. .awards clips its own overflow, so the width is what
-       decides how many columns are on screen. */
-    width: 328px;
-    height: 430px;
-    flex: 0 0 auto;
-  }
-
-  .award-card {
-    width: 150px;
-    height: 150px;
-    border-radius: 26px;
-    padding: 16px;
-  }
-
-  .awards__col--offset {
-    margin-top: 70px;
-  }
+  /* The fixed 328x430 box and flex-shrink:0 belonged to the badge wall that
+     sat beside the copy. The row spans the section now, so it takes its width
+     from the base rule; only the badge size stays tablet-sized. */
+  /* Nothing left to override at this width. The badge used to be pinned to
+     150px square with its own padding and a 22px trailing margin — all three
+     belonged to layouts that are gone. The base rule sizes each badge as a
+     fifth of the row, which lands at about 150px here anyway, and the
+     margin-right was the revolving track's rhythm; on a wrapping row it just
+     pushes every line off centre by half of itself. */
 
   /* 375px cards in a 706px row leave one per line and half the row empty. */
   .blog-card {
@@ -9785,12 +11315,6 @@ canvas {
   .cases,
   .contact {
     padding-top: 8px;
-  }
-
-  /* .reviews-bar ended with 48, which would have made the gap above the
-     testimonials rule 8px deeper than every other one. */
-  .reviews-bar {
-    padding-bottom: 36px;
   }
 
   /* "View More Blogs" and "View Case Studies" are built the same way and were
@@ -11351,15 +12875,6 @@ body.nav-open .contact-dock {
     width: 100%;
   }
 
-  /* 3. Upwork / Trustpilot / GoodFirms sit in a row with a 90px gap. Their own
-        widths total 982px, so at 1229 the 180px of gap tipped them over the
-        1131px available and GoodFirms wrapped underneath — which is what made
-        the blue Trustpilot card look stranded. The gap tracks the viewport
-        instead, and all three stay on the one row the baseline puts them on. */
-  .reviews-bar__card {
-    gap: clamp(28px, 4vw, 90px);
-  }
-
   /* 4. The four office blocks plus their dividers need 1067px, and the panel's
         own 40px padding left only 1051px — sixteen pixels short, so IND Office
         wrapped alone onto a second line with a divider dangling at the end of
@@ -11411,36 +12926,6 @@ body.nav-open .contact-dock {
   .industries__intro {
     width: 100%;
     flex-shrink: 1;
-  }
-
-  /* Upwork / Trustpilot / GoodFirms come to 982px of fixed widths — a 347px
-     logo, a 382x240 card and a 253px logo — so below 1200px they cannot share a
-     row whatever the gap: at 150% zoom there is only 942px to put them in, and
-     GoodFirms dropped underneath on its own. Everything here is allowed to give
-     way instead: the blue card trades its fixed width for a maximum, and the two
-     logos scale inside whatever their column ends up being, which brings the row
-     to about 894px and keeps all three side by side. */
-  .reviews-bar__card {
-    gap: 24px;
-    /* wrap is what stops them shrinking — a flex item wraps before it gives
-       way, so with wrap on they stayed at their full width and GoodFirms went
-       to a second line. nowrap makes the row shrink to fit instead. */
-    flex-wrap: nowrap;
-  }
-
-  .review-stat {
-    min-width: 0;
-    flex-shrink: 1;
-  }
-
-  .review-stat--blue {
-    width: auto;
-    flex: 0 1 382px;
-  }
-
-  .review-stat__logo {
-    max-width: 100%;
-    height: auto;
   }
 
   /* Still too narrow for four offices on one line here, so the row that does
@@ -11512,24 +12997,6 @@ body.nav-open .contact-dock {
   .hero__inner {
     gap: 6px;
   }
-}
-
-/* ============================================================
-   REVIEWS BAR — centre the middle card, not just the row
-   ------------------------------------------------------------
-   .reviews-bar__card centres its three children as a group, which is not the
-   same as centring the middle one: the Upwork lockup is 347px wide and the
-   GoodFirms one 253px, so the 94px difference pushed the Trustpilot card 47px
-   right of the panel's centre line at every width.
-
-   Letting the two outer stats share the leftover space equally puts the blue
-   card exactly on the centre line. Nothing is resized to get there — both
-   logos already centre themselves inside .review-stat (it is a centred flex
-   column), so they simply sit in equal halves either side.
-   ============================================================ */
-.reviews-bar__card > .review-stat:not(.review-stat--blue) {
-  flex: 1 1 0;
-  min-width: 0;
 }
 
 /* ============================================================
@@ -11665,5 +13132,259 @@ body.nav-open .contact-dock {
 
   .sticky-ai-dock-container {
     transition: opacity 180ms ease, visibility 180ms ease;
+  }
+}
+
+/* ============================================================
+   HERO AMBIENT ANIMATIONS — PAUSED WHILE THE HERO IS COVERED
+   ------------------------------------------------------------
+   .hero is position:sticky at every breakpoint (top: --header-height on
+   desktop, top: 0 below it), so it never scrolls out of the viewport — it
+   stays pinned there for the whole document. What hides it is .content-stack
+   (z-index 20, background: var(--color-white), fully opaque) sliding up over
+   it and covering it for the rest of the page.
+
+   Every selector below carries an infinite ambient animation inside that
+   hero, and most of them animate a property the compositor cannot take over:
+   box-shadow spread on .hero__ai-badge and .hero__search, background-position
+   on .hero::before and .hero__headline-highlight, filter/drop-shadow on the
+   glitter stars. Each of those forces a style recalc and a repaint of its
+   element on every frame — and they were all doing it for the entire visit,
+   behind an opaque white panel.
+
+   Measured over a full-page scroll at 8x CPU throttle (mobile emulation),
+   pausing exactly these took the median frame from 41.6ms to 34.6ms, p95 from
+   62.5ms to 55.5ms, frames over 50ms from 148 to 63 per thousand, and mean
+   fps from 23.2 to 29.6.
+
+   Nothing is redefined and no keyframe is touched: animation-play-state
+   freezes an animation where it stands and resumes it from the same point, so
+   scrolling back up finds every one of them carrying on exactly where it was
+   rather than restarting or jumping. useAnimationObserver adds .is-covered to
+   the .hero element off an IntersectionObserver on .content-stack, so deciding
+   this costs no scroll handler and no per-frame work.
+
+   The class goes on .hero rather than on <html> on purpose. Keyed off the root,
+   every toggle invalidated style for the whole document and these eleven
+   selectors had to be matched against all of it: measured at 8x throttle that
+   traded a faster median for a much worse tail — UpdateLayoutTree went from
+   6.7 to 8.8ms per frame and frames over 100ms went from 2 to 20. Scoped to
+   .hero, the invalidation stops at the hero subtree.
+
+   !important is needed because the <=1023.98px .hero__ai-badge rule sets the
+   `animation` shorthand with !important, which resets play-state to running.
+
+   Only the ambient loops are listed. The one-shot entrance animations are
+   left out on purpose, so a reader who lands deep-linked and scrolls up still
+   gets the hero's entrance rather than finding it already spent.
+   ============================================================ */
+.hero.is-covered::before,
+.hero.is-covered .hero__orb::before,
+.hero.is-covered .hero__ai-badge,
+.hero.is-covered .hero__headline-highlight,
+.hero.is-covered .hero__search,
+.hero.is-covered .ai-badge-star--purple,
+.hero.is-covered .ai-badge-star--pink,
+.hero.is-covered .ai-badge-star--blue,
+.hero.is-covered .ai-glitter-star--1,
+.hero.is-covered .ai-glitter-star--2,
+.hero.is-covered .ai-glitter-star--3 {
+  animation-play-state: paused !important;
+}
+
+/* ============================================================
+   THE HERO HAS TO BE A WHOLE VIEWPORT IN FLOW, NOT ONE MINUS THE HEADER
+   ------------------------------------------------------------
+   .site-header is position:fixed, so it takes no room in the document and
+   the hero's static position is y=0. The hero is then stuck at
+   top: var(--header-height) and sized min-height: calc(100svh - header) —
+   which paints correctly (79px..100svh, exactly the area under the header)
+   but only advances the flow by 100svh - 79px. .content-stack follows it
+   immediately, so its rounded top edge starts one header-height above the
+   fold and 79px of the white stack sits on screen before a single pixel is
+   scrolled.
+
+   It never showed at the approved 1536 x 743 baseline because the hero's
+   own content needs ~768px there — more than the 664px floor — so the box
+   was content-driven and ran past the fold anyway. Zoom out and the
+   viewport grows past the content: at 67% the floor is 992px against 768px
+   of content, the floor wins, and the strip appears. That is the "not
+   preserving the viewport" in the report.
+
+   Handing back exactly the header's height as bottom margin puts
+   .content-stack's top edge on the bottom of the screen at rest, at every
+   zoom step, and changes nothing about the hero's own box — same height,
+   same centring, same sticky pin. The margin is never visible: while the
+   hero is stuck it paints over that band, and from the first pixel of
+   scroll .content-stack (z-index 20) is over the hero (z-index 10)
+   already.
+
+   Below 768px the hero sets its own height, top:0 and margin-bottom, so
+   this is scoped above it rather than fought off down there.
+   ============================================================ */
+@media (min-width: 768px) {
+  .hero {
+    margin-bottom: var(--header-height);
+  }
+}
+
+/* ============================================================
+   NO "CALL US" BUTTON ON DESKTOP / LAPTOP
+   ------------------------------------------------------------
+   On request: a tel: link has nothing to hand off to on a machine with no
+   dialler, so the button either does nothing or opens whatever soft-phone
+   happens to be registered. WhatsApp is the one of the pair that actually
+   works from a desktop — wa.me opens web.whatsapp.com — so it is the only
+   one left in the dock here. Both stay on phones and tablets, which is the
+   same 1024px line the rest of this file already treats as "desktop"
+   (.ai-eco, .blog-card__arrow).
+
+   display:none rather than removing it from ContactDock.tsx: the markup is
+   shared with the touch layouts, where the call button is the more useful
+   of the two.
+   ============================================================ */
+@media (min-width: 1024px) {
+  .contact-dock__btn--call {
+    display: none;
+  }
+}
+
+/* ============================================================
+   DESKTOP WIDER THAN THE 1536px BASELINE  —  BROWSER ZOOM BELOW 100%
+   ------------------------------------------------------------
+   The whole stylesheet is authored against the approved 1536 x 743 desktop.
+   The 125%/150% block further up explains why 1536 and not 1920: the panel
+   runs at 125% Windows scaling, so the browser at 100% zoom is already a
+   1536px CSS viewport.
+
+   Zooming *out* only ever makes that viewport bigger:
+
+       100%  ->  1536 x  743   (approved — nothing in here fires)
+        90%  ->  1707 x  826
+        80%  ->  1920 x  929
+        75%  ->  2048 x  991
+        67%  ->  2293 x 1110
+        50%  ->  3072 x 1486
+
+   and essentially nothing in the design follows. --fs-90 and --fs-56 are
+   clamps that top out at 90px and 56px, --gutter tops out at 64px, the
+   container is a flat 1440px, and the ~1900 remaining lengths in this file
+   are plain pixels. So the page stayed the size it is at 1536 while the
+   screen around it grew — a fixed column in a wide window, with the margins
+   doing all of the scaling.
+
+   ONE SCALE, NOT ~1900 SCALED LENGTHS. Every attempt to make this fluid
+   token by token scales the things that read a token and leaves the things
+   that do not, which is worse than either extreme: a section heading grows
+   while the card padding under it does not. `zoom` on <body> scales the
+   layout itself, so the page above stays the single source of truth for
+   what the design is and this block only decides how big to draw it.
+
+   `zoom` and not `transform: scale()`: a transform makes its element the
+   containing block for fixed-position descendants, which would take the
+   header, the "Ask anything" dock and the WhatsApp rail off the viewport and
+   scroll them away with the page. `zoom` is a layout zoom — measured here,
+   a fixed child with left/right:0 still spans the real viewport exactly, and
+   the document does not overflow horizontally.
+
+   tan(atan2(a, b)) is the way to get a *number* out of two lengths: calc()
+   will divide a length by a number but not by another length, and `zoom`
+   takes a number.
+
+   THE SCALE IS SPELLED OUT AT EVERY USE SITE, NOT HELD IN A CUSTOM PROPERTY.
+   That looks like six copies of one expression begging to be factored into
+   a --page-scale custom property, and it was written that way first. It
+   broke Firefox.
+
+   Firefox (checked on 105) evaluates tan()/atan2() correctly when they are
+   written directly in a declaration — calc(100px * tan(atan2(1px, 1px)))
+   computes to 100px there exactly as it does in Chrome. What it does not
+   survive is the same expression arriving through var(): stored in a custom
+   property and substituted into calc(100svh / that property - ...), the
+   result is invalid at computed-value time.
+
+   That distinction is the whole bug. A declaration that is invalid at PARSE
+   time is dropped and the previous declaration in the cascade wins — which is
+   the graceful degradation this block wants. A declaration that is invalid at
+   COMPUTED-VALUE time falls back to the property's INITIAL value instead. So
+   .hero did not fall back to min-height: calc(100svh - header); it fell back
+   to min-height: 0. The hero collapsed to its content height and
+   .content-stack rode up into the middle of it, on every Firefox window at or
+   over 1537px. Inlining the expression keeps it on the parse-time path in
+   every engine.
+
+   @supports carries the actual browser test, and its condition is written to
+   match what the block really needs rather than "are there trig functions".
+   The thing Firefox 105 cannot do is put a VIEWPORT UNIT inside atan2():
+   atan2(1920px, 1536px) parses there and computes correctly, atan2(100vw,
+   1536px) is rejected outright. So the condition asks for the 100vw form.
+
+   Two details in it are load-bearing. It multiplies by 1px because tan()
+   returns a number and a bare number is not a width, so the shorter
+   @supports (width: tan(atan2(...))) is false in every browser and would
+   switch the zoom off for Chrome as well. And it uses 100vw, not 1px: the
+   1px form is true in Firefox 105, which is how the first attempt at this
+   gate let the broken block straight through.
+   ============================================================ */
+@supports (width: calc(1px * tan(atan2(100vw, 1536px)))) {
+  @media (min-width: 1537px) {
+    body {
+      zoom: max(1, min(2, tan(atan2(100vw, 1536px))));
+    }
+
+    /* ------------------------------------------------------------
+       VIEWPORT UNITS ARE THE ONE THING ZOOM DOES NOT REWRITE.
+       Inside a zoomed subtree a length in px is a design pixel and gets
+       multiplied on the way to the screen, but 1vh is still one hundredth of
+       the *real* viewport — so `100svh` reads as 743 * scale design pixels and
+       paints scale x scale too tall. Dividing by the same scale puts it back
+       into design pixels, i.e. the 743 the design was drawn against.
+
+       Only the rules that can apply at this width are listed. Everything under
+       a max-width below 1537, or a max-height a zoomed-out window cannot
+       reach, is untouched — and the vw in --fs-90, --fs-56 and --gutter is
+       already past the top of its clamp here, so those resolve to their
+       ceilings either way.
+       ------------------------------------------------------------ */
+    .hero {
+      min-height: calc(100svh / max(1, min(2, tan(atan2(100vw, 1536px)))) - var(--header-height));
+    }
+
+    .ai-panel {
+      max-height: calc(100vh / max(1, min(2, tan(atan2(100vw, 1536px)))) - 76px);
+    }
+
+    .mega-dropdown,
+    .mega-dropdown--who-we-are {
+      max-width: calc(100vw / max(1, min(2, tan(atan2(100vw, 1536px)))) - 48px) !important;
+    }
+
+    .mega-dropdown--technology,
+    .mega-dropdown--services {
+      max-width: calc(100vw / max(1, min(2, tan(atan2(100vw, 1536px)))) - 32px) !important;
+    }
+  }
+}
+
+/* The two short-viewport relief rules that measure against the viewport rather
+   than capping at a design value, corrected the same way. Their own blocks are
+   keyed (>=1024px, <=700px tall), which a zoomed-out window never satisfies —
+   the aspect ratio is fixed by the display, so scaling the width scales the
+   height with it and the design-space viewport stays ~743px tall at every zoom
+   step. A wide *and* short window does reach them though, and there 100vh/svh
+   is the real height being read as design pixels. Every other length in those
+   blocks is a clamp whose ceiling is the design value, so it resolves to the
+   unrelieved size — the safe direction — and needs nothing. */
+@supports (width: calc(1px * tan(atan2(100vw, 1536px)))) {
+  @media (min-width: 1537px) and (max-height: 700px) {
+    .hero {
+      padding-top: clamp(0px, calc(100vh / max(1, min(2, tan(atan2(100vw, 1536px)))) - 556px), 70px);
+    }
+
+    .mega-dropdown__inner {
+      max-height: calc(
+        100svh / max(1, min(2, tan(atan2(100vw, 1536px)))) - var(--header-height, 79px) - 2 * var(--mega-pad) - 20px
+      );
+    }
   }
 }

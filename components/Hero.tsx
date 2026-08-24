@@ -96,7 +96,18 @@ export function Hero() {
         <div className="hero__subline">
           <p className="hero__subheading">Discuss. Design. Develop</p>
 
-          <img src="/assets/arrow.png" className="ai_annimation" alt="arrow" />
+          {/* The intrinsic size, so the browser can reserve the box before the
+              PNG decodes. .ai_annimation sets width: 75px and leaves height
+              auto, so the rendered arrow is unchanged at 75x69 — these only
+              supply the ratio, which is what the unsized-images audit and the
+              hero fit pass both want. */}
+          <img
+            src="/assets/arrow.png"
+            className="ai_annimation"
+            alt="arrow"
+            width={150}
+            height={138}
+          />
 
           <span className="hero__with">With</span>
 

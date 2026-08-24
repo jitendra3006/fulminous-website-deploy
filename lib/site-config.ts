@@ -100,3 +100,109 @@ export const OFFICES = [
     country: "IN",
   },
 ] as const;
+
+/* Brand colour for the address bar and the installed-app splash. Taken from
+   --color-primary in globals.css, so the chrome matches the navbar rather
+   than guessing at a shade. */
+export const THEME_COLOR = "#164a9e";
+
+/* The @handle behind SOCIAL_PROFILES.x, spelled the way the twitter: card
+   tags want it. Kept next to the profile URL it is derived from so the two
+   cannot drift. */
+export const X_HANDLE = "@fulminous_soft";
+
+/* Read by exactly one engine class that still cares (Bing and the regional
+   crawlers) and by LLM scrapers looking for a topic hint. Nine terms, each
+   one lifted from copy that is actually rendered on this page — the tag is
+   ignored outright when it reads as a keyword dump. */
+export const SITE_KEYWORDS = [
+  "custom software development company",
+  "AI development company",
+  "web development services",
+  "mobile app development",
+  "cloud and DevOps services",
+  "e-commerce development",
+  "UI/UX design services",
+  "dedicated development teams",
+  "software development company India",
+];
+
+/* The ten cards the Showcase renders, name and blurb copied from its
+   SLIDES_DATA. They are restated here rather than imported because Showcase
+   is a client component and StructuredData is a server one; the rule is that
+   this list may only ever contain services the page visibly offers, so if a
+   slide is added or renamed there, change it here too. Anything listed in
+   structured data that a reader cannot find on the page is a Google
+   structured-data violation, not extra coverage. */
+export const SERVICES = [
+  {
+    name: "Software Development",
+    description:
+      "Custom software solutions built end to end for businesses of any size.",
+  },
+  {
+    name: "Web Development",
+    description:
+      "Responsive, feature-rich websites and web applications.",
+  },
+  {
+    name: "Mobile App Development",
+    description:
+      "Custom iOS and Android apps with trending features and engaging design.",
+  },
+  {
+    name: "AI Development",
+    description:
+      "Generative AI, chatbot and AI-powered application development.",
+  },
+  {
+    name: "Cloud & DevOps",
+    description:
+      "Cloud migration, infrastructure management, CI/CD and DevOps consulting.",
+  },
+  {
+    name: "E-commerce Solutions",
+    description:
+      "Custom e-commerce platforms, marketplaces and B2B commerce solutions.",
+  },
+  {
+    name: "UI/UX Design",
+    description:
+      "Engaging interface and experience design for digital platforms.",
+  },
+  {
+    name: "Quality Assurance",
+    description:
+      "Manual, automated, performance, security and mobile app testing.",
+  },
+  {
+    name: "Game Development Services",
+    description:
+      "Game apps and gaming software, from casual titles to real-money platforms.",
+  },
+  {
+    name: "Dedicated Teams & Staff Augmentation",
+    description:
+      "Dedicated development teams, IT staff augmentation and technical consulting.",
+  },
+] as const;
+
+/* The eight cards the Industries section renders, in DOM order. Same rule as
+   SERVICES: this mirrors visible content and nothing else. */
+export const INDUSTRIES = [
+  "HealthCare",
+  "Banking & Finance",
+  "Real Estate",
+  "Travel & Hospitality",
+  "Media & Entertainment",
+  "E-commerce & Retail",
+  "Education & e-Learning",
+  "Food & Restaurant",
+] as const;
+
+/* The four countries the page names as markets — the Footer lists an office
+   in each, and the hero description says the same. Used for
+   Organization.areaServed, which is what lets Google associate the company
+   with a country-level query ("software development company UK") without the
+   page having to claim a local address it does not have. */
+export const AREAS_SERVED = ["US", "GB", "AU", "IN"] as const;

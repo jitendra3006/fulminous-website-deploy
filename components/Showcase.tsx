@@ -198,8 +198,19 @@ export function Showcase() {
     const dotsWrap = root.querySelector<HTMLElement>(".showcase__dots");
     const peekPrev = root.querySelector<HTMLElement>(".showcase__peek--prev");
     const peekNext = root.querySelector<HTMLElement>(".showcase__peek--next");
-    const btnPrev = root.querySelector<HTMLElement>(".showcase__nav--prev");
-    const btnNext = root.querySelector<HTMLElement>(".showcase__nav--next");
+    /* querySelectorAll, not querySelector: under 768px the round arrows beside
+       the card are display:none and a second pair sits either side of the
+       "View All Services" button instead, so there are two prev controls and
+       two next controls in the section at any time — one pair visible per
+       breakpoint. Binding the list means neither pair needs its own handler,
+       and the hidden pair costs nothing since a display:none button cannot be
+       clicked. */
+    const btnPrev = Array.from(
+      root.querySelectorAll<HTMLElement>(".showcase__nav--prev, .showcase__cta-nav--prev")
+    );
+    const btnNext = Array.from(
+      root.querySelectorAll<HTMLElement>(".showcase__nav--next, .showcase__cta-nav--next")
+    );
 
     if (!track || !dotsWrap || !stage || !carousel) return;
 
@@ -332,11 +343,35 @@ export function Showcase() {
       return t ? t.outerHTML : "";
     }
 
+    /* The peek panels are aria-hidden, and sideContent() copies a whole slide
+       into them — six real <a> links each. An anchor with an href stays
+       focusable wherever it sits, so a keyboard user tabbing through the
+       carousel was landing on twelve invisible duplicates of links already on
+       screen, and axe fails the section on aria-hidden-focus for exactly that.
+
+       tabindex="-1" and nothing else. Removing href instead also silences the
+       axe rule — a bare <a> is not focusable — but it trades one audit for
+       another: Lighthouse then counts twelve uncrawlable anchors and SEO drops
+       from 100 to 92. Keeping the href and only taking the copies out of the
+       tab order satisfies both, and the duplicate targets are the same URLs
+       the visible card already links to. */
+    function deactivate(host: HTMLElement) {
+      host
+        .querySelectorAll<HTMLElement>('a, button, input, select, textarea, [tabindex]')
+        .forEach((el) => el.setAttribute("tabindex", "-1"));
+    }
+
     function renderSides() {
       const p = (active - 1 + n) % n;
       const nx = (active + 1) % n;
-      if (peekPrev) peekPrev.innerHTML = sideContent(p);
-      if (peekNext) peekNext.innerHTML = sideContent(nx);
+      if (peekPrev) {
+        peekPrev.innerHTML = sideContent(p);
+        deactivate(peekPrev);
+      }
+      if (peekNext) {
+        peekNext.innerHTML = sideContent(nx);
+        deactivate(peekNext);
+      }
     }
 
     function updateDots() {
@@ -434,8 +469,8 @@ export function Showcase() {
     const onNextClick = () => handleUserInteraction((active + 1) % n, "next");
     const onPrevClick = () => handleUserInteraction((active - 1 + n) % n, "prev");
 
-    if (btnNext) btnNext.addEventListener("click", onNextClick);
-    if (btnPrev) btnPrev.addEventListener("click", onPrevClick);
+    btnNext.forEach((b) => b.addEventListener("click", onNextClick));
+    btnPrev.forEach((b) => b.addEventListener("click", onPrevClick));
     if (peekNext) peekNext.addEventListener("click", onNextClick);
     if (peekPrev) peekPrev.addEventListener("click", onPrevClick);
 
@@ -551,8 +586,8 @@ export function Showcase() {
       stopAutoScroll();
       if (pauseTimer) clearTimeout(pauseTimer);
       viewportObserver.disconnect();
-      if (btnNext) btnNext.removeEventListener("click", onNextClick);
-      if (btnPrev) btnPrev.removeEventListener("click", onPrevClick);
+      btnNext.forEach((b) => b.removeEventListener("click", onNextClick));
+      btnPrev.forEach((b) => b.removeEventListener("click", onPrevClick));
       if (peekNext) peekNext.removeEventListener("click", onNextClick);
       if (peekPrev) peekPrev.removeEventListener("click", onPrevClick);
       document.removeEventListener("visibilitychange", onVisibilityChange);
@@ -589,12 +624,7 @@ export function Showcase() {
             Our offshore IT consulting services along with the AI-powered core helps
             top companies stay competitive, win new markets and increase shareholder value.
           </p>
-          <svg className="section-head__underline" viewBox="0 0 142 10" fill="none" aria-hidden="true">
-            <path d="M2 6C40 -0.5 100 -0.5 140 5" stroke="#f09d4d" strokeWidth={3} strokeLinecap="round" />
-          </svg>
         </div>
-
-        <div className="showcase__dots" role="tablist" aria-label="Select a service" />
 
         <div
           className="showcase__stage"
@@ -618,11 +648,18 @@ export function Showcase() {
             </svg>
           </button>
           <div className="showcase__carousel">
-            <button
-              type="button"
+            {/* A div, not a button. These two are the slivers of the
+                neighbouring cards either side of the active one; clicking one
+                steps the carousel, but they duplicate .showcase__nav exactly,
+                so they are aria-hidden and out of the tab order. axe's
+                aria-hidden-focus rule fails a <button> inside aria-hidden even
+                with tabindex="-1" — the element is still programmatically
+                focusable — and `disabled` would stop the click firing. A div
+                carries no implicit focusability, so the rule passes and the
+                pointer shortcut still works: the handler binds by class. */}
+            <div
               className="showcase__peek showcase__peek--prev"
               aria-hidden="true"
-              tabIndex={-1}
             />
             <div className="showcase__frame">
               <div className="showcase__card">
@@ -691,11 +728,18 @@ export function Showcase() {
                 </div>
               </div>
             </div>
-            <button
-              type="button"
+            {/* A div, not a button. These two are the slivers of the
+                neighbouring cards either side of the active one; clicking one
+                steps the carousel, but they duplicate .showcase__nav exactly,
+                so they are aria-hidden and out of the tab order. axe's
+                aria-hidden-focus rule fails a <button> inside aria-hidden even
+                with tabindex="-1" — the element is still programmatically
+                focusable — and `disabled` would stop the click firing. A div
+                carries no implicit focusability, so the rule passes and the
+                pointer shortcut still works: the handler binds by class. */}
+            <div
               className="showcase__peek showcase__peek--next"
               aria-hidden="true"
-              tabIndex={-1}
             />
           </div>
           <button
@@ -716,7 +760,38 @@ export function Showcase() {
           </button>
         </div>
 
+        {/* Moved below the carousel, on request. The dots are populated and
+            driven from the effect above by querySelector, so the position in
+            the markup carries no behaviour with it. */}
+        <div className="showcase__dots" role="tablist" aria-label="Select a service" />
+
         <div className="showcase__cta-wrap">
+          {/* Phone-only slider controls, one either side of the button.
+              They are separate elements rather than the .showcase__nav pair
+              relocated because those two are absolutely positioned against
+              .showcase__stage; moving them into this wrapper would re-anchor
+              them to it and shift them on desktop, which is locked. Both pairs
+              carry the same chevron and the same handler — .showcase__cta-nav
+              is display:none until 767.98px, .showcase__nav from 768px up, so
+              exactly one pair is ever on screen. */}
+          <button
+            type="button"
+            className="showcase__cta-nav showcase__cta-nav--prev"
+            aria-label="Previous service"
+            aria-controls="services"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M15 5l-7 7 7 7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+
           {/* Was href="#services", the id of the very section this button sits
               in — a link to itself. It now goes to the real services index. */}
           <a
@@ -727,6 +802,24 @@ export function Showcase() {
           >
             View All Services
           </a>
+
+          <button
+            type="button"
+            className="showcase__cta-nav showcase__cta-nav--next"
+            aria-label="Next service"
+            aria-controls="services"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M9 5l7 7-7 7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
 
         <div className="showcase__source" aria-label="All services">

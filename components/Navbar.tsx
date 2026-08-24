@@ -501,15 +501,26 @@ export function Navbar() {
 
   const updateDropdownPositions = () => {
     const navItems = document.querySelectorAll<HTMLElement>(".site-nav__item--has-dropdown");
-    const vw = document.documentElement.clientWidth || window.innerWidth;
+    /* Past 1536px the whole page is drawn at a CSS zoom so the design fills
+       the window — see the ">= 1537px" block at the bottom of globals.css.
+       Inside that zoom, lengths written into CSS are *design* pixels while
+       getBoundingClientRect() and documentElement.clientWidth come back in
+       real screen pixels, so everything measured here has to be divided by
+       the zoom before it is handed back to the stylesheet. It is 1 at and
+       below the baseline, where the two spaces are the same thing. */
+    const scale = parseFloat(getComputedStyle(document.body).zoom) || 1;
+    const vw =
+      (document.documentElement.clientWidth || window.innerWidth) / scale;
     const margin = 16;
 
     navItems.forEach((item) => {
       const dropdown = item.querySelector<HTMLElement>(".mega-dropdown");
       if (!dropdown) return;
 
-      const itemRect = item.getBoundingClientRect();
-      const itemCenter = itemRect.left + itemRect.width / 2;
+      // Real screen pixels out of getBoundingClientRect, divided back into the
+      // design pixels the custom properties below are read as.
+      const itemLeft = item.getBoundingClientRect().left / scale;
+      const itemCenter = itemLeft + item.offsetWidth / 2;
 
       const isWhoWeAre = dropdown.classList.contains("mega-dropdown--who-we-are");
       const isTech = dropdown.classList.contains("mega-dropdown--technology");
@@ -522,8 +533,7 @@ export function Navbar() {
       const maxLeft = vw - dropdownWidth - margin;
       const clampedLeft = Math.max(minLeft, Math.min(idealLeft, maxLeft));
 
-      const parentLeft = itemRect.left;
-      const relativeDropdownLeft = clampedLeft - parentLeft;
+      const relativeDropdownLeft = clampedLeft - itemLeft;
       const pointerOffset = itemCenter - clampedLeft;
 
       dropdown.style.setProperty("--dropdown-width", `${dropdownWidth}px`);
@@ -643,7 +653,14 @@ export function Navbar() {
       }
     };
 
+    /* Scrolling closes an open mega dropdown. Almost every scroll event on the
+       page arrives with nothing open, and this used to run the full close
+       anyway — a setState dispatch plus a timer clear per event, several per
+       frame on a trackpad. There is nothing to close when nothing is open and
+       nothing is pinned, so that case leaves early now; when a panel *is* open
+       the work is exactly what it was. */
     const handleScroll = () => {
+      if (activeDropdown === null && !pinnedRef.current) return;
       if (Date.now() < ignoreScrollUntil.current) {
         return;
       }
@@ -677,11 +694,18 @@ export function Navbar() {
             The homepage is a real destination and is what a logo should link
             to — it is also the link crawlers use to confirm the site root. */}
         <a className="site-header__logo" href="/" aria-label="Fulminous Software home">
+          {/* The file's real intrinsic size, not the box it is drawn in.
+              These attributes exist to give the browser an aspect ratio to
+              reserve before the image decodes, and 177x46 is not the ratio of
+              anything — the webp is 373x92 (4.05:1) and 177x46 is 3.85:1, so
+              the mark was being squeezed ~5% vertically and Lighthouse failed
+              it on image-aspect-ratio. The rendered width is still 177px; the
+              stylesheet takes the height from the ratio now. */}
           <img
             src="/assets/Fulminous-Logo.webp"
             alt="Fulminous Software logo"
-            width={177}
-            height={46}
+            width={373}
+            height={92}
           />
         </a>
 

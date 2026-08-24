@@ -64,137 +64,12 @@ export function Partners() {
     return whenIdle(clone);
   }, []);
 
-  // Desktop: pin the partners block with CSS `position: sticky` and drive the
-  // awards column from the page's own scroll offset.
-  //
-  // The previous implementation hijacked the wheel event — preventDefault on
-  // every tick, then window.scrollTo back to a locked Y while it hand-scrolled
-  // the awards column. That can never be smooth: wheel scrolling is composited
-  // off the main thread, so the browser had already painted a scrolled frame
-  // before our snap-back ran, and the heading visibly bounced once per tick.
-  // Nothing is blocked now. The page scrolls natively; we only read the pin's
-  // progress and translate the awards track, so the text cannot move at all.
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const section = document.querySelector<HTMLElement>(".partners");
-    const inner = document.querySelector<HTMLElement>(".partners__inner");
-    const viewport = document.querySelector<HTMLElement>(".awards");
-    const track = document.querySelector<HTMLElement>(".awards__track");
-    if (!section || !inner || !viewport || !track) return;
-
-    const desktop = window.matchMedia("(min-width: 768px)");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    let frame = 0;
-    let distance = 0;
-
-    const clear = () => {
-      track.style.transform = "";
-      section.style.removeProperty("--pin-extra");
-      section.style.removeProperty("--pin-top");
-    };
-
-    const apply = () => {
-      frame = 0;
-      if (distance <= 0) return;
-
-      const styles = getComputedStyle(section);
-      const padTop = parseFloat(styles.paddingTop) || 0;
-      const padBottom = parseFloat(styles.paddingBottom) || 0;
-      const pinTop = parseFloat(getComputedStyle(inner).top) || 0;
-
-      // Sticky travels inside the section's content box, so the runway spacer
-      // below .partners__inner is exactly how far the pin can move — which is
-      // exactly `distance`. Read it off the live box rather than assuming.
-      const startTop = pinTop - padTop;
-      const endTop = pinTop - (section.offsetHeight - padBottom - inner.offsetHeight);
-      const travel = startTop - endTop;
-      if (travel <= 0) return;
-
-      const raw = (startTop - section.getBoundingClientRect().top) / travel;
-      const progress = raw < 0 ? 0 : raw > 1 ? 1 : raw;
-      // translate3d keeps the column on the compositor — no layout, no reflow
-      // of the text beside it.
-      track.style.transform = `translate3d(0, ${-(progress * distance).toFixed(2)}px, 0)`;
-    };
-
-    const measure = () => {
-      if (!desktop.matches || reduce.matches) {
-        distance = 0;
-        clear();
-        return;
-      }
-
-      const header = document.querySelector<HTMLElement>(".site-header");
-      const headerHeight = header ? header.getBoundingClientRect().height : 79;
-      // Sit just under the fixed navbar, but never push the block off the
-      // bottom of a short viewport.
-      const pinTop = Math.max(
-        headerHeight + 8,
-        Math.min(headerHeight + 32, window.innerHeight - inner.offsetHeight - 24)
-      );
-      section.style.setProperty("--pin-top", `${pinTop}px`);
-
-      const styles = getComputedStyle(viewport);
-      const visible =
-        viewport.clientHeight -
-        (parseFloat(styles.paddingTop) || 0) -
-        (parseFloat(styles.paddingBottom) || 0);
-      // scrollHeight is the fallback: if anything ever constrains the track's
-      // box again, offsetHeight collapses to the visible height and the column
-      // would silently stop travelling. scrollHeight still reports the content.
-      const natural = Math.max(track.offsetHeight, track.scrollHeight);
-      distance = Math.max(0, natural - visible);
-      // The runway is the extra section height the pin scrolls through, and the
-      // column finishes travelling exactly as the pin releases — so the ratio
-      // between the two IS the badges' speed. At 1:1 they slid past at the full
-      // scroll rate while the heading beside them stood still, which read as the
-      // section rushing by. A longer runway for the same travel means the same
-      // badges cross the same window over more scrolling, i.e. slower: at 1.7
-      // they move at about 0.6x the page. Raise this to slow them further.
-      // apply() re-derives `travel` from the live box, so it needs no changes.
-      const PACE = 1.7;
-      section.style.setProperty("--pin-extra", `${Math.round(distance * PACE)}px`);
-      apply();
-    };
-
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(apply);
-    };
-
-    /* Deferred, not skipped. measure() reads getComputedStyle, offsetHeight,
-       scrollHeight and a bounding rect — a forced reflow of the whole awards
-       column, which was running inside hydration for a block the user cannot
-       see yet. Until it runs `distance` is 0, and apply() returns immediately
-       on that, so an early scroll simply finds the column not yet pinned —
-       exactly what it does today before the first measure lands. */
-    const cancelIdle = whenIdle(measure);
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", measure);
-    desktop.addEventListener("change", measure);
-    reduce.addEventListener("change", measure);
-
-    // Badge images are unsized until they decode; re-measure so the runway
-    // matches the real column height instead of a short first guess.
-    const images = Array.from(track.querySelectorAll("img"));
-    images.forEach((img) => {
-      if (!img.complete) img.addEventListener("load", measure);
-    });
-
-    return () => {
-      cancelIdle();
-      if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", measure);
-      desktop.removeEventListener("change", measure);
-      reduce.removeEventListener("change", measure);
-      images.forEach((img) => img.removeEventListener("load", measure));
-      clear();
-    };
-  }, []);
-
+  /* The certificates used to need an effect here — first a scroll handler
+     that translated a pinned column, then a clone of all fourteen cards to
+     seed a revolving marquee. The wall is static now, so neither exists: the
+     badges are laid out by .awards in globals.css and nothing scripts them.
+     That is 14 fewer cloned subtrees in the DOM and one fewer infinite
+     animation running behind the fold for the whole visit. */
   return (
     <>
       <section className="trusted" aria-labelledby="trusted-title">
@@ -433,7 +308,7 @@ export function Partners() {
                 <div className="award-card">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/RankWatchTopWeb.png" alt="RankWatch Top Web Development Agencies 2025" width={150} height={150} />
+              loading="lazy" src="/assets/RankWatchTopWeb.webp" alt="RankWatch Top Web Development Agencies 2025" width={264} height={400} />
                 </div>
                 <div className="award-card">
                   <img
@@ -455,10 +330,7 @@ export function Partners() {
           </aside>
         </div>
 
-        {/* Scroll runway for the sticky pin — its height is the exact distance
-            the awards column has left to travel. Desktop only; height comes
-            from --pin-extra, which the effect measures. */}
-        <div className="partners__runway" aria-hidden="true" />
+
       </section>
     </>
   );
