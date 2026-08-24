@@ -207,6 +207,45 @@ export function useAnimationObserver() {
     };
     window.addEventListener("resize", onCoverResize, { passive: true });
 
+    /* Park the decorative animations in whichever sections are off screen.
+       ------------------------------------------------------------------
+       Same trick .hero already uses with .is-covered, applied to the six
+       sections below it. Profiling a full-page scroll at 4x CPU put 27% of
+       the frame budget — 7.2ms of 26.2ms — in the perpetual animations, and
+       no single one of them accounted for it: the AI video, the marquee, the
+       fixed header and every will-change each moved the median by under 1ms.
+       Switching them all off moved it to 19.0ms. So the win is in not running
+       the ones nobody is looking at.
+
+       The pause list lives in globals.css, keyed on .is-idle. It names only
+       selectors carrying an `infinite` animation, so entrances are untouched,
+       and 200px of rootMargin means a section is still running well before it
+       scrolls into view. Paused holds the current frame rather than resetting,
+       so nothing jumps when it comes back. */
+    const IDLE_SECTIONS = [
+      ".tech-partner",
+      ".trusted",
+      ".industries",
+      ".testimonials",
+      ".cases",
+      ".blogs",
+    ];
+
+    let idleObserver: IntersectionObserver | null = null;
+    if ("IntersectionObserver" in window) {
+      idleObserver = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            e.target.classList.toggle("is-idle", !e.isIntersecting);
+          }
+        },
+        { rootMargin: "200px 0px" }
+      );
+      for (const sel of IDLE_SECTIONS) {
+        document.querySelectorAll(sel).forEach((el) => idleObserver!.observe(el));
+      }
+    }
+
     /* Hand the compositor layer back once the reveal has played.
        ------------------------------------------------------------------
        .reveal carries `will-change: opacity, transform`. That is the right
@@ -544,6 +583,7 @@ export function useAnimationObserver() {
       heroCover?.disconnect();
       if (coverResizeFrame) cancelAnimationFrame(coverResizeFrame);
       window.removeEventListener("resize", onCoverResize);
+      idleObserver?.disconnect();
       heroEl?.classList.remove("is-covered");
       settleTimers.forEach((t) => window.clearTimeout(t));
       if (hero) {
