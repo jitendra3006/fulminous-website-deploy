@@ -5197,6 +5197,35 @@ button {
      design's ground; this is what takes the navy back down to it. */
   filter: brightness(1.08) contrast(1.03) saturate(1.04);
   transform: scale(var(--ai-zoom));
+
+  /* The same still the poster attribute names, as this element's background.
+     ------------------------------------------------------------------
+     A video paints its own background first and composites the decoded frame
+     over it, so while the clip is running this is completely hidden and costs
+     nothing — it is the same URL the poster already fetches, so it is one
+     request, not two. What it buys is that the band can never come up as bare
+     navy. Four separate things put it there, and the poster attribute alone
+     only covers the first:
+
+       * prefers-reduced-motion, where the src is deliberately never set
+       * autoplay refused by a policy or a data-saver setting
+       * the file failing to decode on a machine whose codecs cannot
+       * the frame decoding but never painting, which is what a Firefox
+         report of a flat navy band came down to: state was healthy
+         (readyState 4, playing, 1280x720, no error) and the layer still
+         showed nothing
+
+     On the video rather than .ai-banner__scene on purpose. The clip is wider
+     than the scene box by --ai-pull and hangs off the left edge, so a
+     background on the scene would be framed differently from the footage it
+     stands in for. Here it inherits the same box, the same offset, the same
+     scale(var(--ai-zoom)) through the entrance and the same filter above, so
+     the still is framed and graded exactly as the first frame would be, and
+     cover/50% 46% mirror the object-fit and object-position on this element. */
+  background-image: url("/assets/fulminous-ai-scene.webp");
+  background-size: cover;
+  background-position: 50% 46%;
+  background-repeat: no-repeat;
 }
 
 .ai-banner__tint {
@@ -7128,18 +7157,18 @@ button {
     text-align: center;
   }
 
-  /* "Read More" sat left of centre — off the divider dot below it by about
-     16px. The cause is the arrow beside it: <use href="#icon-arrow-right">
-     points at a symbol that is not defined anywhere in the project, so it
-     paints nothing while still taking its 24px box plus the 8px gap. Centring
-     the link centres text-plus-invisible-arrow, which puts the text half of
-     that 32px to the left.
-     Dropped here rather than compensated for with padding — there is no glyph
-     to keep room for. Desktop keeps it: the rows are left-aligned there, so
-     nothing is off centre, and the hover slide still has its target. */
-  .case-link svg {
-    display: none;
-  }
+  /* The arrow beside "Read More" is shown here, same as desktop.
+     ------------------------------------------------------------
+     It used to be display:none in this block, and the reason was sound at the
+     time: <use href="#icon-arrow-right"> pointed at a symbol that did not
+     exist, so it painted nothing while still occupying its 24px box plus the
+     8px gap — and because the link is centred on a phone, that pushed the
+     text 16px left of the divider dot under it.
+
+     SvgSymbols.tsx defines icon-arrow-right now, so the premise is gone: there
+     IS a glyph to keep room for, the 32px is doing visible work, and
+     text-plus-arrow centres correctly as a pair. Hiding it here was the only
+     thing leaving the phone without an affordance the desktop has. */
 }
 
 /* ============================================================
@@ -10701,10 +10730,10 @@ canvas {
 }
 
 /* The painted-in arrow background that used to sit here went with the pill —
-   it was a mobile-only stand-in for the empty <use href="#icon-arrow-right">
-   in .case-link / .intro-card__link. Those two arrows now render exactly as
-   they do on desktop, which is to say empty: the symbol is not defined
-   anywhere in the project, so nothing paints at any width. */
+   it was a mobile-only stand-in for <use href="#icon-arrow-right"> back when
+   that symbol was undefined. SvgSymbols.tsx defines it now, so .case-link and
+   .intro-card__link both paint a real arrow at every width and need no
+   stand-in. */
 
 /* ============================================================
    SMALL LAPTOPS / LANDSCAPE TABLETS — 1024px to 1199.98px
@@ -12735,14 +12764,12 @@ body.nav-open .contact-dock {
   }
 }
 
-/* Blog cards: the red arrow beside "Read More" comes off on tablet and phone.
-   Desktop (>=1024px) keeps it, along with its hover slide. Hidden rather than
-   removed from the markup so nothing else about the card has to change. */
-@media (max-width: 1023.98px) {
-  .blog-card__arrow {
-    display: none;
-  }
-}
+/* Blog cards: the red arrow beside "Read More" used to be display:none from
+   1023.98px down, so desktop had the affordance and tablet and phone did not.
+   On request the arrow now shows at every width, matching .case-link and
+   .intro-card__link — every "Read More" on the page carries its arrow. The
+   hover slide comes with it and is harmless on touch, where there is no
+   hover to trigger it. */
 
 /* The hero's AI tile bobs 2px up and back on a 3s loop — aiBadgeAuraPulse
    animates transform alongside its glow. Below desktop the tile is small and
