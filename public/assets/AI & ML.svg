@@ -1,5 +1,23 @@
-<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M22 10V34M10 22H34M14 14L30 30M14 30L30 14" stroke="#1256C4" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="22" cy="22" r="6" fill="#1256C4"/>
-    <circle cx="22" cy="22" r="3" fill="#FFFFFF"/>
-  </svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 44 44">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke: #f09d4d;
+      }
+
+      .st0, .st1 {
+        fill: none;
+        stroke-linejoin: round;
+        stroke-width: 4px;
+      }
+
+      .st1 {
+        stroke: #164a9e;
+      }
+    </style>
+  </defs>
+  <path class="st1" d="M35.81,22.23l-5.27-1.8c-1.62-.55-3.08-1.47-4.29-2.67-1.21-1.21-2.12-2.67-2.67-4.29l-1.8-5.27c-.69-2.02-3.54-2.02-4.23,0l-1.8,5.27c-.55,1.61-1.47,3.08-2.67,4.29-1.21,1.21-2.67,2.12-4.29,2.67l-5.27,1.8c-2.02.69-2.02,3.54,0,4.23l5.27,1.8c1.61.55,3.08,1.47,4.29,2.67,1.21,1.21,2.12,2.67,2.67,4.29l1.8,5.27c.69,2.02,3.54,2.02,4.23,0l1.8-5.27c.55-1.61,1.47-3.08,2.67-4.29,1.21-1.21,2.67-2.12,4.29-2.67l5.27-1.8c2.02-.69,2.02-3.54,0-4.23Z"/>
+  <path class="st0" d="M37.53,10.94s.17-2.36,1.14-3.33c.97-.97,3.33-1.14,3.33-1.14l-3.33-1.14-1.14-3.33-1.14,3.33-3.33,1.14,3.33,1.14,1.14,3.33Z"/>
+</svg>

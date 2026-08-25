@@ -206,6 +206,70 @@ export function Industries() {
           </p>
         </div>
       </section>
+
+      <section className="reviews-bar" aria-label="Client ratings">
+        <div className="reviews-bar__inner">
+          <div className="reviews-bar__card">
+            <div className="review-stat">
+              {/* This alt said "GoodFirms rating" and the GoodFirms image
+                  below said "Clutch rating" — the two were describing each
+                  other's badge, and neither described Clutch. */}
+              <img
+              decoding="async"
+              loading="lazy"
+                className="review-stat__logo"
+                src="/assets/upwork.webp"
+                alt="Upwork 4.9 out of 5 review rating"
+                width={347}
+                height={68}
+              />
+            </div>
+
+            <div className="review-stat review-stat--blue">
+              <div className="trustpilot-card-inner">
+                <div className="trustpilot-card-head">
+                  <svg className="trustpilot-star-svg" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                    <path fill="#00b67a" d="M12 0l3.6 7.4L24 8.5l-6 5.8 1.4 8.3L12 18.7l-7.4 3.9L6 14.3 0 8.5l8.4-1.1L12 0z" />
+                  </svg>
+                  <span className="trustpilot-card-title">Trustpilot</span>
+                </div>
+                <div className="trustpilot-card-score">
+                  <div className="stars" role="img" aria-label="Rated 4.9 out of 5 stars">
+                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                      <use href="#icon-star" />
+                    </svg>
+                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                      <use href="#icon-star" />
+                    </svg>
+                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                      <use href="#icon-star" />
+                    </svg>
+                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                      <use href="#icon-star" />
+                    </svg>
+                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                      <use href="#icon-star" />
+                    </svg>
+                  </div>
+                  <span className="trustpilot-card-text">4.9/5 Review</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="review-stat">
+              <img
+              decoding="async"
+              loading="lazy"
+                className="review-stat__logo"
+                src="/assets/GoodFirms.webp"
+                alt="GoodFirms 4.9 out of 5 review rating"
+                width={253}
+                height={39}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

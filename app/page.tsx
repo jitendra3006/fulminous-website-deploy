@@ -6,7 +6,7 @@ import { Showcase } from "@/components/Showcase";
 import { Partners } from "@/components/Partners";
 import { Domains } from "@/components/Domains";
 import { Industries } from "@/components/Industries";
-import { FulminousAiBanner } from "@/components/FulminousAiBanner";
+import { FulminousAiSection } from "@/components/FulminousAiSection";
 import { Testimonials } from "@/components/Testimonials";
 import { Blogs } from "@/components/Blogs";
 import { Cases } from "@/components/Cases";
@@ -31,8 +31,11 @@ export default function HomePage() {
 
           <Partners />
           <Domains />
+          {/* Sits between the tech stack and the industries, on request: the
+              AI practice reads as the thing that stack is put to work on,
+              before the page turns to who it is delivered for. */}
+          <FulminousAiSection />
           <Industries />
-          <FulminousAiBanner />
           <Testimonials />
           <Cases />
           <Blogs />

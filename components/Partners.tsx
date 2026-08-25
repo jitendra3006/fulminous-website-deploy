@@ -250,7 +250,7 @@ export function Partners() {
                 <div className="award-card">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/GoodFirms.webp" alt="Goodfirms RESEARCH PARTNER" width={150} height={150} />
+              loading="lazy" src="/assets/research-partner-badge.webp" alt="Goodfirms Research Partner" width={150} height={150} />
                 </div>
                 <div className="award-card">
                   {/* The two filenames are swapped in /assets: this one holds
@@ -293,7 +293,7 @@ export function Partners() {
                 <div className="award-card">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/research-partner-badge.webp" alt="ESC Member Govt of India" width={150} height={150} />
+              loading="lazy" src="/assets/GoodFirms.webp" alt="Rated 4.9 out of 5 on GoodFirms" width={150} height={150} />
                 </div>
                 <div className="award-card">
                   <img

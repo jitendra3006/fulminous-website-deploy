@@ -223,40 +223,6 @@
   unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
 }
 
-/* ---- Inter ---- */
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter-variable-latin.woff2") format("woff2");
-  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/inter-variable-latin-ext.woff2") format("woff2");
-  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/inter-variable-latin.woff2") format("woff2");
-  unicode-range: u+00??,u+0131,u+0152-0153,u+02bb-02bc,u+02c6,u+02da,u+02dc,u+0304,u+0308,u+0329,u+2000-206f,u+20ac,u+2122,u+2191,u+2193,u+2212,u+2215,u+feff,u+fffd;
-}
-@font-face {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/inter-variable-latin-ext.woff2") format("woff2");
-  unicode-range: u+0100-02ba,u+02bd-02c5,u+02c7-02cc,u+02ce-02d7,u+02dd-02ff,u+0304,u+0308,u+0329,u+1d00-1dbf,u+1e00-1e9f,u+1ef2-1eff,u+2020,u+20a0-20ab,u+20ad-20c0,u+2113,u+2c60-2c7f,u+a720-a7ff;
-}
-
 /* ---- Metric-compatible fallbacks (next/font adjustFontFallback output) ---- */
 @font-face {
   font-family: "Poppins Fallback";
@@ -274,24 +240,23 @@
   line-gap-override: 0.00%;
   size-adjust: 100.72%;
 }
-@font-face {
-  font-family: "Inter Fallback";
-  src: local("Arial");
-  ascent-override: 90.49%;
-  descent-override: 22.56%;
-  line-gap-override: 0.00%;
-  size-adjust: 107.06%;
-}
 
-/* The three tokens globals.css builds --font-display / --font-body /
-   --font-util / --font-ui out of. next/font used to hand these out through
+/* The two faces the site is set in. next/font used to hand these out through
    the generated .__variable_* classes on <html>; the names below are the
    only thing that changed, and each still resolves to
-   "<family>", "<family> Fallback", …, Arial, sans-serif. */
+   "<family>", "<family> Fallback", …, Arial, sans-serif.
+
+   Inter used to be a third entry here. It was reaching four declarations —
+   .feature-item__title, .feature-item__desc, .case-info__desc and
+   .review-stat__score — every one of them a supporting-copy role that
+   Figtree already serves a section away, so the Domains block was painting
+   its heading, its subtitle and its feature list in three different
+   letterforms. Those four now read the body face, and Inter is gone: it was
+   never in the preload list, so it also cost 133KB of woff2 discovered only
+   when that section laid out. */
 :root {
   --font-poppins: "Poppins", "Poppins Fallback";
   --font-figtree: "Figtree", "Figtree Fallback";
-  --font-inter: "Inter", "Inter Fallback";
 }
 
 /* ============================================================
@@ -329,7 +294,6 @@
   --font-body: var(--font-poppins), Arial, sans-serif;
   --font-alt: var(--font-poppins), Arial, sans-serif;
   --font-util: var(--font-figtree), Arial, sans-serif;
-  --font-ui: var(--font-inter), Arial, sans-serif;
 
   --fw-light: 300;
   --fw-regular: 400;
@@ -348,7 +312,14 @@
   --fs-20: 20px;
   --fs-19: 19px;
   --fs-18: 18px;
+  /* 17 and 15 were in the stylesheet long before they were in the scale —
+     17px across the mobile drawer, intro and industry card titles, 15px
+     across the nav, the mega dropdown, contact and the dock. Naming them
+     changes nothing on screen; it just means the next edit to "the nav
+     size" lands in one place instead of thirteen. */
+  --fs-17: 17px;
   --fs-16: 16px;
+  --fs-15: 15px;
   --fs-14: 14px;
   --fs-13: 13px;
   --fs-12: 12px;
@@ -638,8 +609,8 @@ button {
 
 .site-nav__link {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 15px;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-15);
   line-height: 22px;
   color: #1e293b;
   text-transform: capitalize;
@@ -657,8 +628,8 @@ button {
   background: #164a9e !important;
   color: #ffffff !important;
   font-family: var(--font-display) !important;
-  font-weight: 600 !important;
-  font-size: 15px !important;
+  font-weight: var(--fw-semibold) !important;
+  font-size: var(--fs-15) !important;
   padding: 13px 24px !important;
   border-radius: 16px !important;
   box-shadow: 0 4px 16px rgba(22, 74, 158, 0.2) !important;
@@ -819,8 +790,8 @@ button {
 .mega-dropdown__title {
   margin: 0 0 12px;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 15px;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-15);
   color: var(--color-primary);
   border-bottom: 2px solid rgba(22, 74, 158, 0.12);
   padding-bottom: 6px;
@@ -842,8 +813,8 @@ button {
   border: 1px solid var(--color-primary);
   color: var(--color-primary);
   font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--fs-13);
+  font-weight: var(--fw-semibold);
   text-decoration: none;
   white-space: nowrap;
   max-width: 100%;
@@ -899,8 +870,8 @@ button {
 
 .mega-dropdown__item-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 15px;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-15);
   line-height: 1.25;
   color: #1e293b;
   margin: 0;
@@ -913,8 +884,8 @@ button {
 
 .mega-dropdown__item-desc {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 12px;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-12);
   line-height: 1.35;
   color: #64748b;
   margin-top: 3px;
@@ -926,8 +897,8 @@ button {
   color: #ffffff;
   padding: 11px 22px;
   border-radius: 24px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-medium);
   margin-top: 20px;
   text-decoration: none;
   display: inline-block;
@@ -1095,8 +1066,8 @@ button {
 
 .hero__with {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 22px;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-22);
   color: #0f172a;
   margin-right: 4px;
 }
@@ -1149,8 +1120,8 @@ button {
 
 .hero__ai-badge-text {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 19px;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-19);
   color: #000000;
   line-height: 1;
   margin-top: auto;
@@ -2009,8 +1980,8 @@ button {
 
   .mobile-drawer__row-label {
     font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
+    font-size: var(--fs-17);
+    font-weight: var(--fw-semibold);
     letter-spacing: -0.012em;
     line-height: 1.25;
     color: #1e293b;
@@ -2070,8 +2041,8 @@ button {
 
   .mobile-drawer__back span {
     font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 600;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-semibold);
     letter-spacing: -0.012em;
   }
 
@@ -2089,7 +2060,7 @@ button {
     margin: 0 0 4px;
     font-family: var(--font-display);
     font-size: 10.5px;
-    font-weight: 700;
+    font-weight: var(--fw-bold);
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: #94a3b8;
@@ -2107,8 +2078,8 @@ button {
     padding: 11px 8px;
     border-radius: 9px;
     font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 500;
+    font-size: var(--fs-15);
+    font-weight: var(--fw-medium);
     line-height: 1.3;
     color: #334155;
     text-decoration: none;
@@ -2147,7 +2118,7 @@ button {
     display: flex;
     width: 100%;
     padding: 15px 24px;
-    font-size: 15px;
+    font-size: var(--fs-15);
     box-shadow: 0 8px 20px rgba(22, 74, 158, 0.22);
   }
 
@@ -2279,7 +2250,7 @@ button {
     justify-content: center;
     gap: 8px;
     font-size: clamp(11px, min(3.4vw, 2.1svh), 14px) !important;
-    font-weight: 500 !important;
+    font-weight: var(--fw-medium) !important;
     color: #ffffff !important;
     letter-spacing: 0.5px;
     white-space: nowrap !important;
@@ -2305,7 +2276,7 @@ button {
   .hero__headline {
     display: block;
     font-size: clamp(26px, min(10.5vw, 5.2svh), 52px) !important;
-    font-weight: 800 !important;
+    font-weight: var(--fw-extrabold) !important;
     /* 1.06 was set when each line was its own flex item and the leading did
        not have to hold anything. In flow the second line carries the Vision
        pill, whose box is taller than the text, so it rose into line one and
@@ -2371,7 +2342,7 @@ button {
     font-size: clamp(13px, min(4.5vw, 2.7svh), 19px) !important;
     line-height: 1.3 !important;
     color: #000000 !important;
-    font-weight: 600 !important;
+    font-weight: var(--fw-semibold) !important;
     white-space: nowrap !important;
     text-align: center;
     margin: 0 0 2px 0 !important;
@@ -2379,7 +2350,7 @@ button {
 
   .hero__dot {
     color: #f97316 !important;
-    font-weight: 700;
+    font-weight: var(--fw-bold);
   }
 
   /* The reference draws this arrow at roughly 18% of the screen width, a
@@ -2407,7 +2378,7 @@ button {
      not a margin — it nudges the word without changing the row's height. */
   .hero__with {
     font-size: clamp(13px, min(4vw, 2.4svh), 16px) !important;
-    font-weight: 600 !important;
+    font-weight: var(--fw-semibold) !important;
     color: #0f172a !important;
     line-height: 1 !important;
     align-self: center;
@@ -2468,7 +2439,7 @@ button {
     left: calc(var(--ai-badge-size) * 0.11) !important;
     bottom: calc(var(--ai-badge-size) * 0.1) !important;
     font-size: calc(var(--ai-badge-size) * 0.34) !important;
-    font-weight: 700 !important;
+    font-weight: var(--fw-bold) !important;
     color: #0f172a !important;
     line-height: 1 !important;
     text-transform: uppercase;
@@ -2939,7 +2910,7 @@ button {
 
 .stat__plus {
   font-weight: var(--fw-black);
-  font-size: 36.12px;
+  font-size: var(--fs-36);
   color: var(--color-accent);
   display: inline-block;
 }
@@ -3183,7 +3154,7 @@ button {
   .section-head__title {
     font-size: clamp(22px, 5.2vw, 30px);
     line-height: 1.3;
-    font-weight: 700;
+    font-weight: var(--fw-bold);
     color: #1e293b;
     word-break: normal;
     overflow-wrap: break-word;
@@ -3225,7 +3196,7 @@ button {
   }
 
   .intro-card__title {
-    font-size: 17px;
+    font-size: var(--fs-17);
     line-height: 1.35;
     word-break: normal;
     overflow-wrap: break-word;
@@ -3248,13 +3219,13 @@ button {
   }
 
   .intro-card__label {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: var(--fs-20);
+    font-weight: var(--fw-bold);
     color: var(--color-primary);
   }
 
   .intro-card__para {
-    font-size: 15px;
+    font-size: var(--fs-15);
     line-height: 1.65;
     color: #1e293b;
     word-break: normal;
@@ -3274,12 +3245,12 @@ button {
   }
 
   .values-top__title {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: var(--fs-22);
+    font-weight: var(--fw-bold);
   }
 
   .values-top__text {
-    font-size: 15px;
+    font-size: var(--fs-15);
     line-height: 1.4;
     word-break: normal;
     overflow-wrap: break-word;
@@ -3289,7 +3260,7 @@ button {
     padding: 18px 22px;
     border-radius: var(--radius-24);
     gap: 16px;
-    font-size: 15px;
+    font-size: var(--fs-15);
     box-shadow: 0 8px 24px rgba(22, 74, 158, 0.15);
   }
 
@@ -3338,7 +3309,7 @@ button {
   }
 
   .intro-card__para {
-    font-size: 14px;
+    font-size: var(--fs-14);
     line-height: 1.6;
   }
 
@@ -3447,15 +3418,12 @@ button {
 /* The decoration: one short rule under the heading, drawn from the two brand
    colours already in the tokens rather than a new one. A pseudo-element so the
    markup and the copy stay exactly as they were. */
-.partners__title::after {
-  content: "";
-  display: block;
-  width: 72px;
-  height: 4px;
-  margin: var(--space-16) auto 0;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-}
+/* No rule under the Partners heading. There used to be a 72x4 bar here — first
+   a blue-to-orange gradient, then briefly solid primary — but the design has
+   no underline on this heading at all: it goes straight from the h2 to the
+   paragraph. Removing it also takes back the 20px the bar and its top margin
+   were adding inside the h2, so the heading now sits on .partners__intro's own
+   24px gap, which is what the reference shows. */
 
 .partners__text {
   margin: 0;
@@ -3465,9 +3433,16 @@ button {
   line-height: 36px;
   color: var(--color-text);
   /* Uncapped, the paragraph ran the full 1512px of the section — around 150
-     characters a line, well past what is comfortable to read. Capped to a
-     normal measure and centred by the column above. */
-  max-width: 760px;
+     characters a line, well past what is comfortable to read. So it is capped
+     and centred by the column above.
+
+     880px, not the 760 it was: the design sets this copy in two lines, and at
+     760 it broke to four. Measured at 20px/36px, 800px is where it first fits
+     in two; 880 leaves ~10% of headroom so a font fallback or a slightly wider
+     glyph set cannot tip it back to three. Below 1024px the container is
+     narrower than this anyway, so the cap does nothing there and the phone
+     and tablet blocks keep their own type sizes. */
+  max-width: 880px;
 }
 
 /* A static wall of certificates: five, five, four, centred.
@@ -3501,18 +3476,47 @@ button {
 .awards {
   position: relative;
   width: 100%;
-  /* 5 * 200 + 4 * 28. */
-  max-width: 1112px;
+  /* No cap. The row spans .partners__inner's content box, which is the same
+     box the header uses — max-width: 1440px with the same --gutter — so the
+     first plate's left edge lines up with the logo and the last plate's right
+     edge with the Contact Us button, which is what the design shows. A fixed
+     1236px cap left it 5.7% narrower than the header and floating inside it. */
+  max-width: none;
   margin-inline: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* 28px, back down from the 70px the plate-free version needed. Each badge
-     sits on its own plate again, and the plate edge is what separates one
-     from the next — a 70px gap on top of that reads as the row falling apart.
-     Still fluid so the five-up row holds down to the phone breakpoint. */
-  --award-gap: clamp(14px, 2vw, 28px);
-  gap: var(--award-gap);
+  /* Two different gaps, because the design uses two.
+     ------------------------------------------------------------------
+     Measured off the reference at 1920 (screenshot pixels divided by the
+     125% capture scale): the plates are 196 square, sit 63-64px apart
+     across the row, and only 23-24px apart between rows. A single `gap`
+     cannot say that — it was giving 33 across and 34 down, so the columns
+     were half as far apart as they should be and the rows half again too far.
+
+     Both stay fluid so the five-up row survives down to the phone
+     breakpoint, where the block below swaps to its own two-column grid and
+     the `gap` shorthand there overrides both of these.
+
+     The column gap is a percentage on purpose. Above 1537px the body is
+     zoomed, and a vw unit inside a zoomed subtree still measures the REAL
+     viewport — so a vw-based gap drifts against the container it is supposed
+     to sit inside. A percentage resolves against this element's own width,
+     which is the container, so it holds at every width and through the zoom.
+     5.2% is the design's 80:1545 gap-to-row ratio. */
+  --award-col-gap: 5.2%;
+  /* Matched to the column gap. Measured, the columns sat 85px apart at 1905
+     and the rows only 33 — the band between rows was the tight one. This clamp
+     tracks --award-col-gap: 5vw lands on ~69 at 1440 and ~49 at 1024, which is
+     what 5.2% of the container comes to at those widths, and the 69px ceiling
+     holds it there above 1537 where the container stops growing.
+
+     A length, not the same 5.2% the columns use: a percentage row-gap resolves
+     against the container's block size, and this container's height is
+     indefinite, so it would collapse to zero. */
+  --award-row-gap: clamp(24px, 5vw, 69px);
+  column-gap: var(--award-col-gap);
+  row-gap: var(--award-row-gap);
 }
 
 /* The track and the two column wrappers are pure structure now — they exist
@@ -3530,8 +3534,10 @@ button {
      fifth card onto its own line. max-width stops it growing past the design
      size on a very wide window — past that point the row simply centres with
      more air around it. */
-  flex: 0 0 calc((100% - 4 * var(--award-gap)) / 5 - 0.02px);
-  max-width: 200px;
+  /* An exact fifth of the container once the four column gaps are out of it.
+     No max-width any more: capping the card at 196px was what stopped the row
+     reaching the container edges. */
+  flex: 0 0 calc((100% - 4 * var(--award-col-gap)) / 5 - 0.02px);
   /* Square without a fixed height, so the box follows the fluid width. */
   aspect-ratio: 1 / 1;
   display: flex;
@@ -3602,13 +3608,13 @@ button {
   }
 
   .partners__title {
-    font-size: 24px;
+    font-size: var(--fs-24);
     line-height: 1.3;
     margin-bottom: 8px;
   }
 
   .partners__text {
-    font-size: 14px;
+    font-size: var(--fs-14);
     line-height: 1.6;
     color: #64748b;
     margin: 0;
@@ -3819,7 +3825,7 @@ button {
 .domain-tab__label {
   font-family: var(--font-display);
   font-weight: var(--fw-medium);
-  font-size: 18px;
+  font-size: var(--fs-18);
   text-transform: capitalize;
   color: var(--color-text);
   white-space: nowrap;
@@ -3930,7 +3936,7 @@ button {
 
 .feature-item__title {
   margin: 0;
-  font-family: var(--font-ui);
+  font-family: var(--font-util);
   font-weight: var(--fw-semibold);
   font-size: var(--fs-16);
   color: var(--color-text);
@@ -3939,7 +3945,7 @@ button {
 .feature-item__desc {
   margin: 0;
   max-width: 261px;
-  font-family: var(--font-ui);
+  font-family: var(--font-util);
   font-weight: var(--fw-regular);
   font-size: var(--fs-14);
   line-height: 20px;
@@ -3996,7 +4002,7 @@ button {
        and read as breathing room. The panel is ~40% shorter now, so the same
        130px plus Industries' own 36px top left a 166px void between the two
        sections. */
-    padding: 48px 0 56px;
+    padding: calc(var(--section-gap) / 2) 0;
     /* `clip`, not `hidden` — same reason .content-stack uses it. `hidden`
        makes this a scroll container and the accordion's sticky headings would
        then resolve against it instead of the viewport, so they would never
@@ -4019,7 +4025,7 @@ button {
   }
 
   .domains__title {
-    font-size: 24px !important;
+    font-size: var(--fs-24) !important;
     line-height: 1.3 !important;
     color: #1a2338 !important;
     opacity: 1 !important;
@@ -4027,7 +4033,7 @@ button {
   }
 
   .domains__subtitle {
-    font-size: 14px !important;
+    font-size: var(--fs-14) !important;
     line-height: 1.5 !important;
     color: #64748b !important;
     opacity: 1 !important;
@@ -4128,7 +4134,7 @@ button {
   .domain-acc__label {
     font-family: var(--font-display);
     font-size: 15.5px;
-    font-weight: 600;
+    font-weight: var(--fw-semibold);
     letter-spacing: -0.01em;
     line-height: 1.3;
     color: #1e293b;
@@ -4320,8 +4326,8 @@ button {
 
   .domain-acc__item-label {
     font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-medium);
     line-height: 1.35;
     color: #334155;
   }
@@ -4469,7 +4475,7 @@ button {
 
   .domain-tab__label {
     font-size: 13.5px;
-    font-weight: 600;
+    font-weight: var(--fw-semibold);
     color: #1a2338;
   }
 
@@ -4509,10 +4515,10 @@ button {
   }
 
   .domains__content-title {
-    font-size: 19px !important;
+    font-size: var(--fs-19) !important;
     line-height: 1.35 !important;
     margin-bottom: 4px;
-    font-weight: 700;
+    font-weight: var(--fw-bold);
     color: #1a2338 !important;
     opacity: 1 !important;
   }
@@ -4613,7 +4619,7 @@ button {
   .feature-item__title {
     font-size: 14.5px !important;
     line-height: 1.35 !important;
-    font-weight: 600;
+    font-weight: var(--fw-semibold);
     color: #1a2338;
     margin-bottom: 0;
     overflow-wrap: break-word;
@@ -4694,9 +4700,14 @@ button {
   gap: var(--space-24);
 }
 
+/* Top-aligned, not centred. Centring set the intro against the middle of the
+   card block, which put its heading 101px below the tint edge above it while
+   the first card started at 75 — the same gap reading as two numbers. The
+   cards keep their own internal padding, so the heading lines up with the top
+   of the card, which is where the boundary is. */
 .industries__row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-24);
   width: 100%;
@@ -5350,8 +5361,11 @@ button {
   margin: 0;
   padding: 14px 34px;
   border-radius: 20px;
-  background: var(--color-white);
-  box-shadow: 0 20px 48px rgba(6, 14, 52, 0.32);
+  /* No plate behind the wordmark, on request — the words sit straight on the
+     band. The white card and its drop shadow are both gone; the box, its
+     padding and its position are untouched, so nothing around it moves. */
+  background: transparent;
+  box-shadow: none;
   font-family: var(--font-display);
   font-weight: var(--fw-extrabold);
   font-style: italic;
@@ -6076,20 +6090,34 @@ button {
     --ai-scene-h: clamp(220px, 56vw, 320px);
   }
 
+  /* Below the clip, not straddling it.
+     ------------------------------------------------------------
+     This used to sit at `--ai-scene-h - 24px`, so the wordmark hung 24px over
+     the bottom of the video. That read fine while it had a white plate behind
+     it — the plate was the thing overlapping, and it looked deliberate. With
+     the plate gone the bare orange type sits straight on the footage, over
+     whatever frame happens to be playing, and there is no contrast guarantee.
+
+     +14px instead: the type clears the clip entirely and reads against the
+     panel. The 19px it had between itself and the heading is preserved by
+     moving .ai-banner__inner's top padding out by the same amount the chip
+     moved (44 -> 82), otherwise the chip lands on the title instead. Net
+     effect is the band growing 38px taller on phones, which is the cost of
+     having the wordmark clear of the video. */
   .ai-banner__tab {
-    top: calc(var(--ai-scene-h) - 24px);
+    top: calc(var(--ai-scene-h) + 14px);
     padding: 10px 24px;
     border-radius: 14px;
-    font-size: 26px;
+    font-size: var(--fs-26);
   }
 
   .ai-banner__inner {
-    padding-block: 44px 40px;
+    padding-block: 82px 40px;
   }
 
   .ai-banner__title {
     margin-bottom: 14px;
-    font-size: 26px;
+    font-size: var(--fs-26);
     line-height: 1.35;
   }
 
@@ -6140,13 +6168,13 @@ button {
   }
 
   .industries__title {
-    font-size: 24px !important;
+    font-size: var(--fs-24) !important;
     line-height: 1.3 !important;
     color: #1a2338 !important;
   }
 
   .industries__text {
-    font-size: 14px !important;
+    font-size: var(--fs-14) !important;
     line-height: 1.55 !important;
     color: #64748b !important;
   }
@@ -6196,7 +6224,7 @@ button {
   }
 
   .industry-card__title {
-    font-size: 17px !important;
+    font-size: var(--fs-17) !important;
     line-height: 1.35 !important;
     color: #1a2338;
     margin-bottom: 4px;
@@ -6218,7 +6246,7 @@ button {
   }
 
   .cta-quote__title {
-    font-size: 26px;
+    font-size: var(--fs-26);
   }
 
   .cta-quote__subtitle {
@@ -6481,7 +6509,7 @@ button {
   }
 
   .testimonials__title {
-    font-size: 26px;
+    font-size: var(--fs-26);
   }
 
   .testimonials__grid {
@@ -6632,8 +6660,11 @@ button {
 .blog-card__arrow {
   width: 20px;
   height: 20px;
-  stroke: #e53e3e !important;
-  color: #e53e3e !important;
+  /* The accent, not the #e53e3e red it used to be. .case-link and
+     .intro-card__link both draw their arrow in --color-accent, so a red one
+     here was the only arrow on the page off the palette. */
+  stroke: var(--color-accent) !important;
+  color: var(--color-accent) !important;
   fill: none;
   stroke-width: 2.5;
   stroke-linecap: round;
@@ -6643,7 +6674,10 @@ button {
 
 .blog-card:hover .blog-card__arrow {
   transform: translateX(6px);
-  stroke: #c53030 !important;
+  /* The accent's own darker partner — the same #e07a1f the AI wordmark
+     gradient ends on — so the arrow still deepens on hover without leaving
+     the palette. */
+  stroke: #e07a1f !important;
 }
 
 .blog-card__text {
@@ -6709,7 +6743,7 @@ button {
   }
 
   .blogs__title {
-    font-size: 26px;
+    font-size: var(--fs-26);
   }
 
   .blog-card,
@@ -6937,7 +6971,7 @@ button {
 }
 
 .case-info__desc {
-  font-family: var(--font-ui);
+  font-family: var(--font-util);
   font-weight: var(--fw-regular);
   font-size: var(--fs-16);
   line-height: 22px;
@@ -7145,7 +7179,7 @@ button {
   }
 
   .cases__title {
-    font-size: 26px;
+    font-size: var(--fs-26);
   }
 
   .case-thumb {
@@ -8568,8 +8602,8 @@ a:focus-visible {
 
 .showcase__name {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 19px;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-19);
   line-height: 1.25;
   color: #1a2338;
   margin-bottom: 8px;
@@ -8582,8 +8616,8 @@ a:focus-visible {
 
 .showcase__desc {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 13px;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-13);
   line-height: 1.45;
   color: var(--color-text-muted);
   margin-bottom: 12px;
@@ -8618,7 +8652,7 @@ a:focus-visible {
   display: block;
   padding: 2px 0 2px 10px;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: var(--fs-13);
   line-height: 1.4;
   color: #475569;
   text-decoration: none;
@@ -8957,9 +8991,9 @@ a:focus-visible {
     align-self: center;
     /* 18px rather than 20: the title has lost the icon's 44px plus the gap
        from its measure now that the two share a row. */
-    font-size: 18px !important;
+    font-size: var(--fs-18) !important;
     line-height: 1.3 !important;
-    font-weight: 700;
+    font-weight: var(--fw-bold);
     color: #1a2338;
     height: auto !important;
     white-space: normal !important;
@@ -8975,7 +9009,7 @@ a:focus-visible {
   }
 
   .showcase__desc {
-    font-size: 14px !important;
+    font-size: var(--fs-14) !important;
     line-height: 1.6 !important;
     color: #64748b;
     height: auto !important;
@@ -9013,7 +9047,7 @@ a:focus-visible {
     display: block;
     position: relative;
     padding: 2px 0;
-    font-size: 14px;
+    font-size: var(--fs-14);
     line-height: 1.45;
     color: #475569;
     text-decoration: none;
@@ -9287,7 +9321,7 @@ canvas {
     width: 100%;
     min-height: 48px;
     padding: 12px 16px;
-    font-size: 20px;
+    font-size: var(--fs-20);
     border-radius: var(--radius-12);
     transition: color var(--transition-fast), background-color var(--transition-fast);
   }
@@ -9323,7 +9357,7 @@ canvas {
   }
 
   .site-nav__link {
-    font-size: 18px;
+    font-size: var(--fs-18);
   }
 }
 
@@ -9476,7 +9510,7 @@ canvas {
   }
 
   .ai-panel .ai-modal-title {
-    font-size: 17px;
+    font-size: var(--fs-17);
     letter-spacing: -0.2px;
   }
 
@@ -9505,7 +9539,7 @@ canvas {
     background: #f5f7fb;
     border-color: #e4eaf3;
     border-radius: 12px;
-    font-size: 13px;
+    font-size: var(--fs-13);
   }
 
   .ai-panel .ai-modal-input:focus,
@@ -9873,8 +9907,8 @@ canvas {
 
 .ai-modal-title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 24px;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-24);
   color: #0f172a;
   margin: 0 0 2px 0;
   line-height: 1.2;
@@ -9941,7 +9975,7 @@ canvas {
   background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(203, 213, 225, 0.6);
   font-family: var(--font-util);
-  font-size: 14px;
+  font-size: var(--fs-14);
   color: #0f172a;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -9964,7 +9998,7 @@ canvas {
   background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(203, 213, 225, 0.6);
   font-family: var(--font-util);
-  font-size: 14px;
+  font-size: var(--fs-14);
   color: #0f172a;
   outline: none;
   resize: none;
@@ -9999,7 +10033,7 @@ canvas {
   background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
   color: #ffffff;
   font-family: var(--font-util);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   font-size: 14.5px;
   border: none;
   cursor: pointer;
@@ -10253,7 +10287,7 @@ canvas {
   }
 
   .contact__text {
-    font-size: 15px;
+    font-size: var(--fs-15);
     line-height: 1.55;
   }
 
@@ -10313,11 +10347,11 @@ canvas {
   .contact__submit {
     padding: 12px 20px;
     border-radius: 12px;
-    font-size: 15px;
+    font-size: var(--fs-15);
   }
 
   .contact__note {
-    font-size: 12px;
+    font-size: var(--fs-12);
     line-height: 1.5;
   }
 }
@@ -10503,7 +10537,7 @@ canvas {
      and 501px tall. Ease the type down and hold the block to a fixed eight
      lines, so every card's comment area is the same size as its neighbours. */
   .testimonials__col .tquote__text {
-    font-size: 13px;
+    font-size: var(--fs-13);
     line-height: 1.55;
     margin: 0;
     display: -webkit-box;
@@ -10537,7 +10571,7 @@ canvas {
    point instead of splitting a word. */
 @media (max-width: 400px) {
   .footer__contact-block p {
-    font-size: 13px;
+    font-size: var(--fs-13);
     overflow-wrap: anywhere;
     line-height: 1.5;
   }
@@ -10675,7 +10709,7 @@ canvas {
   }
 
   .domain-tab__label {
-    font-size: 12px;
+    font-size: var(--fs-12);
   }
 
   /* The panel headings under the rail wrapped to two lines at 19px/15px
@@ -10685,11 +10719,11 @@ canvas {
   }
 
   .domains__content-sub {
-    font-size: 13px !important;
+    font-size: var(--fs-13) !important;
   }
 
   .feature-item__title {
-    font-size: 14px !important;
+    font-size: var(--fs-14) !important;
   }
 }
 
@@ -11160,11 +11194,11 @@ canvas {
   }
 
   .partners__title {
-    font-size: 26px;
+    font-size: var(--fs-26);
   }
 
   .partners__text {
-    font-size: 15px;
+    font-size: var(--fs-15);
     line-height: 1.6;
   }
 
@@ -11268,7 +11302,12 @@ canvas {
    ============================================================ */
 @media (max-width: 767.98px) {
   .domains::before,
-  .industries::before,
+  /* .industries::before was here. It was written when .industries followed
+     .domains, which is white on white and needs the mark. .fai sits between
+     them now and paints a tinted band, so the tint ending already draws the
+     boundary — and the rule was landing 8px under it, two marks almost
+     touching with 44px of air below them. Removed for the same reason
+     .trusted has never had one. */
   .testimonials::before,
   .blogs::before,
   .cases::before,
@@ -11375,17 +11414,24 @@ canvas {
      from anything else. The phone layout solved this by splitting the trailing
      space; the same arithmetic works here — 44 above, and 8 + 36 below, which
      is also 44. */
+  /* The 8 below the button was the showcase's share of a 44 it split with
+     .trusted's 36. Splitting it that way framed the button correctly and left
+     the seam into .trusted at 119 against the 150 every other pair on the
+     page makes. The whole 44 sits in the showcase now, so the button keeps
+     its even frame and the seam is .trusted's to complete. */
   .showcase__cta-wrap {
     margin-top: 44px;
-    margin-bottom: 8px;
+    margin-bottom: 44px;
   }
 
   .showcase {
     padding-bottom: 0;
   }
 
+  /* 31 on top of .trusted's own 75px of internal offset, which with the 44
+     above completes the 150. */
   .trusted {
-    padding-top: 36px;
+    padding-top: 31px;
   }
 
   /* ---- Testimonials: the two columns in a row end level ----
@@ -11787,7 +11833,7 @@ canvas {
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: var(--fw-semibold);
-  font-size: 15px;
+  font-size: var(--fs-15);
   line-height: 1;
   white-space: nowrap;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -12404,7 +12450,7 @@ body.nav-open .contact-dock {
   margin: 0;
   font-family: var(--font-display);
   font-weight: var(--fw-medium);
-  font-size: 13px;
+  font-size: var(--fs-13);
   letter-spacing: 0.01em;
   color: rgba(219, 232, 251, 0.86);
   text-shadow: 0 2px 10px rgba(5, 16, 31, 0.6);
@@ -12735,8 +12781,8 @@ body.nav-open .contact-dock {
   gap: 9px;
   padding-inline: 4px;
   font-family: var(--font-util);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--fs-14);
+  font-weight: var(--fw-semibold);
   color: #164a9e;
 }
 
@@ -12760,7 +12806,7 @@ body.nav-open .contact-dock {
   }
 
   .ai-panel-status {
-    font-size: 13px;
+    font-size: var(--fs-13);
   }
 }
 
@@ -13413,5 +13459,1302 @@ body.nav-open .contact-dock {
         100svh / max(1, min(2, tan(atan2(100vw, 1536px)))) - var(--header-height, 79px) - 2 * var(--mega-pad) - 20px
       );
     }
+  }
+}
+
+/* ============================================================
+   PARK DECORATIVE ANIMATIONS WHILE THEIR SECTION IS OFF SCREEN
+   ------------------------------------------------------------
+   Profiled at 4x CPU on a 390px viewport, scrolling the whole page: median
+   frame time 26.2ms, and 27% of that — 7.2ms a frame — is the perpetual
+   animations. Not any one of them. Ablating the AI video, the marquee, the
+   fixed header, every will-change, and the hero background each moved the
+   median by under 1ms; switching ALL animations off moved it to 19.0ms and
+   took frames over 32ms from 5.0% to 0.3%. The cost is the aggregate.
+
+   So the fix is not to remove any of them, it is to stop running the ones
+   nobody can see. .hero already does this — useAnimationObserver adds
+   .is-covered once .content-stack rises over it, and eleven selectors park.
+   This is the same idea for the six sections below the hero.
+
+   Every selector listed here runs an `infinite` decorative animation and
+   nothing else. One-shot entrances are deliberately NOT in this list: the
+   reveal is a transition, so animation-play-state cannot touch it anyway, and
+   the staggered .domains-anim entrances are left alone so a section still
+   animates in normally when it arrives. Paused is not stopped — the animation
+   holds its current frame and carries on from there, so nothing restarts or
+   jumps when the section comes back.
+
+   Zero visual change by construction: it only ever applies to a section that
+   is more than 200px outside the viewport.
+   ============================================================ */
+.is-idle .gemini-star--main,
+.is-idle .gemini-star--sub1,
+.is-idle .gemini-star--sub2,
+.is-idle .intro-card::after,
+.is-idle .intro-card--growth,
+.is-idle .intro-card--about,
+.is-idle .values-top,
+.is-idle .values-top::after,
+.is-idle .service-card__image,
+.is-idle .service-card__image::after,
+.is-idle .generative-caret,
+.is-idle .marquee__track,
+.is-idle .industry-card::after,
+.is-idle .tphoto,
+.is-idle .tphoto::before,
+.is-idle .blog-card__image::after,
+.is-idle .case-thumb::after,
+.is-idle .case-thumb--blue,
+.is-idle .case-thumb__shot--front,
+.is-idle .case-thumb__shot--back-l,
+.is-idle .case-thumb__shot--back-r {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   FULMINOUS AI SECTION
+   ------------------------------------------------------------
+   Lifted from the standalone page this section was handed over as. Every
+   selector is scoped under .fai and every custom property is namespaced
+   --fai-*, so none of it reaches the rest of the site and nothing here
+   depends on the tokens above.
+
+   One edit against the original: --fai-font pointed at bare "Poppins" and
+   the page pulled it from fonts.googleapis.com. This app already
+   self-hosts Poppins — see the @font-face layer at the top of this file —
+   so the token now reads var(--font-poppins) and the section adds no
+   third-party render-blocking request. Same family, same weights.
+   ============================================================ */
+/* ==========================================================================
+   Fulminous AI — section styles
+   Mobile-first. Breakpoints: 641px (tablet), 1024px (desktop).
+   Everything is scoped under .fai so nothing leaks into the rest of the site.
+   ========================================================================== */
+
+.fai {
+  /* ---- colour tokens (verify against your Figma styles before launch) ---- */
+  --fai-blue-900: #0F2E70;
+  --fai-blue-700: #1B4DB1;
+  --fai-blue-500: #2F6BE0;
+  --fai-accent:   #F0A04B;
+  --fai-accent-ink: #16213C;
+  --fai-spark:    #6C4FE0;
+
+  --fai-tint:     #F5F8FE;
+  --fai-surface:  #FFFFFF;
+  --fai-chip:     #EDF2FE;
+  --fai-chip-2:   #F1F5FD;
+  --fai-track:    #EAF0FB;
+  --fai-track-br: #DFE8F8;
+  --fai-eyebrow:  #E7EEFC;
+  --fai-eyebrow-br: #D2E0F8;
+
+  --fai-border:      #E4EBF8;
+  --fai-border-soft: #EEF2FA;
+
+  --fai-ink:   #101828;
+  --fai-ink-2: #475467;
+  /* 4.81:1 on --fai-track, up from 4.35. The tab labels sit at 13.5px on
+     #EAF0FB, which put them just under the 4.5:1 AA minimum. */
+  --fai-ink-3: #60697D;
+  /* 4.69:1 on --fai-tint, up from 2.42 — the worst of the three. This is
+     the stat labels at 11.5px and the YOU GET label at 10.5px, both on
+     #F5F8FE, where #98A2B3 was barely half the AA minimum. */
+  --fai-ink-4: #69707C;
+
+  --fai-ring-outer: #EDF2FB;
+  --fai-ring-dash:  #CBDAF3;
+  --fai-ring-mid:   #E2EAF8;
+  --fai-spoke:      #DCE6F8;
+  --fai-satellite:  #B9CEEF;
+  --fai-satellite-2:#D3E0F6;
+
+  /* ---- geometry ---- */
+  --fai-r: 31.25%;              /* node orbit radius, as % of stage width  */
+  --fai-core: 26.25%;           /* core diameter, as % of stage width      */
+  --fai-stage-max: 350px;       /* raised at each breakpoint               */
+  --fai-radius-card: 22px;
+  --fai-radius-stage: 24px;
+
+  --fai-shadow-card:    0 10px 28px rgba(16, 40, 100, 0.06);
+  --fai-shadow-stage:   0 8px 24px rgba(16, 40, 100, 0.05);
+  --fai-shadow-node:    0 5px 14px rgba(16, 40, 100, 0.08);
+  --fai-shadow-node-on: 0 12px 26px rgba(27, 77, 177, 0.22);
+
+  --fai-font: var(--font-poppins), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fai-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  box-sizing: border-box;
+  /* The page rhythm, not the section's own: every sibling pads
+     --section-gap/2 top and bottom, so any two of them sit exactly
+     --section-gap apart. */
+  padding: calc(var(--section-gap) / 2) 0;
+  background: var(--fai-tint);
+  font-family: var(--fai-font);
+  color: var(--fai-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.fai *,
+.fai *::before,
+.fai *::after { box-sizing: border-box; }
+
+.fai p,
+.fai h2,
+.fai h3,
+.fai h4,
+.fai ul,
+.fai dl,
+.fai dd,
+.fai dt { margin: 0; padding: 0; }
+
+.fai ul { list-style: none; }
+
+/* Same box the header uses, so the section lines up with the page.
+   ------------------------------------------------------------
+   This was capped at a flat 1240px and centred, which left it narrower than
+   the header and floating inside it. --container-max plus --gutter is exactly
+   what .site-header__inner and .partners__inner use, so the first thing on
+   this row starts at the logo's left edge and the last ends at the Contact Us
+   button's right edge, at every width and through the >=1537px zoom.
+
+   The horizontal padding moved here from .fai for the same reason: it has to
+   be the gutter of this box, not an outer inset added on top of it. .fai keeps
+   its vertical padding at each breakpoint. */
+.fai__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+  max-width: var(--container-max);
+  padding-inline: var(--gutter);
+  margin-inline: auto;
+}
+
+/* ---------- header ---------- */
+
+.fai__head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* FULMINOUS AI — the words on their own, no pill.
+   ------------------------------------------------------------
+   This shipped as a bordered chip on --fai-eyebrow. On request the plate and
+   its border are gone and the type steps up from 11px to 14px, which is what
+   made it read as small — at 11px with 1.4px of tracking it was the smallest
+   thing in the section. 14 was still short, so it is 17px now.
+
+   The padding goes with the plate rather than being kept: it existed to inset
+   the text from the pill edge, and with no pill it only pushed the eyebrow
+   out of line with the h2 underneath it. At 0 the two share a left edge.
+
+   Contrast improves rather than suffers — --fai-blue-700 was 6.57:1 on the
+   pill and is 7.20:1 on the section ground behind it. */
+.fai__eyebrow {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: var(--fs-17);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 1.4px;
+  color: var(--fai-blue-700);
+}
+
+/* Sized in em so the spark tracks the label. The markup carries width/height
+   of 15, which was right beside 11px type and looks undersized beside 17px. */
+.fai__eyebrow svg { color: var(--fai-spark); flex: 0 0 auto; width: 1.1em; height: 1.1em; }
+
+.fai__h2 {
+  font-size: var(--fs-36);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: var(--fai-ink);
+  text-wrap: pretty;
+  max-width: 660px;
+}
+
+.fai__lead {
+  font-size: var(--fs-16);
+  line-height: 1.75;
+  color: var(--fai-ink-3);
+  max-width: 620px;
+}
+
+.fai__stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--fai-border);
+}
+
+.fai__stat { display: flex; flex-direction: column; gap: 1px; }
+
+.fai__stat dt {
+  order: 2;
+  font-size: 10.5px;
+  color: var(--fai-ink-4);
+}
+
+.fai__stat dd {
+  order: 1;
+  font-size: clamp(1.125rem, 1rem + 0.4vw, 1.3125rem);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.2px;
+  color: var(--fai-ink);
+}
+
+.fai__stat dd b { color: var(--fai-accent); font-weight: var(--fw-semibold); }
+
+.fai__rule {
+  width: 1px;
+  height: 26px;
+  background: var(--fai-border);
+}
+
+/* ---------- body layout ---------- */
+
+.fai__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  /* small screens: choose the lens, then read the map, then the panel */
+  grid-template-areas:
+    "tabs"
+    "stage"
+    "panel";
+  gap: 22px;
+}
+
+.fai__tabs      { grid-area: tabs; }
+.fai__stagewrap { grid-area: stage; }
+.fai__card      { grid-area: panel; }
+
+/* ---------- orbit stage ---------- */
+
+.fai__stagewrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.fai__stage {
+  position: relative;
+  width: 100%;
+  max-width: var(--fai-stage-max);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  border: 1px solid #E9EFFB;
+  border-radius: var(--fai-radius-stage);
+  background: radial-gradient(54% 48% at 50% 50%, #F4F8FF 0%, #FFFFFF 58%);
+  box-shadow: var(--fai-shadow-stage);
+  overflow: hidden;
+}
+
+.fai__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.fai__svg--spin {
+  animation: fai-spin 95s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+.fai__ring--outer { stroke: var(--fai-ring-outer); }
+.fai__ring--mid   { stroke: var(--fai-ring-mid); }
+.fai__ring--dash  { stroke: var(--fai-ring-dash); stroke-dasharray: 3 9; }
+.fai__sat         { fill: var(--fai-satellite-2); }
+.fai__sat--lead   { fill: var(--fai-satellite); }
+
+.fai__spoke {
+  stroke: var(--fai-spoke);
+  stroke-width: 1;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  /* pathLength="1" on the element lets one dash rule work at any scale */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.fai.is-revealed .fai__spoke {
+  animation: fai-draw 620ms ease-out both;
+  animation-delay: calc(120ms + var(--fai-i) * 70ms);
+}
+
+.fai__spoke.is-on {
+  stroke: var(--fai-blue-700);
+  stroke-width: 1.6;
+}
+
+.fai.is-revealed .fai__spoke.is-on {
+  animation: fai-draw 620ms ease-out both,
+             fai-glow 2.6s ease-in-out 760ms infinite;
+}
+
+/* core */
+
+.fai__core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: var(--fai-core);
+  aspect-ratio: 1 / 1;
+  border-radius: 999px;
+  background: var(--fai-blue-700);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+              0 0 0 12px rgba(27, 77, 177, 0.05),
+              0 16px 34px rgba(27, 77, 177, 0.28);
+  color: #fff;
+  text-align: center;
+}
+
+.fai__coreglow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--fai-core);
+  aspect-ratio: 1 / 1;
+  border-radius: 999px;
+  background: var(--fai-blue-500);
+  opacity: 0.3;
+  animation: fai-pulse 3.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.fai__corename {
+  font-size: 11.5px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.25;
+}
+
+.fai__corelens {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 7.5px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.7px;
+  /* 4.64:1 on the core blue, up from 4.29. 9.5px reversed type needs the
+     full 4.5:1 — it does not qualify as large text. */
+  color: #E3ECFD;
+}
+
+/* nodes */
+
+.fai__node {
+  position: absolute;
+  left: calc(50% + var(--fai-fx) * var(--fai-r));
+  top: calc(50% + var(--fai-fy) * var(--fai-r));
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 9px 13px 9px 9px;
+  border: 1px solid var(--fai-border);
+  border-radius: 999px;
+  background: var(--fai-surface);
+  box-shadow: var(--fai-shadow-node);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.fai.is-revealed .fai__node {
+  animation: fai-nodein 520ms var(--fai-ease) both;
+  animation-delay: calc(140ms + var(--fai-i) * 70ms);
+}
+
+.fai__node:hover {
+  border-color: var(--fai-blue-500);
+  box-shadow: 0 12px 28px rgba(27, 77, 177, 0.18);
+}
+
+.fai__node.is-on {
+  border: 1.5px solid var(--fai-blue-700);
+  box-shadow: var(--fai-shadow-node-on);
+}
+
+.fai__nodelabel {
+  font-size: 11.5px;
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  color: var(--fai-accent-ink);
+}
+
+.fai__node.is-on .fai__nodelabel { color: var(--fai-blue-700); }
+
+.fai__num {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--fai-chip);
+  font-size: 9.5px;
+  font-weight: var(--fw-semibold);
+  color: var(--fai-blue-700);
+}
+
+.fai__node.is-on .fai__num,
+.fai__row.is-on .fai__num {
+  background: var(--fai-accent);
+  color: var(--fai-accent-ink);
+}
+
+.fai__hint {
+  font-size: 11.5px;
+  color: var(--fai-ink-4);
+  padding-left: 2px;
+}
+
+/* ---------- lens switcher ---------- */
+
+.fai__tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 5px;
+  border: 1px solid var(--fai-track-br);
+  border-radius: 20px;
+  background: var(--fai-track);
+}
+
+.fai__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: var(--fw-semibold);
+  color: var(--fai-ink-3);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.fai__tab svg { flex: 0 0 auto; }
+.fai__tab:hover { color: var(--fai-blue-700); }
+
+.fai__tab[aria-selected="true"] {
+  background: var(--fai-surface);
+  color: var(--fai-blue-700);
+  box-shadow: 0 3px 10px rgba(16, 40, 100, 0.1);
+}
+
+/* ---------- panel ---------- */
+
+.fai__card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 20px;
+  border: 1px solid var(--fai-border);
+  border-radius: var(--fai-radius-card);
+  background: var(--fai-surface);
+  box-shadow: var(--fai-shadow-card);
+  /* The row list below asks this card how wide it is rather than asking the
+     window. On desktop the card is whatever is left after the stage takes its
+     560px and the column gap takes 44, so the two do not move together. */
+  container-type: inline-size;
+}
+
+.fai__cardhead { order: 1; display: flex; flex-direction: column; gap: 8px; }
+
+.fai.is-revealed .fai__cardhead,
+.fai.is-revealed .fai__detailinner {
+  animation: fai-rise 340ms ease-out both;
+}
+
+.fai__h3 {
+  font-size: var(--fs-20);
+  font-weight: var(--fw-semibold);
+  line-height: 1.3;
+  letter-spacing: -0.25px;
+  color: var(--fai-ink);
+}
+
+.fai__blurb {
+  font-size: var(--fs-16);
+  line-height: 1.7;
+  color: var(--fai-ink-3);
+  max-width: 570px;
+}
+
+/* detail strip — above the row list below 1024, below it on desktop */
+.fai__detail {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 196px;
+  padding: 18px;
+  border: 1px solid var(--fai-border);
+  border-radius: 16px;
+  background: var(--fai-tint);
+}
+
+.fai__detailinner { display: flex; flex-direction: column; gap: 10px; }
+
+.fai__detailhead { display: flex; align-items: center; gap: 11px; }
+
+.fai__detailnum {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--fai-accent);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--fai-accent-ink);
+}
+
+.fai__h4 {
+  font-size: clamp(0.96875rem, 0.9rem + 0.2vw, 1.0625rem);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.1px;
+  color: var(--fai-ink);
+}
+
+.fai__detailbody {
+  font-size: var(--fs-16);
+  line-height: 1.7;
+  color: var(--fai-ink-2);
+}
+
+.fai__get { display: flex; flex-direction: column; gap: 3px; padding-top: 3px; }
+
+.fai__getlabel {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 1.2px;
+  color: var(--fai-ink-4);
+}
+
+.fai__getvalue {
+  font-size: 12.5px;
+  font-weight: var(--fw-medium);
+  line-height: 1.55;
+  color: var(--fai-accent-ink);
+}
+
+/* row list */
+.fai__rows {
+  order: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+
+/* Two columns only once the card can hold two labels. The widest is
+   "AI-Powered App Development" at 224px, and each row spends another 60 on
+   its numeral, the gap and its own padding — so a column is 284 and a pair of
+   them, with the 14px gap, is 582. 640 is that plus 29px a column, because
+   the labels are set in the body face and Gecko draws them a little wider
+   than Blink does.
+
+   This was 420, which is narrower than a single label needs. Every width that
+   gave the card between 420 and 582 — roughly 1185 to 1361px of window — got
+   two columns too tight to hold a title, so all six broke across two lines. */
+@container (min-width: 640px) {
+  .fai__rows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+}
+
+/* Same two decisions for an engine with no container queries, written against
+   the viewport instead. Two bands, because the card's width does not track the
+   window monotonically: while the panel is stacked the card is the full inner
+   width, and at 1024 it jumps back to whatever is left beside the 560px
+   stage. A single min-width here is what produced the original bug. */
+@supports not (container-type: inline-size) {
+  @media (min-width: 768px) and (max-width: 1023.98px) {
+    .fai__rows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+  }
+  @media (min-width: 1424px) {
+    .fai__rows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+  }
+}
+
+.fai__row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.fai.is-revealed .fai__row {
+  animation: fai-rise 320ms ease-out both;
+  animation-delay: calc(120ms + var(--fai-i) * 50ms);
+}
+
+.fai__row:hover { background: var(--fai-tint); }
+
+.fai__row.is-on {
+  background: var(--fai-chip);
+  box-shadow: inset 0 0 0 1px var(--fai-eyebrow-br);
+}
+
+.fai__row .fai__num {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--fai-chip-2);
+  font-size: 11px;
+  color: var(--fai-ink-3);
+}
+
+.fai__rowlabel {
+  font-size: 13.5px;
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+  color: var(--fai-ink-2);
+}
+
+.fai__row.is-on .fai__rowlabel { font-weight: var(--fw-semibold); color: var(--fai-ink); }
+
+/* footer */
+.fai__foot {
+  order: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--fai-border-soft);
+}
+
+.fai__note { display: flex; align-items: flex-start; gap: 9px; }
+.fai__note svg { flex: 0 0 auto; margin-top: 1px; color: var(--fai-accent); }
+.fai__note p { font-size: 12.5px; line-height: 1.6; color: var(--fai-ink-2); }
+
+.fai__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 52px;
+  /* The header's Contact Us shape, not a pill: .btn sets --radius-16 and
+     .btn--primary pads 16/24. Matching those two makes the two buttons read as
+     the same control. Only the shape is borrowed — the fill stays
+     --fai-blue-700 so the section keeps its own palette. */
+  padding: var(--space-16) var(--space-24);
+  border-radius: var(--radius-16);
+  background: var(--fai-blue-700);
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transition: background 160ms ease;
+}
+
+.fai__cta:hover { background: #163F93; color: #fff; }
+
+/* focus */
+.fai :is(button, a):focus-visible {
+  outline: 2px solid var(--fai-blue-500);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   TABLET — 641px and up
+   ========================================================================== */
+
+@media (min-width: 641px) {
+  .fai {
+    --fai-stage-max: 688px;
+    --fai-radius-card: 24px;
+    --fai-radius-stage: 28px;
+    padding: calc(var(--section-gap) / 2) 0;
+  }
+
+  .fai__inner { gap: 28px; }
+  .fai__head { gap: 14px; }
+  .fai__stats { gap: 22px; margin-top: 6px; padding-top: 18px; }
+  .fai__stat dt { font-size: 11.5px; }
+  .fai__rule { height: 30px; }
+
+  .fai__body { gap: 28px; }
+  .fai__stagewrap { gap: 14px; }
+  .fai__hint { font-size: 12.5px; padding-left: 4px; }
+
+  .fai__core { gap: 7px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.2), 0 0 0 20px rgba(27,77,177,.05), 0 26px 56px rgba(27,77,177,.3); }
+  .fai__corename { font-size: 15.5px; line-height: 1.3; }
+  .fai__corelens { padding: 3px 10px; font-size: 9.5px; letter-spacing: 1px; }
+
+  .fai__node {
+    gap: 10px;
+    min-height: 46px;
+    padding: 10px 17px 10px 12px;
+    box-shadow: var(--fai-shadow-node);
+  }
+  .fai__node.is-on { box-shadow: 0 16px 34px rgba(27,77,177,.22); }
+  .fai__nodelabel { font-size: var(--fs-13); }
+  .fai__num { width: 24px; height: 24px; border-radius: 7px; font-size: 11px; }
+
+  /* pills return to a single row */
+  .fai__tabs {
+    display: inline-flex;
+    align-self: flex-start;
+    grid-template-columns: none;
+    gap: 4px;
+    border-radius: 999px;
+  }
+  .fai__tab { border-radius: 999px; padding: 10px 18px; font-size: 13.5px; }
+
+  .fai__card { gap: 22px; padding: 30px 32px; }
+  .fai__detail { min-height: 178px; padding: 20px 22px; border-radius: 18px; }
+  .fai__detailinner { gap: 11px; }
+  .fai__detailhead { gap: 12px; }
+  .fai__detailnum { width: 26px; height: 26px; border-radius: 8px; font-size: 11.5px; }
+  .fai__get { flex-direction: row; align-items: baseline; gap: 10px; }
+  .fai__getlabel { flex: 0 0 auto; font-size: 10.5px; }
+
+  .fai__rowlabel { font-size: var(--fs-14); }
+
+  /* One row, but a row that is allowed to become two. The note and the CTA
+     were both unshrinkable, so between 641px and roughly 780px the pair
+     overran the card instead of stacking. The note now gives up width down
+     to 260px and drops below the button after that. */
+  .fai__foot {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 24px;
+    padding-top: 22px;
+  }
+  .fai__note { flex: 1 1 260px; min-width: 0; max-width: 380px; }
+  .fai__note p { font-size: var(--fs-13); }
+  .fai__cta { flex: 0 0 auto; }
+}
+
+/* ==========================================================================
+   DESKTOP — 1024px and up
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .fai {
+    --fai-stage-max: 560px;
+    padding: calc(var(--section-gap) / 2) 0;
+  }
+
+  .fai__inner { gap: 48px; }
+
+  /* Top-aligned, not bottom-aligned. flex-end sat the h2's last line level
+     with the stats row, which reads well on its own but is 52px taller on the
+     right than the left — so the eyebrow started 127px under the tint edge
+     while the lead beside it started at 75, and the gap above this section
+     looked like two different gaps depending on which half you read. */
+  .fai__head {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 64px;
+  }
+
+  .fai__headline { display: flex; flex-direction: column; gap: 18px; max-width: 660px; }
+  .fai__intro { flex: 0 0 420px; display: flex; flex-direction: column; gap: 20px; }
+  .fai__stats { margin-top: 0; }
+
+  .fai__body {
+    grid-template-columns: var(--fai-stage-max) minmax(0, 1fr);
+    /* desktop: the stage spans both rows beside the switcher and the panel */
+    grid-template-areas:
+      "stage tabs"
+      "stage panel";
+    column-gap: 44px;
+    row-gap: 18px;
+    /* The switcher shares this grid with the stage, so the width it actually
+       gets is this box minus 560px minus the column gap — nothing the
+       viewport can tell it. */
+    container-type: inline-size;
+  }
+
+  .fai__stagewrap { align-self: center; gap: 16px; }
+  .fai__tabs {
+    justify-self: start;
+    align-self: end;
+    max-width: 100%;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  /* desktop reads rows first, then the detail beneath them */
+  .fai__rows  { order: 2; }
+  .fai__detail { order: 3; }
+
+  /* The four lens pills measure 148 + 117 + 123 + 133 with 4px gaps and 12px
+     of track padding, so the row needs 545px — which means a body of
+     560 (the stage) + 44 (the column gap) + 545 = 1149px. Below that the
+     switcher goes back to the 2x2 tile grid it uses on the phone, which reads
+     as a deliberate shape rather than a line that ran out of room.
+
+     1180 and not 1149: at 1133.98 there was a 15px band, body between 1134
+     and 1149, where the tile grid was already off and the row still did not
+     fit, and the pills wrapped 3 + 1 with Industries alone on the second
+     line. --gutter is 4vw here so body is 0.92 x viewport, which put that
+     band at about 1233-1249px of window — reachable on a 1920 screen at
+     155% zoom, which is how it was found.
+
+     Measured on .fai__body, so at 1440px — where that column is 1325px —
+     this does not apply and the desktop layout is untouched. */
+  @container (max-width: 1179.98px) {
+    .fai__tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-self: stretch;
+      align-self: start;
+      width: 100%;
+      max-width: 340px;
+      gap: 6px;
+      padding: 5px;
+      border-radius: 20px;
+    }
+    .fai__tab { border-radius: 16px; padding: 10px 12px; }
+  }
+}
+
+/* The stage gives the panel room where the panel has none.
+   ------------------------------------------------------------
+   At 1024 the body is 942: the stage's 560 plus the 44px column gap left the
+   panel 338 and the card 272 of content, against the 284 one row of labels
+   needs — so "AI-Powered App Development" broke across two lines, and it was
+   the only width in the whole sweep that still did.
+
+   The stage is where the slack is. Its orbit is positioned in percentages, so
+   it is correct at any size and 560 is only a ceiling; holding that ceiling
+   while the window shrank is what squeezed the panel. 460 through this band
+   gives the card 372 of content and the label 312.
+
+   Bounded above at 1282.98 so the stage is back to its full 560 by the time
+   the switcher returns to a single row, and 1440 never sees this. */
+@media (min-width: 1024px) and (max-width: 1282.98px) {
+  .fai {
+    --fai-stage-max: 460px;
+  }
+}
+
+/* The switcher's fallback, against the viewport: body is 0.92 x window here,
+   so a 1180px body is a 1283px window. Bounded above only — below 1024 the
+   phone rules already tile it. */
+@supports not (container-type: inline-size) {
+  @media (min-width: 1024px) and (max-width: 1282.98px) {
+    .fai__tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      justify-self: stretch;
+      align-self: start;
+      width: 100%;
+      max-width: 340px;
+      gap: 6px;
+      padding: 5px;
+      border-radius: 20px;
+    }
+    .fai__tab { border-radius: 16px; padding: 10px 12px; }
+  }
+}
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
+
+@keyframes fai-spin   { to { transform: rotate(360deg); } }
+@keyframes fai-draw   { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes fai-glow   { 0%, 100% { opacity: 1; } 50% { opacity: 0.34; } }
+@keyframes fai-pulse  { 0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+                        70%, 100% { transform: translate(-50%, -50%) scale(1.26); opacity: 0; } }
+@keyframes fai-nodein { from { opacity: 0; transform: translate(-50%, -50%) scale(0.86); }
+                        to   { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes fai-rise   { from { opacity: 0; transform: translateY(9px); }
+                        to   { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fai .fai__svg--spin,
+  .fai .fai__coreglow { animation: none; }
+  .fai .fai__coreglow { opacity: 0; }
+  .fai.is-revealed .fai__spoke,
+  .fai.is-revealed .fai__spoke.is-on {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .fai.is-revealed .fai__node,
+  .fai.is-revealed .fai__row,
+  .fai.is-revealed .fai__cardhead,
+  .fai.is-revealed .fai__detailinner {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+  .fai * { transition-duration: 1ms !important; }
+}
+
+/* The AI section on the phone rhythm.
+   ------------------------------------------------------------
+   Below 1024px the page does not use --section-gap between sections. Every
+   seam there is 44px, built as 36 of trailing padding on the section above
+   plus 8 of leading padding on the one below — see the note beside .domains
+   and .industries further up. Left on calc(--section-gap / 2) this section
+   was the only thing on a phone opening a 111px seam above it and 83 below.
+
+   Matching 8/36 puts both of its seams at 44, the same as every other pair
+   from .partners down to .contact. */
+@media (max-width: 767.98px) {
+  .fai { padding: 8px 0 36px; }
+}
+
+/* .trusted kept its desktop bottom padding on phones.
+   ------------------------------------------------------------
+   Its padding-top is overridden three times below 768px but the bottom never
+   was, so it held calc(--section-gap / 2) = 75px while every other section on
+   a phone ends in 36 or less. That made the seam under it 111px against the
+   44px every other pair uses — the largest single spacing inconsistency on
+   the phone layout.
+
+   8px pairs with .partners' 36 of leading padding to give the same 44. Only
+   the bottom is touched; the 36 above it is the documented decision that
+   keeps the View All Services button centred in its band. */
+@media (max-width: 767.98px) {
+  .trusted { padding-bottom: 8px; }
+}
+
+/* ============================================================
+   CLIENT RATINGS BAR — Upwork / Trustpilot / GoodFirms
+   ------------------------------------------------------------
+   Recovered from commit 9b5f139. This sat between the "Ready to Start Your
+   Project?" call to action and the testimonials, and went out when the AI
+   video band took its slot; the band has since been replaced, so the row is
+   back where it was.
+
+   Restored as it was, with one omission: the recovered block also carried
+   .stars and .stars__icon, which already exist verbatim near the top of
+   this file and are shared with the hero and testimonial rating rows. Two
+   copies of a shared rule is how they drift, so only the rules unique to
+   this section were brought across.
+   ============================================================ */
+.review-card--trustpilot .stars__icon {
+  width: 13px;
+  height: 13px;
+}
+
+.review-card--google .stars__icon {
+  width: 14px;
+  height: 14px;
+}
+
+.reviews-bar {
+  /* --section-gap/2, same as every other section, so its two seams are the
+     150px the rest of the page uses. It arrived from the recovery at 0/90,
+     which was right for the layout it used to sit in and wrong here. */
+  padding: calc(var(--section-gap) / 2) 0;
+}
+
+.reviews-bar__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.reviews-bar__card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 90px;
+  flex-wrap: wrap;
+  border-radius: 34px;
+  background: var(--color-white);
+  box-shadow: 0 0 25px rgba(240, 157, 77, 0.15);
+}
+
+.review-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.review-stat__logo {
+  object-fit: contain;
+}
+
+.review-stat__row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.review-stat__score {
+  font-family: var(--font-util);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-22);
+  color: var(--color-black);
+}
+
+.review-stat--blue {
+  width: 382px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  border-radius: var(--radius-24);
+  background: var(--color-primary);
+}
+
+.trustpilot-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.trustpilot-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trustpilot-card-title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: 28px;
+  color: #ffffff;
+}
+
+.trustpilot-card-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trustpilot-card-text {
+  font-family: var(--font-display);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-16);
+  color: #ffffff;
+}
+
+.reviews-bar__card > .review-stat:not(.review-stat--blue) {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (max-width: 767.98px) {
+    .reviews-bar__card {
+      gap: 32px;
+      padding: 30px 24px;
+    }
+
+    .review-stat--blue {
+      width: 100%;
+      max-width: 340px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .review-stat--blue:active {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(22, 74, 158, 0.3);
+    }
+
+    .reviews-bar {
+      padding-bottom: 48px;
+    }
+
+    .reviews-bar {
+      padding-bottom: 36px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    .reviews-bar__card {
+      padding: 30px 24px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1439.98px) {
+    .reviews-bar__card {
+      gap: clamp(28px, 4vw, 90px);
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+    .reviews-bar__card {
+      gap: 24px;
+      /* wrap is what stops them shrinking — a flex item wraps before it gives
+         way, so with wrap on they stayed at their full width and GoodFirms went
+         to a second line. nowrap makes the row shrink to fit instead. */
+      flex-wrap: nowrap;
+    }
+
+    .review-stat {
+      min-width: 0;
+      flex-shrink: 1;
+    }
+
+    .review-stat--blue {
+      width: auto;
+      flex: 0 1 382px;
+    }
+
+    .review-stat__logo {
+      max-width: 100%;
+      height: auto;
+    }
+}
+
+
+/* The ratings row on the phone rhythm: 8 leading, 36 trailing, so the seam
+   above and below it is the same 44px every other pair uses below 768px. */
+@media (max-width: 767.98px) {
+  .reviews-bar { padding: 8px 0 36px; }
+}
+
+/* ============================================================
+   SECTION SEAM RHYTHM (>=768px)
+   ------------------------------------------------------------
+   --section-gap is 150 and every section pads half of it top and bottom, so
+   any two of them sit exactly 150 apart. Three seams did not, measured from
+   the last painted thing above to the first painted thing below:
+
+     hero -> tech-partner     75    one section's half-gap, not two
+     tech-partner -> trusted  166   16 too many
+     trusted -> partners      174   24 too many
+
+   Fixed at the source of each, rather than by nudging the neighbour.
+   ============================================================ */
+@media (min-width: 768px) {
+  /* The hero pays nothing into this seam. Its canvas is a full-bleed
+     background that runs to the section's own box edge, so the hero's 180px
+     of bottom padding is behind the artwork and contributes no clear space at
+     all — the whole seam was .tech-partner's 75. It takes the full gap here
+     so the join under the hero matches every other join on the page. */
+  .tech-partner {
+    padding-top: var(--section-gap);
+  }
+
+  /* .showcase closes .tech-partner, so its tail padding lands on top of the
+     150 the two sections already agree on rather than inside either of them.
+     Its own bottom spacing is set by .showcase__cta-wrap, which frames the
+     "View All Services" button; this was pure overshoot past that. */
+  .showcase {
+    padding-bottom: 0;
+  }
+
+  /* The marquee logos are taller than their row and overhang .trusted's
+     content box by 24px, so 75 of padding measured as 99. Subtracting the
+     overhang is what makes the seam 150 without moving the logos. */
+  .trusted {
+    padding-bottom: calc(var(--section-gap) / 2 - 24px);
+  }
+}
+
+/* ============================================================
+   PHONE SEAM RHYTHM (<=767.98px) — the last word
+   ------------------------------------------------------------
+   This file grew several passes at phone spacing, each correcting the one
+   before, and between them the seams ended up at 44, 60, 68, 80, 97 and 103.
+   The five at 97 are the ones with the --- * --- rule and they were right:
+   44px of clear space, the 9px rule, 44px of clear space.
+
+   So 44 is the figure, and this block puts every other seam on it. Where the
+   break is a rule, 44 sits either side of the rule. Where the break is a
+   background colour change — .fai and .cta-quote are the only two sections
+   that paint their own ground on the phone — 44 sits either side of the
+   colour edge. Where there is no mark at all, the 88 those two add up to is
+   the whole gap. A ruled seam therefore measures 97 and an unruled one 88;
+   the difference is the rule itself, which is ink rather than gap.
+
+   It comes last on purpose. Every rule here is a plain single-class selector
+   inside the same @media the earlier passes used, so ordering is the only
+   thing deciding it — moving this block earlier in the file silently hands
+   the page back to whichever pass happens to follow it.
+   ============================================================ */
+@media (max-width: 767.98px) {
+  /* Ruled seam into .domains. The last .award-card overhangs .partners'
+     content box by 6px, so 36 of padding measured 50 over the rule against
+     44 under it — the one line on the phone that sat visibly off centre. */
+  .partners {
+    padding-bottom: 30px;
+  }
+
+  /* Into and out of the .fai tint. Both of these were 8px, which put the
+     heading almost against the colour edge on one side and the card almost
+     against it on the other. */
+  .domains {
+    padding-bottom: 44px;
+  }
+
+  .fai {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  /* Out of the tint above, into the .cta-quote band below. */
+  .industries {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  /* The band's own two edges. */
+  .cta-quote {
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  /* Below the band; its own bottom stays 36 because .testimonials adds 8 to
+     make the 44 its rule needs above it. */
+  .reviews-bar {
+    padding-top: 44px;
+  }
+
+  /* Same story as the desktop seam above: the hero's canvas runs to its own
+     box edge, so it contributes no clear space and the whole seam was
+     .tech-partner's 50 against the 88 every other unmarked seam gets. */
+  .tech-partner {
+    padding-top: 88px;
+  }
+
+  /* Two seams with no mark of any kind, so each is one 88px gap. The
+     marquee logos overhang .trusted's content box by 24, which is why the
+     bottom here is 28 and not 44. */
+  .trusted {
+    padding-top: 44px;
+    padding-bottom: 28px;
   }
 }

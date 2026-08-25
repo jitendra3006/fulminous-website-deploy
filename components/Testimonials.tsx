@@ -56,8 +56,7 @@ export function Testimonials() {
               loading="lazy"
                 className="tphoto__img"
                 src="/assets/Brett McCammon.webp"
-                alt="Portrait of Brett McCammon"
-              />
+                alt="Portrait of Brett McCammon" width={528} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Brett McCammon</p>
                 <p className="tphoto__role">Managing Director</p>
@@ -72,8 +71,7 @@ export function Testimonials() {
               loading="lazy"
                 className="tphoto__img"
                 src="/assets/Heung jun Kwon.webp"
-                alt="Portrait of Heung jun Kwon"
-              />
+                alt="Portrait of Heung jun Kwon" width={530} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Heung jun Kwon</p>
                 <p className="tphoto__role">Head of Marketing Team</p>
@@ -155,8 +153,7 @@ export function Testimonials() {
               loading="lazy"
                 className="tphoto__img"
                 src="/assets/Kwame Duah.webp"
-                alt="Portrait of Kwame Duah"
-              />
+                alt="Portrait of Kwame Duah" width={500} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Kwame Duah</p>
                 <p className="tphoto__role">COO &amp; Manager</p>
@@ -171,8 +168,7 @@ export function Testimonials() {
               loading="lazy"
                 className="tphoto__img"
                 src="/assets/Carla Vernón.webp"
-                alt="Portrait of Carla Vernón"
-              />
+                alt="Portrait of Carla Vernón" width={532} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Carla Vernón</p>
                 <p className="tphoto__role">CEO &amp; Board Director</p>
