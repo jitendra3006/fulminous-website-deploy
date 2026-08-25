@@ -93,20 +93,32 @@ const nextConfig = {
       },
       {
         /* Anything under /public is served by Next with
-           `Cache-Control: public, max-age=0` — so every repeat visit
-           re-validates ~100 image requests, and a cold CDN edge re-fetches
-           all of them. These filenames are not content-hashed, so
-           `immutable` would be wrong: a logo swap has to be able to go live.
-           30 days with a week of stale-while-revalidate is the compromise —
-           a returning visitor pays nothing, and an updated file is picked up
-           in the background on the next visit after it changes.
+           `Cache-Control: public, max-age=0`, so every repeat visit
+           re-validates ~100 image requests and a cold CDN edge re-fetches all
+           of them. These filenames are not content-hashed, so `immutable`
+           would be wrong: an icon swap has to be able to go live.
+
+           This was 30 days of max-age with a week of stale-while-revalidate,
+           on the theory that a changed file would be picked up in the
+           background. It is not: stale-while-revalidate only applies once
+           max-age has expired, so inside those 30 days the browser serves its
+           own copy and sends no request at all. Eight industry icons were
+           replaced and stayed invisible on any device that had loaded the old
+           ones — which is exactly the failure `immutable` was avoided for.
+
+           60 seconds of max-age with a month of stale-while-revalidate gets
+           what the old comment claimed: the cached copy still paints
+           immediately, so a returning visitor pays nothing on the render
+           path, but the browser revalidates in the background and the next
+           navigation has the new bytes.
+
            Fonts and JS under /_next are hashed and already get a year from
            Next. */
         source: "/assets/:path*",
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=2592000, stale-while-revalidate=604800",
+            value: "public, max-age=60, stale-while-revalidate=2592000",
           },
         ],
       },

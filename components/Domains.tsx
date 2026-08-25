@@ -476,11 +476,19 @@ export function Domains() {
     if (!tabs.length || !content) return;
 
 
+    /* The fade belongs to a tab switch. On the first render there is nothing
+       to fade from, and `animation-fill-mode: both` would hold the panel at
+       opacity 0 until the animation started — which is what axe caught
+       mid-fade and scored as a 1.39:1 contrast failure once
+       content-visibility moved that start later. */
+    let firstRender = true;
+
     function item(sk: { iconImg?: string; title: string; desc: string }, delay: number) {
       const iconMarkup = `<div class="feature-item__raw-icon">${getTechIconSvg(sk.title)}</div>`;
 
+      const anim = firstRender ? '' : ' domains-anim';
       return (
-        '<article class="feature-item domains-anim" style="animation-delay:' +
+        '<article class="feature-item' + anim + '" style="animation-delay:' +
         delay +
         'ms">' +
         iconMarkup +
@@ -507,12 +515,13 @@ export function Domains() {
         if (k < splitAt) a += html;
         else b += html;
       }
+      const anim = firstRender ? '' : ' domains-anim';
       content.innerHTML =
         '<div class="domains__content-head">' +
-        '<h3 class="domains__content-title domains-anim">' +
+        '<h3 class="domains__content-title' + anim + '">' +
         esc(d.label) +
         "</h3>" +
-        '<p class="domains__content-sub domains-anim" style="animation-delay:60ms">' +
+        '<p class="domains__content-sub' + anim + '" style="animation-delay:60ms">' +
         esc(d.sub) +
         "</p>" +
         "</div>" +
@@ -524,6 +533,7 @@ export function Domains() {
         b +
         "</div>" +
         "</div>";
+      firstRender = false;
     }
 
     let active = 0;

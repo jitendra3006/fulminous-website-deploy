@@ -13251,18 +13251,43 @@ body.nav-open .contact-dock {
    left out on purpose, so a reader who lands deep-linked and scrolls up still
    gets the hero's entrance rather than finding it already spent.
    ============================================================ */
+/* The five HTML ones freeze in place, for the reason above. */
 .hero.is-covered::before,
 .hero.is-covered .hero__orb::before,
 .hero.is-covered .hero__ai-badge,
 .hero.is-covered .hero__headline-highlight,
-.hero.is-covered .hero__search,
+.hero.is-covered .hero__search {
+  animation-play-state: paused !important;
+}
+
+/* The six stars come off the timeline entirely.
+   ------------------------------------------------------------
+   These are SVG <path> elements and their keyframes animate
+   transform: scale() rotate(). On an HTML element that is a compositor
+   property; on an SVG child it is geometry, so Blink relaid each path out
+   once per presented frame — for the whole 21,600px of page, because .hero is
+   position: sticky and never leaves the viewport, only gets covered.
+
+   Measured over a full scroll down and back at 4x CPU: these six alone
+   accounted for 1,025 layouts, 468ms of layout, and 9% of total main-thread
+   task time. Everything else that looked like a suspect was measured and
+   cleared — the badge's box-shadow keyframes (0.1%), removing filter from
+   these stars (-0.4%), the header's backdrop-filter (-0.2%), and
+   will-change / transform-box / contain / isolation / translateZ on the paths
+   (all within noise). An SVG path transform cannot be promoted out of layout.
+
+   animation-play-state: paused does not help either — measured at 0.0%.
+   A paused animation is still an active animation, so the layout still
+   happens. Removing it is the only thing that works, and while covered these
+   are behind an opaque .content-stack, so a 1.8s twinkle restarting when the
+   reader comes back up is not something there is anything to see. */
 .hero.is-covered .ai-badge-star--purple,
 .hero.is-covered .ai-badge-star--pink,
 .hero.is-covered .ai-badge-star--blue,
 .hero.is-covered .ai-glitter-star--1,
 .hero.is-covered .ai-glitter-star--2,
 .hero.is-covered .ai-glitter-star--3 {
-  animation-play-state: paused !important;
+  animation: none !important;
 }
 
 /* ============================================================
@@ -14756,5 +14781,117 @@ body.nav-open .contact-dock {
   .trusted {
     padding-top: 44px;
     padding-bottom: 28px;
+  }
+}
+
+/* ============================================================
+   DEFER OFFSCREEN SECTIONS
+   ------------------------------------------------------------
+   The LCP on this page is the hero h1 — text, not an image — and it lands
+   at 1828ms on a 4x-throttled phone while the stylesheet that unblocks it
+   finished at 1015ms. Those 813ms are style resolution and layout across
+   2,873 nodes and 21,600px of page, done in full before the first pixel,
+   and almost none of it for anything the first screen shows.
+
+   content-visibility: auto postpones that. A section that is off screen
+   contributes its intrinsic size to the scroll height and nothing else
+   until it comes near the viewport, at which point it lays out and paints
+   normally. Nothing about the design changes; the work just happens when
+   it is needed instead of all at once up front.
+
+   contain-intrinsic-size carries `auto`, so once a section has rendered
+   the browser remembers its real height and the placeholder is exact from
+   then on. The length beside it is only the first guess, and each is that
+   section's measured height at 390px — every section is tallest on the
+   phone, so guessing high means the scroll height starts a little long and
+   settles shorter, moving content that is below the fold rather than in it.
+
+   .hero and .tech-partner are deliberately absent. The hero is what the
+   first paint is for, and .tech-partner begins inside the first
+   viewport-and-a-bit — deferring it would move work into the moment the
+   user starts scrolling, which is the one moment it must not cost
+   anything.
+   ============================================================ */
+.showcase {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 999px;
+}
+
+.trusted {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 248px;
+}
+
+.partners {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1381px;
+}
+
+.domains {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 565px;
+}
+
+.fai {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1893px;
+}
+
+.industries {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1681px;
+}
+
+.cta-quote {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 485px;
+}
+
+.reviews-bar {
+  content-visibility: auto;
+  /* 609 and not the 545 the section measures at rest: the ratings row grows
+     once its two logos decode, and the first guess should be the settled
+     height rather than the pre-decode one. */
+  contain-intrinsic-size: auto 609px;
+}
+
+.testimonials {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 3521px;
+}
+
+.cases {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2340px;
+}
+
+.blogs {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1676px;
+}
+
+.contact {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 824px;
+}
+
+/* An engine without content-visibility simply renders everything, which is
+   what it did before, so no fallback is needed. But a print or a
+   find-in-page has to see all of it, and reduced-motion users are the
+   most likely to be running assistive tech that walks the whole page. */
+@media print {
+  .showcase,
+  .trusted,
+  .partners,
+  .domains,
+  .fai,
+  .industries,
+  .cta-quote,
+  .reviews-bar,
+  .testimonials,
+  .cases,
+  .blogs,
+  .contact {
+    content-visibility: visible;
   }
 }
