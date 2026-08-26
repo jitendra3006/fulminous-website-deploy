@@ -14642,6 +14642,11 @@ body.nav-open .contact-dock {
 .trustpilot-card-score .stars__icon {
   width: 20px;
   height: 20px;
+  /* The gold the other two columns use. Their stars are baked into the logo
+     artwork, and sampling both files gives rgb(255,188,17) as the dominant
+     value in each. These five were on the orange accent, which read as a
+     different rating row sitting between two matching ones. */
+  fill: #ffbc11;
 }
 
 .trustpilot-card-text {

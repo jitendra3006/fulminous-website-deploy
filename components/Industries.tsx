@@ -250,19 +250,19 @@ export function Industries() {
                 </div>
                 <div className="trustpilot-card-score">
                   <div className="stars" role="img" aria-label="Rated 4.9 out of 5 stars">
-                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                    <svg className="stars__icon">
                       <use href="#icon-star" />
                     </svg>
-                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                    <svg className="stars__icon">
                       <use href="#icon-star" />
                     </svg>
-                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                    <svg className="stars__icon">
                       <use href="#icon-star" />
                     </svg>
-                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                    <svg className="stars__icon">
                       <use href="#icon-star" />
                     </svg>
-                    <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
+                    <svg className="stars__icon">
                       <use href="#icon-star" />
                     </svg>
                   </div>
