@@ -226,6 +226,11 @@ export function Industries() {
             </div>
 
 
+
+            {/* Splits the row into three, the way the offices panel in the
+                footer does. Presentational, so it is hidden from assistive
+                tech — the three cards are already separate elements. */}
+            <div className="reviews-bar__divider" aria-hidden="true" />
             <div className="review-stat review-stat--blue">
               <div className="trustpilot-card-inner">
                 <div className="trustpilot-card-head">
@@ -235,7 +240,7 @@ export function Industries() {
                   <span className="trustpilot-card-title">Trustpilot</span>
                 </div>
                 <div className="trustpilot-card-score">
-                  <div className="stars" role="img" aria-label="Rated 5.0 out of 5 from 50 reviews">
+                  <div className="stars" role="img" aria-label="Rated 4.9 out of 5 stars">
                     <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
                       <use href="#icon-star" />
                     </svg>
@@ -252,12 +257,17 @@ export function Industries() {
                       <use href="#icon-star" />
                     </svg>
                   </div>
-                  <span className="trustpilot-card-text">5.0, 50 Review</span>
+                  <span className="trustpilot-card-text">4.9/5 Review</span>
                 </div>
               </div>
             </div>
 
 
+
+            {/* Splits the row into three, the way the offices panel in the
+                footer does. Presentational, so it is hidden from assistive
+                tech — the three cards are already separate elements. */}
+            <div className="reviews-bar__divider" aria-hidden="true" />
             <div className="review-stat">
               <img
               decoding="async"

@@ -14641,6 +14641,36 @@ body.nav-open .contact-dock {
   color: var(--color-black);
 }
 
+/* The two rules that split the row into three, the same 1.5px accent line the
+   offices panel draws in the footer.
+
+   The 40px inset is the point. In the footer the rules stretch inside a panel
+   that has 40px of padding, so they stop well short of its edges and read as
+   separators; .reviews-bar__card has no padding of its own on the desktop, so
+   stretching here ran them the full height of the card, corner to corner, and
+   the row read as a three-cell table rather than one card. */
+.reviews-bar__divider {
+  /* 1.75, not the panel’s 1.5. These two sit at different places in the row, so
+     they split across device pixels at different widths: at 1.5px one of the
+     two draws at three quarters strength at 1536 and 1440 on a 125% display,
+     and 1.75 is the nearest width that draws both evenly at every viewport and
+     ratio measured. */
+  width: 1.75px;
+  align-self: stretch;
+  margin-block: 40px;
+  background: var(--color-accent);
+  flex: 0 0 auto;
+}
+
+/* Only while the three are on one line. Card height is the honest signal:
+   240px when the row closes up, 300 or more once it wraps. Measured one line at
+   1024 and wrapped at 1000. */
+@media (max-width: 1023.98px) {
+  .reviews-bar__divider {
+    display: none;
+  }
+}
+
 .reviews-bar__card > .review-stat:not(.review-stat--blue) {
   flex: 1 1 0;
   min-width: 0;
