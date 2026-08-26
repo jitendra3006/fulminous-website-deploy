@@ -198,6 +198,24 @@ export default function RootLayout({
        same-origin, so there is no third-party handshake left to warm up. */
     <html lang="en">
       <head>
+        {/* The domain icon sprite. It carries the 39 Expertise Across Domains
+            icons, which used to be a string table inside Domains.tsx and so
+            were compiled into the page chunk — 50KB of the 76KB that chunk
+            weighed gzipped, for markup the accordion had already written into
+            the HTML. As a file they are downloaded once instead of twice.
+
+            prefetch, not preload: the section is well below the fold, so this
+            has no business on the critical path. Measured against no hint at
+            all it was the same on TBT and slightly better on Speed Index —
+            the browser finds the <use> references in the accordion markup and
+            fetches the sprite during load either way, so the hint only makes
+            the priority explicit. */}
+        <link
+          rel="prefetch"
+          href="/assets/icons/domains-sprite.svg?v=1"
+          as="image"
+          type="image/svg+xml"
+        />
         {PRELOADED_FONTS.map((href) => (
           <link
             key={href}
