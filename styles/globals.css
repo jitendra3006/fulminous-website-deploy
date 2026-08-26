@@ -14761,9 +14761,47 @@ body.nav-open .contact-dock {
       max-width: 100%;
     }
 
+    /* The star is a flex item beside a title that cannot shrink, so at 320 it
+       was absorbing the whole shortfall and rendering 0x0. */
+    .trustpilot-star-svg {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+    }
+
+    /* 28px, not the 42 the desktop draws: at 42 the word alone is 203px wide
+       against 192px of content box at 320, and it read far heavier than the
+       two logo images beside it. At 28 it is 135, so star plus word is 185. */
+    .trustpilot-card-title {
+      font-size: 28px;
+    }
+
+    /* Both rows stay on one line at this size. */
+    .trustpilot-card-head,
+    .trustpilot-card-score {
+      flex-wrap: nowrap;
+    }
+
+    /* Back to the sizes this row used before the Figma pass scaled it for the
+       desktop — the score has to sit with a 28px word, not a 42px one. */
+    .trustpilot-card-score .stars__icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .trustpilot-card-text {
+      font-size: var(--fs-16);
+      /* "4.9/5 Review" is one label, not two lines. */
+      white-space: nowrap;
+    }
+
     .review-stat--blue {
       width: 100%;
       max-width: 340px;
+      /* 24, not the desktop 30. The score row needs 194px - five 16px stars,
+         the gaps, and a 96px label - and 30px a side left only 192 of content
+         box at 320, so it wrapped by two pixels. */
+      padding: 24px;
       /* Stacked, so the 240px box would only add air. */
       height: auto;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
