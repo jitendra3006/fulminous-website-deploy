@@ -4947,7 +4947,11 @@ button {
   max-width: 456px;
   padding: 20px 28px;
   border: 1px solid var(--color-primary);
-  border-radius: 100px;
+  /* The header’s Contact Us radius, which is what the Figma draws here too:
+     measured off the frame, the arc reaches the control’s edge after 14 device
+     pixels - about 15 at frame scale - where a pill on a 75px-tall control
+     would take 38. It was 100px, which clamps to a full stadium. */
+  border-radius: var(--radius-16);
   background: #fdfdfd;
   font-family: var(--font-display);
   font-size: var(--fs-14);
@@ -4962,11 +4966,10 @@ button {
   width: 282px;
   padding: 20px;
   border: none;
-  /* A pill, matching the Figma and the email field beside it. This was
-     --radius-16 for a while to line up with the header’s Contact Us button,
-     but the Figma pairs the two controls in this row as one shape and the
-     field is already fully round. */
-  border-radius: 100px;
+  /* Same radius as the field beside it and as the header’s Contact Us. I had
+     this at 100px reading the Figma frame as a pill; measured, its arc reaches
+     the edge after 14 device pixels, so it is the 16 this site uses. */
+  border-radius: var(--radius-16);
   background: var(--color-primary);
   color: var(--color-white);
   font-family: var(--font-display);
@@ -14763,6 +14766,26 @@ body.nav-open .contact-dock {
 
     /* The star is a flex item beside a title that cannot shrink, so at 320 it
        was absorbing the whole shortfall and rendering 0x0. */
+    /* GoodFirms drew bigger than Upwork at the same box, and the difference is
+       inside the files rather than the css. upwork.webp is 1200x353 with 141px
+       of empty margin each side, so its mark fills 77% of the file; 
+       GoodFirms.webp is tight to its at 98%. Given the same box, GoodFirms
+       lands 27% larger.
+
+       So each gets a box sized from its own fill, for the same 191px drawn
+       mark: 250 x 0.766 and 196 x 0.977. Fixed rather than a percentage,
+       because these columns shrink to fit their content and a percentage
+       max-width against a shrink-to-fit parent resolves circularly - it came
+       out at one value for every width. Trimming the upwork file would be the
+       tidier fix, but it would resize the logo on the desktop too. */
+    .review-stat__logo {
+      max-width: 250px;
+    }
+
+    .review-stat__logo[src*="GoodFirms"] {
+      max-width: 196px;
+    }
+
     .trustpilot-star-svg {
       flex: 0 0 auto;
       width: 42px;
