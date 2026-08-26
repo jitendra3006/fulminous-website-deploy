@@ -40,8 +40,8 @@ const SLIDES_DATA = [
       { href: live("/software-development-consulting-company"), label: "Technical Consulting" },
       { href: live("/software-consulting-development-services"), label: "Managed Development Services" },
     ],
-    imgSrc: "/assets/Software-Development-Banner.webp",
-    imgAlt: "Dedicated Teams & Staff Augmentation illustration",
+    imgSrc: "/assets/Dedicated-Teams-IMG.webp",
+    imgAlt: "A development team working together in an office",
   },
   {
     name: "Quality Assurance",
@@ -162,8 +162,8 @@ const SLIDES_DATA = [
       { href: live("/software-development"), label: "Enterprise Software Solutions" },
       { href: live("/top-saas-application-development-company"), label: "SaaS Product Development" },
     ],
-    imgSrc: "/assets/Software-Development-Banner.webp",
-    imgAlt: "Software Development illustration",
+    imgSrc: "/assets/Software-Development-Code.webp",
+    imgAlt: "Software developer writing code on a laptop",
   },
 ];
 

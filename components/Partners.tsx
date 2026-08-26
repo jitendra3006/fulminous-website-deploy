@@ -200,6 +200,26 @@ export function Partners() {
               decoding="async"
               loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Star-Ludo.jpg" alt="Star Ludo logo" width={40} height={40} />
             </li>
+            <li className="marquee__item">
+              <img
+              decoding="async"
+              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/InvestInn.webp" alt="InvestInn logo" width={72} height={40} />
+            </li>
+            <li className="marquee__item">
+              <img
+              decoding="async"
+              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Bingo-Fiesta.webp" alt="Bingo Fiesta logo" width={228} height={40} />
+            </li>
+            <li className="marquee__item">
+              <img
+              decoding="async"
+              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Capitol-Cafe-Restaurant.webp" alt="Capitol Cafe and Restaurant logo" width={44} height={40} />
+            </li>
+            <li className="marquee__item">
+              <img
+              decoding="async"
+              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/TrailMates.webp" alt="TrailMates logo" width={34} height={40} />
+            </li>
           </ul>
         </div>
       </section>
