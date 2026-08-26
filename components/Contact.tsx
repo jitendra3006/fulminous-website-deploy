@@ -1,4 +1,5 @@
 import React from "react";
+import { ContactCaptcha } from "@/components/ContactCaptcha";
 
 export function Contact() {
   return (
@@ -74,9 +75,11 @@ export function Contact() {
                   />
                 </div>
               </div>
-              <button className="contact__submit" type="button">
-                Get Free Proposal
-              </button>
+              {/* The captcha and the submit travel together: the button has to be
+                  able to refuse, so the state that decides lives with it. This
+                  is the only client component in the section — the three fields
+                  above stay server-rendered. */}
+              <ContactCaptcha />
               <p className="contact__note">
                 By submitting, you agree to our privacy terms. No spam, ever.
               </p>

@@ -809,7 +809,11 @@ button {
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
-  border-radius: 20px;
+  /* Same 16px as .btn, so the outline button is the Contact Us shape drawn in
+     outline rather than a third radius. Two call sites share this class — the
+     Services dropdown's "View More Services" and the mobile drawer's
+     sub-CTA — and they are the same control, so both move together. */
+  border-radius: var(--radius-16);
   border: 1px solid var(--color-primary);
   color: var(--color-primary);
   font-family: var(--font-display);
@@ -4947,7 +4951,10 @@ button {
   width: 282px;
   padding: 20px;
   border: none;
-  border-radius: 100px;
+  /* The header's Contact Us shape, not a pill. .btn sets --radius-16 and that
+     radius is what makes a control read as one of this site's buttons; at
+     100px this was the only fully round one on the page. */
+  border-radius: var(--radius-16);
   background: var(--color-primary);
   color: var(--color-white);
   font-family: var(--font-display);
@@ -7686,7 +7693,9 @@ button {
 .office-divider {
   width: 1px;
   align-self: stretch;
-  background: #e5e5e5;
+  /* The accent, matching the panel border it sits inside and the ratings row
+     above — #e5e5e5 read as a seam in the panel rather than part of it. */
+  background: var(--color-accent);
 }
 
 .footer__bottom {
@@ -7749,7 +7758,7 @@ button {
     width: 100%;
     height: 1px;
     align-self: center;
-    background: #e5e5e5;
+    background: var(--color-accent);
   }
 }
 
@@ -14527,15 +14536,16 @@ body.nav-open .contact-dock {
   color: var(--color-black);
 }
 
+/* Trustpilot sits in the row like the other two, not in a filled card.
+   The 382x240 and the fill went together: with no fill there is nothing for a
+   fixed box to hold, and the three read as equal columns instead of one being
+   a panel dropped between two logos. The class name stays because five media
+   queries use it to mean "the Trustpilot one". */
 .review-stat--blue {
-  width: 382px;
-  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 30px;
-  border-radius: var(--radius-24);
-  background: var(--color-primary);
 }
 
 .trustpilot-card-inner {
@@ -14556,7 +14566,9 @@ body.nav-open .contact-dock {
   font-family: var(--font-display);
   font-weight: var(--fw-semibold);
   font-size: 28px;
-  color: #ffffff;
+  /* Was #ffffff for the blue fill. On the row's white ground that is invisible,
+     so it takes the same colour the other two cards' review text uses. */
+  color: var(--color-black);
 }
 
 .trustpilot-card-score {
@@ -14569,12 +14581,23 @@ body.nav-open .contact-dock {
   font-family: var(--font-display);
   font-weight: var(--fw-medium);
   font-size: var(--fs-16);
-  color: #ffffff;
+  color: var(--color-black);
 }
 
-.reviews-bar__card > .review-stat:not(.review-stat--blue) {
+/* All three, now that Trustpilot is not a fixed-width panel. */
+.reviews-bar__card > .review-stat {
   flex: 1 1 0;
   min-width: 0;
+}
+
+/* The hairlines that split the row into three. Same construction as
+   .office-divider in the footer — a 1px child that stretches to the row's
+   height — and the same accent, which is what the Figma draws both in. */
+.reviews-bar__divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--color-accent);
+  flex: 0 0 auto;
 }
 
 @media (max-width: 767.98px) {
@@ -14583,16 +14606,23 @@ body.nav-open .contact-dock {
       padding: 30px 24px;
     }
 
+    /* The row wraps to one card per line here, so a vertical rule between
+       them has nothing to divide. Hidden rather than turned horizontal: the
+       cards are already generously spaced by the 32px gap, and the footer's
+       equivalent does the same at this width. */
+    .reviews-bar__divider {
+      display: none;
+    }
+
     .review-stat--blue {
       width: 100%;
       max-width: 340px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .review-stat--blue:active {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(22, 74, 158, 0.3);
-    }
+    /* The press feedback was a blue glow for the blue card. With no fill
+       there is nothing to lift, and a shadow on a transparent box draws a
+       rectangle around nothing. */
 
     .reviews-bar {
       padding-bottom: 48px;
@@ -14870,5 +14900,102 @@ body.nav-open .contact-dock {
   .blogs,
   .contact {
     content-visibility: visible;
+  }
+}
+
+/* ============================================================
+   THE CONTACT FORM CHECK
+   ------------------------------------------------------------
+   Built on .contact__input so the answer field is the same control as the
+   three above it — same height, same fill, same focus ring — rather than a
+   third kind of input in one form.
+
+   The canvas is a fixed 168x52 and does not flex: it is drawn at that size
+   at the device pixel ratio, and letting the layout stretch it would
+   resample the glyphs and make a legible challenge illegible. On a narrow
+   phone the row wraps and the canvas keeps its size instead of shrinking.
+   ============================================================ */
+.contact__captcha-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.contact__captcha-canvas {
+  flex: 0 0 auto;
+  width: 168px;
+  height: 52px;
+  border-radius: var(--radius-12, 12px);
+  background: #ffffff;
+  /* The panel behind this is the primary blue, so the plate needs its own
+     edge or it reads as a hole in the card. */
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.contact__captcha-input {
+  flex: 1 1 140px;
+  min-width: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.contact__captcha-refresh {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-12, 12px);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.contact__captcha-refresh:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.contact__captcha-refresh:active {
+  transform: rotate(-45deg);
+}
+
+/* A real button in the tab order, styled as the link it reads as. */
+.contact__captcha-alt {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #ffffff;
+  font-family: var(--font-util);
+  font-size: var(--fs-13);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.contact__captcha-alt:hover {
+  color: var(--color-accent);
+}
+
+/* Always in the DOM so the live region exists before it has anything to say,
+   and reserving its line so an error does not push the button down. */
+.contact__captcha-error {
+  margin: 6px 0 0;
+  min-height: 18px;
+  font-family: var(--font-util);
+  font-size: var(--fs-13);
+  /* On the primary blue this needs to be a light warm tone, not a red that
+     disappears into the panel. */
+  color: #ffd9b0;
+}
+
+@media (max-width: 767.98px) {
+  .contact__captcha-input {
+    flex: 1 1 100%;
   }
 }

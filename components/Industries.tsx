@@ -225,6 +225,11 @@ export function Industries() {
               />
             </div>
 
+
+            {/* Splits the row into three, the way the footer's office panel
+                does. Presentational, so it is hidden from assistive tech —
+                the three cards are already separate elements there. */}
+            <div className="reviews-bar__divider" aria-hidden="true" />
             <div className="review-stat review-stat--blue">
               <div className="trustpilot-card-inner">
                 <div className="trustpilot-card-head">
@@ -255,6 +260,11 @@ export function Industries() {
                 </div>
               </div>
             </div>
+
+            {/* Splits the row into three, the way the footer's office panel
+                does. Presentational, so it is hidden from assistive tech —
+                the three cards are already separate elements there. */}
+            <div className="reviews-bar__divider" aria-hidden="true" />
 
             <div className="review-stat">
               <img
