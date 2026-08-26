@@ -14553,7 +14553,10 @@ body.nav-open .contact-dock {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 90px;
+  /* Named, because the outer columns need to know it: the gap decides how far
+     off-centre their logos land, so their correction has to track it. */
+  --rev-gap: 90px;
+  gap: var(--rev-gap);
   flex-wrap: wrap;
   border-radius: 34px;
   background: var(--color-white);
@@ -14641,6 +14644,50 @@ body.nav-open .contact-dock {
   color: var(--color-black);
 }
 
+/* Where the rules sit, and where the outer logos sit relative to them.
+
+   On the cell boundaries the rules were 46px from the Upwork and GoodFirms
+   logos and 140px from the Trustpilot mark, so each read as belonging to the
+   logo rather than sitting between the two. Half a gap inward is roughly
+   midway.
+
+   The outer logos are then centred in the cells that produces. The row gap
+   falls between each outer column and the rule beside it, so untouched the
+   logo sits gap/2 outward of its cell; moving the rule in by another half
+   gap widens the cell by that much and shifts its centre a further quarter,
+   which is why the offset is three quarters of a gap.
+
+   Relative offsets, not padding or margin: those come out of the column's
+   width and both logos carry max-width: 100%, so padding the column shrank
+   Upwork from 286 to 196. Not transform either — .reveal animates transform
+   on .review-stat and .reveal.is-visible resets it to none, which would wipe
+   the offset out the moment the row reveals.
+
+   Only from 1024, which is where the row is on one line and the rules exist. */
+@media (min-width: 1024px) {
+  .reviews-bar__divider,
+  .reviews-bar__card > .review-stat:first-child,
+  .reviews-bar__card > .review-stat:last-child {
+    position: relative;
+  }
+
+  .reviews-bar__divider:nth-child(2) {
+    inset-inline-start: calc(var(--rev-gap) / 2);
+  }
+
+  .reviews-bar__divider:nth-child(4) {
+    inset-inline-start: calc(var(--rev-gap) / -2);
+  }
+
+  .reviews-bar__card > .review-stat:first-child {
+    inset-inline-start: calc(var(--rev-gap) * 0.75);
+  }
+
+  .reviews-bar__card > .review-stat:last-child {
+    inset-inline-start: calc(var(--rev-gap) * -0.75);
+  }
+}
+
 /* The two rules that split the row into three, the same 1.5px accent line the
    offices panel draws in the footer.
 
@@ -14678,7 +14725,7 @@ body.nav-open .contact-dock {
 
 @media (max-width: 767.98px) {
     .reviews-bar__card {
-      gap: 32px;
+      --rev-gap: 32px;
       padding: 30px 24px;
     }
 
@@ -14710,13 +14757,13 @@ body.nav-open .contact-dock {
 
 @media (min-width: 1024px) and (max-width: 1439.98px) {
     .reviews-bar__card {
-      gap: clamp(28px, 4vw, 90px);
+      --rev-gap: clamp(28px, 4vw, 90px);
     }
 }
 
 @media (min-width: 1024px) and (max-width: 1199.98px) {
     .reviews-bar__card {
-      gap: 24px;
+      --rev-gap: 24px;
       /* wrap is what stops them shrinking — a flex item wraps before it gives
          way, so with wrap on they stayed at their full width and GoodFirms went
          to a second line. nowrap makes the row shrink to fit instead. */
