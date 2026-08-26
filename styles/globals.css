@@ -4962,10 +4962,11 @@ button {
   width: 282px;
   padding: 20px;
   border: none;
-  /* The header's Contact Us shape, not a pill. .btn sets --radius-16 and that
-     radius is what makes a control read as one of this site's buttons; at
-     100px this was the only fully round one on the page. */
-  border-radius: var(--radius-16);
+  /* A pill, matching the Figma and the email field beside it. This was
+     --radius-16 for a while to line up with the header’s Contact Us button,
+     but the Figma pairs the two controls in this row as one shape and the
+     field is already fully round. */
+  border-radius: 100px;
   background: var(--color-primary);
   color: var(--color-white);
   font-family: var(--font-display);
