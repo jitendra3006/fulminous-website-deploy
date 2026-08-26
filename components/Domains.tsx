@@ -768,37 +768,37 @@ export function Domains() {
               aria-selected="true"
             >
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Emerging Technologies & AI.svg" alt="Emerging Technologies & AI" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <Image className="domain-tab__icon" src="/assets/icons/Emerging Technologies & AI.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Emerging Technologies &amp; AI</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Backend Development.svg" alt="Backend Development" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <Image className="domain-tab__icon" src="/assets/icons/Backend Development.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Backend Development</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Frontend Development.svg" alt="Frontend Development" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <Image className="domain-tab__icon" src="/assets/icons/Frontend Development.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Frontend Development</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Mobile Technologies.svg" alt="Mobile Technologies" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <Image className="domain-tab__icon" src="/assets/icons/Mobile Technologies.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Mobile Technologies</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/CMS & Ecommerce.svg" alt="CMS & Ecommerce" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <Image className="domain-tab__icon" src="/assets/icons/CMS & Ecommerce.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">CMS &amp; Ecommerce</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Cloud Platforms.svg" alt="Cloud Platforms" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <Image className="domain-tab__icon" src="/assets/icons/Cloud Platforms.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Cloud Platforms</span>
             </button>

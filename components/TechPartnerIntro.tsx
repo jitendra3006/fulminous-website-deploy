@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 export function ScrollGenerativeText({
   text,
@@ -32,57 +32,90 @@ export function ScrollGenerativeText({
 }
 
 function AnimatedCounter({ target, duration = 1600 }: { target: number; duration?: number }) {
-  const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const elRef = useRef<HTMLSpanElement>(null);
+  const wrapRef = useRef<HTMLSpanElement>(null);
+  const valueRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const el = elRef.current;
-    if (!el) return;
+    const wrap = wrapRef.current;
+    const value = valueRef.current;
+    if (!wrap || !value) return;
+
+    /* Anyone who has asked for less motion gets the number, not the count. */
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      value.textContent = String(target);
+      return;
+    }
+
+    /* The markup ships the target so the number is real content without
+       javascript. Once we are going to animate it, reset to zero here — the
+       stats sit well below the fold, so this happens long before they are
+       looked at, and it avoids the final number showing and then snapping
+       back to 0 as the section scrolls in. */
+    value.textContent = "0";
+
+    let frame = 0;
+    let startedAt = 0;
+    let shown = 0;
+
+    const step = (t: number) => {
+      if (!startedAt) startedAt = t;
+      const progress = Math.min((t - startedAt) / duration, 1);
+      /* Ease-out cubic, the same curve as before. */
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const next = progress < 1 ? Math.floor(eased * target) : target;
+      /* Only touch the DOM when the integer actually changes: at 120Hz most
+         frames land on the same number. */
+      if (next !== shown) {
+        shown = next;
+        value.textContent = String(next);
+      }
+      if (progress < 1) frame = requestAnimationFrame(step);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          setIsVisible(true);
+        /* The last entry, not the first. A callback can carry several entries
+           for one element after a fast scroll, and reading entries[0] meant a
+           stale "left the viewport" could land after the element had settled
+           in view - resetting the number to 0 with no later notification to
+           put it right. Measured: the third stat sat at 0 while fully on
+           screen under a 6x cpu throttle. */
+        const entry = entries[entries.length - 1];
+        if (entry.isIntersecting) {
+          cancelAnimationFrame(frame);
+          startedAt = 0;
+          shown = -1;
+          frame = requestAnimationFrame(step);
         } else {
-          setIsVisible(false);
+          cancelAnimationFrame(frame);
+          shown = 0;
+          value.textContent = "0";
         }
       },
       { threshold: 0.2 }
     );
 
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isVisible) {
-      setCount(0);
-      return;
-    }
-
-    let startTimestamp: number | null = null;
-    let animationFrameId: number;
-
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      // Ease-out cubic formula for a smooth, premium slowdown as it reaches target number
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeOut * target));
-
-      if (progress < 1) {
-        animationFrameId = requestAnimationFrame(step);
-      } else {
-        setCount(target);
-      }
+    observer.observe(wrap);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
     };
+  }, [target, duration]);
 
-    animationFrameId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isVisible, target, duration]);
-
-  return <span ref={elRef}>{count}</span>;
+  /* The hidden copy sizes the box to the final value in the real font, and
+     the live one is laid over it, so a digit appearing cannot move anything.
+     The server renders the target too, which is the honest value to have in
+     the markup and means no shift when hydration takes over. */
+  return (
+    <span className="counter" ref={wrapRef}>
+      <span className="counter__reserve" aria-hidden="true">
+        {target}
+      </span>
+      <span className="counter__value" ref={valueRef}>
+        {target}
+      </span>
+    </span>
+  );
 }
 
 export function TechPartnerIntro() {

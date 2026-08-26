@@ -1143,28 +1143,47 @@ button {
   animation: heavyGlitterBluePulse 1.8s ease-in-out 1.2s infinite;
 }
 
+/* No scale in here, and that is a performance fix rather than a style choice.
+
+   These keyframes drive svg <path> elements. In Blink a transform on an svg
+   child is geometry, not a composited property, so the path is relaid out on
+   every frame of the animation and there is no way to promote it out of layout
+   - will-change, transform-box, contain, isolation and translateZ were all
+   measured and all did nothing, and animation-play-state: paused does not help
+   because a paused animation is still an active one.
+
+   Measured on a 6x throttled 360px phone, one full scroll of the page:
+
+     baseline                         840 layouts   699ms of layout
+     stars removed entirely            19 layouts    18ms
+     this, scale dropped               21 layouts    19ms
+
+   So dropping the scale is worth as much as deleting the animation, and what
+   is left - opacity 0.5 to 1 plus the brightness and drop-shadow glow - is
+   what the twinkle actually reads as. The size pulse was 0.9 to 1.28 on a path
+   inside a 28x24 badge, about two pixels.
+
+   .ai-badge-star keeps transform-box and transform-origin: they are inert
+   without a transform, and they are what a scale would need if it came back. */
 @keyframes heavyGlitterTwinkle {
   0%, 55%, 100% {
     opacity: 0.5;
-    transform: scale(0.9);
     filter: brightness(0.95);
   }
   75% {
     opacity: 1;
-    transform: scale(1.28);
     filter: brightness(1.2) drop-shadow(0 0 8px currentColor) drop-shadow(0 0 14px currentColor);
   }
 }
 
+/* Same reasoning as heavyGlitterTwinkle above. */
 @keyframes heavyGlitterBluePulse {
   0%, 55%, 100% {
     opacity: 0.6;
-    transform: scale(0.94);
     filter: brightness(0.95);
   }
   75% {
     opacity: 1;
-    transform: scale(1.32);
     filter: brightness(1.25) drop-shadow(0 0 10px #1e40af) drop-shadow(0 0 16px #1d4ed8);
   }
 }
@@ -2908,6 +2927,26 @@ button {
   font-weight: var(--fw-extrabold);
   font-size: 56px;
   line-height: 58px;
+}
+
+/* The counter reserves its final width so counting up cannot reflow the stat
+   or rewrap the label under it. .counter__reserve is a hidden copy of the
+   target that sets the box in the real font; .counter__value is laid over it,
+   right-aligned, so the "+" beside it never moves and the finished state is
+   pixel-identical to a plain text node. */
+.counter {
+  position: relative;
+  display: inline-block;
+}
+
+.counter__reserve {
+  visibility: hidden;
+}
+
+.counter__value {
+  position: absolute;
+  inset: 0;
+  text-align: right;
 }
 
 .stat--light .stat__number {
@@ -8914,10 +8953,24 @@ a:focus-visible {
      arrows out to the edges. */
   .showcase__cta-wrap {
     gap: 12px;
+    /* The row is a button between two arrows, and a flex item shrinks before
+       it wraps. Below about 500px there is not room for all three, so the
+       button was being squeezed under its own label and .btn clips at
+       overflow: hidden with white-space: nowrap - measured 161px of text in a
+       156px box at 320, and 108 in 49 at 320 with 1.5 zoom, which cut it to
+       "View A". Wrapping lets the arrows drop to their own line instead. */
+    flex-wrap: wrap;
   }
 
   .showcase .services__cta {
     margin: 0;
+    /* Never shrink under the label. */
+    flex: 0 0 auto;
+    max-width: 100%;
+    /* And on the narrowest phones the label still needs 164px against the
+       161px the container has, so the 24px sides come in. .btn is nowrap with
+       overflow: hidden, so three pixels short is a visibly cut word. */
+    padding-inline: 16px;
   }
 
   .showcase__carousel {
@@ -9259,6 +9312,14 @@ a:focus-visible {
    behind the logo — while transparent files like Visual Objects showed only
    the mark. Dropping the shadow makes every logo behave like the transparent
    ones. The colour, lift and scale are unchanged. */
+/* InvestInn a step down from the cap the widest wordmarks take. It is a long
+   two-tone lockup, so at the full 3.9x it was the loudest thing in the strip,
+   and the hover scale of 1.1 pushed that further. 3.4x lands it between the
+   capped marks and Gameson. */
+.marquee__logo[src*="InvestInn"] {
+  max-width: calc(var(--logo-h) * 3.4);
+}
+
 .marquee__item:hover .marquee__logo {
   filter: grayscale(0);
   opacity: 1;

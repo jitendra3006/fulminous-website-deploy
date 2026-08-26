@@ -203,7 +203,7 @@ export function Partners() {
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/InvestInn.webp" alt="InvestInn logo" width={220} height={40} />
+              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/InvestInn.webp" alt="InvestInn logo" width={167} height={40} />
             </li>
             <li className="marquee__item">
               <img
