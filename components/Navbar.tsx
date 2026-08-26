@@ -12,38 +12,6 @@ import { isExternalHref, live } from "@/lib/site-config";
 const crossSiteProps = (href: string) =>
   isExternalHref(href) ? { target: "_blank", rel: "noopener noreferrer" } : {};
 
-const IconDiamond = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2L15 9L22 12L15 15L12 22L9 15L2 12L9 9L12 2Z" fill="#0052cc" />
-  </svg>
-);
-
-const IconStar = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2V22M2 12H22M4.93 4.93L19.07 19.07M4.93 19.07L19.07 4.93" stroke="#0052cc" strokeWidth="2.5" strokeLinecap="round" />
-  </svg>
-);
-
-const IconTarget = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="9" stroke="#0052cc" strokeWidth="2.5" />
-    <circle cx="12" cy="12" r="3" fill="#0052cc" />
-  </svg>
-);
-
-const IconSmileD = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 4H12C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20H5V4Z" fill="#0052cc" />
-  </svg>
-);
-
-const IconRibbon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 20C6 13.3726 11.3726 8 18 8V14C14.6863 14 12 16.6863 12 20H6Z" fill="#0052cc" />
-    <path d="M18 4C10.268 4 4 10.268 4 18H10C10 13.5817 13.5817 10 18 10V4Z" fill="#0052cc" />
-  </svg>
-);
-
 const IconArrowRight = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -204,16 +172,20 @@ const TECHNOLOGY_COLUMNS: MegaGroup[][] = [
   ],
 ];
 
-const MEGA_ICONS = [IconRibbon, IconStar, IconTarget, IconSmileD, IconDiamond];
-
 function MegaColumns({
   columns,
   onLinkClick,
   footer,
+  showTitles = true,
 }: {
   columns: MegaGroup[][];
   onLinkClick: () => void;
   footer?: React.ReactNode;
+  /* Technology keeps its group headings — Backend, Frontend, Mobile, CMS are
+     what tell you which stack a row belongs to. Services does not: its groups
+     were "Browse by Services" and two hidden placeholders holding the columns
+     in line, which is a heading doing layout rather than saying anything. */
+  showTitles?: boolean;
 }) {
   return (
     <>
@@ -234,20 +206,25 @@ function MegaColumns({
             const titleId = `mega-${ci}-${gi}-title`;
             return (
             <React.Fragment key={group.title}>
-              <p
-                id={titleId}
-                className={`mega-dropdown__title${group.hidden ? " mega-dropdown__title--hidden" : ""}`}
-                aria-hidden={group.hidden || undefined}
-                style={gi > 0 ? { marginTop: "16px" } : undefined}
-              >
-                {group.title}
-              </p>
+              {showTitles ? (
+                <p
+                  id={titleId}
+                  className={`mega-dropdown__title${group.hidden ? " mega-dropdown__title--hidden" : ""}`}
+                  aria-hidden={group.hidden || undefined}
+                  style={gi > 0 ? { marginTop: "16px" } : undefined}
+                >
+                  {group.title}
+                </p>
+              ) : null}
               <ul
                 className="mega-dropdown__list"
-                aria-labelledby={group.hidden ? undefined : titleId}
+                /* With no visible heading the list has nothing naming it, so
+                   the group title moves onto the list itself. */
+                aria-labelledby={showTitles && !group.hidden ? titleId : undefined}
+                aria-label={!showTitles ? group.title : undefined}
+                style={!showTitles && gi > 0 ? { marginTop: "16px" } : undefined}
               >
-                {group.items.map((item, ii) => {
-                  const Icon = MEGA_ICONS[(ci * 3 + gi * 2 + ii) % MEGA_ICONS.length];
+                {group.items.map((item) => {
                   return (
                     <li key={item.href}>
                       <a
@@ -256,9 +233,6 @@ function MegaColumns({
                         onClick={onLinkClick}
                         {...crossSiteProps(item.href)}
                       >
-                        <span className="mega-dropdown__item-icon">
-                          <Icon />
-                        </span>
                         <span className="mega-dropdown__item-text">
                           <span className="mega-dropdown__item-title">{item.label}</span>
                           <span className="mega-dropdown__item-desc">{item.desc}</span>
@@ -891,11 +865,9 @@ export function Navbar() {
                         order. See the note in MegaColumns above — the same
                         change, hand-written here because this panel is not
                         driven by the shared table. */}
-                    <p id="mega-who-company" className="mega-dropdown__title">Company</p>
-                    <ul className="mega-dropdown__list" aria-labelledby="mega-who-company">
+                    <ul className="mega-dropdown__list" aria-label="Company">
                       <li>
                         <a href={live("/about-us")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">About Us</span>
                             <span className="mega-dropdown__item-desc">Get creative inspiration</span>
@@ -906,7 +878,6 @@ export function Navbar() {
                         {/* The live site has no separate team page; /about-us
                             is where the company and its people are described. */}
                         <a href={live("/about-us")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Team</span>
                             <span className="mega-dropdown__item-desc">Stunning web design</span>
@@ -915,7 +886,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href={live("/career")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Career</span>
                             <span className="mega-dropdown__item-desc">Join our global team</span>
@@ -924,7 +894,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href="#contact" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Contact Us</span>
                             <span className="mega-dropdown__item-desc">Artistic visual expression</span>
@@ -936,11 +905,9 @@ export function Navbar() {
 
                   {/* Col 2: Why Fulminous */}
                   <div className="mega-dropdown__col">
-                    <p id="mega-who-why" className="mega-dropdown__title">Why Fulminous</p>
-                    <ul className="mega-dropdown__list" aria-labelledby="mega-who-why">
+                    <ul className="mega-dropdown__list" aria-label="Why Fulminous">
                       <li>
                         <a href={live("/client-reviews")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Client Reviews</span>
                             <span className="mega-dropdown__item-desc">Impactful storytelling</span>
@@ -949,7 +916,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href={live("/our-clients")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconSmileD /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Clients</span>
                             <span className="mega-dropdown__item-desc">Functional digital products</span>
@@ -958,7 +924,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href={live("/our-partners")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Partners</span>
                             <span className="mega-dropdown__item-desc">Beautiful crafted prints</span>
@@ -967,7 +932,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href={live("/fulminous-software-awards-recognition")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconRibbon /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Awards &amp; Memberships</span>
                             <span className="mega-dropdown__item-desc">Recognized industry leader</span>
@@ -979,11 +943,9 @@ export function Navbar() {
 
                   {/* Col 3: Partner With Us */}
                   <div className="mega-dropdown__col">
-                    <p id="mega-who-partner" className="mega-dropdown__title">Partner With Us</p>
-                    <ul className="mega-dropdown__list" aria-labelledby="mega-who-partner">
+                    <ul className="mega-dropdown__list" aria-label="Partner With Us">
                       <li>
                         <a href={live("/associate-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconStar /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Associate Partnership</span>
                             <span className="mega-dropdown__item-desc">Collaborative growth</span>
@@ -992,7 +954,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href={live("/strategic-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconDiamond /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Strategic Partnership</span>
                             <span className="mega-dropdown__item-desc">Long-term synergy</span>
@@ -1001,7 +962,6 @@ export function Navbar() {
                       </li>
                       <li>
                         <a href={live("/referral-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
-                          <span className="mega-dropdown__item-icon"><IconTarget /></span>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Referral Partnership</span>
                             <span className="mega-dropdown__item-desc">Earn referral rewards</span>
@@ -1039,6 +999,7 @@ export function Navbar() {
                   <MegaColumns
                     columns={SERVICES_COLUMNS}
                     onLinkClick={handleLinkClick}
+                    showTitles={false}
                     footer={
                       <a
                         className="btn--outline-primary mega-dropdown__btn"

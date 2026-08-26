@@ -851,16 +851,7 @@ button {
   background-color: rgba(0, 82, 204, 0.04);
 }
 
-.mega-dropdown__item-icon {
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #0052cc;
-  margin-top: 2px;
-}
+
 
 .mega-dropdown__item-text {
   display: flex;
@@ -11637,16 +11628,9 @@ canvas {
 
   /* The icons carry their own width/height attributes, so the box alone is not
      enough — the svg has to be told to fill it. */
-  .mega-dropdown__item-icon {
-    width: 18px;
-    height: 18px;
-    margin-top: 1px;
-  }
 
-  .mega-dropdown__item-icon svg {
-    width: 100%;
-    height: 100%;
-  }
+
+
 
   .mega-dropdown__item-title {
     font-size: 12.5px;
@@ -13159,16 +13143,9 @@ body.nav-open .contact-dock {
 
   /* The icons carry their own width/height attributes, so the box alone
      is not enough — the svg has to be told to fill it. */
-  .mega-dropdown__item-icon {
-    width: clamp(20px, 3.4svh, 28px);
-    height: clamp(20px, 3.4svh, 28px);
-    margin-top: 1px;
-  }
 
-  .mega-dropdown__item-icon svg {
-    width: 100%;
-    height: 100%;
-  }
+
+
 
   .mega-dropdown__item-title {
     font-size: clamp(13px, 2.2svh, 15px);
