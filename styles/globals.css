@@ -267,6 +267,12 @@
   --color-primary: #164a9e;
   --color-primary-dark: #0f3a7e;
   --color-accent: #f09d4d;
+  /* The accent held back, for a rule that sits inside something already drawn
+     in the accent. The three separators in the footer offices panel are the
+     same hue and the same 2px as the border framing them, and at full
+     strength all four read as one grid; a little under it they read as
+     separators inside a panel. */
+  --color-hairline: rgba(240, 157, 77, 0.6);
   --color-star: #dfb300;
   --color-text: #333333;
   --color-text-muted: #5c5c5c;
@@ -2529,6 +2535,17 @@ button {
   gap: 40px;
   width: 100%;
   text-align: center;
+}
+
+/* The Figma sets the intro headline on two lines, breaking after the colon.
+   The second half is 1106px of text, which needs a box at least that wide: at
+   1280 the box is 1178 and it fits, at 1200 it is 1104 and it does not. So the
+   break is taken from 1240px up and the headline flows below that, where the
+   phone and tablet wrapping was already tuned. */
+@media (min-width: 1240px) {
+  .section-head__title-break {
+    display: block;
+  }
 }
 
 .section-head__title {
@@ -7639,7 +7656,28 @@ button {
   gap: 20px;
   width: 100%;
   padding: 40px;
-  border: 1px solid var(--color-accent);
+  /* 2, not 1. This border and the three rules inside the panel are the same
+     colour and were the same 1px, and they still rendered as four different
+     lines on a 125% display: sampled out of the pixels at a 1536 viewport,
+     the border came out at 75% strength and the three rules at 75, 100 and
+     75. A 1px rule is 1.25 device pixels there, so how it is drawn depends on
+     where it lands, and the three land at 545.05 / 959.38 / 1373.70 because
+     justify-content: space-between divides 613px of slack over six gaps.
+
+     Construction does not fix it — border-left, a zero-width box, its own
+     composited layer and 0.8px all measured identical. Width does, because a
+     line wide enough to always contain a whole device pixel cannot be split.
+     Swept across the real configurations, only 2px is even everywhere:
+
+                  1px    1.5px  2px
+       1536@1.25  75%    75%    even
+       1920@1.25  75%    even   even
+       1440@1.25  75%    75%    even
+       1024@1.25  75%    75%    even
+        430@1.25  75%    75%    even   (the stacked horizontal variant)
+
+     So all four lines in this panel are 2px together. */
+  border: 2px solid var(--color-accent);
   border-radius: 30px;
   background: var(--color-white);
   flex-wrap: wrap;
@@ -7691,11 +7729,14 @@ button {
 }
 
 .office-divider {
-  width: 1px;
+  /* Same 2px as the panel border — see the note there for why 1px drew these
+     three at three different strengths. */
+  width: 2px;
   align-self: stretch;
-  /* The accent, matching the panel border it sits inside and the ratings row
-     above — #e5e5e5 read as a seam in the panel rather than part of it. */
-  background: var(--color-accent);
+  /* A shade under the border that frames them, so the three fade slightly
+     rather than matching it stroke for stroke. Was #e5e5e5, which read as a
+     seam in the panel rather than part of it. */
+  background: var(--color-hairline);
 }
 
 .footer__bottom {
@@ -7756,9 +7797,9 @@ button {
   .office-divider {
     display: block;
     width: 100%;
-    height: 1px;
+    height: 2px;
     align-self: center;
-    background: var(--color-accent);
+    background: var(--color-hairline);
   }
 }
 
@@ -7770,7 +7811,7 @@ button {
    a third left dangling at x=692 against the panel's right edge. Lay the
    four out on an explicit grid instead and draw the separators as cell
    borders — one vertical rule down the middle, one horizontal rule between
-   the rows, in the same #e5e5e5 hairline desktop uses. */
+   the rows, in the same accent line desktop uses. */
 @media (min-width: 640px) and (max-width: 1023.98px) {
   .footer__offices {
     display: grid;
@@ -7797,12 +7838,12 @@ button {
      the left column. */
   .office:nth-child(1),
   .office:nth-child(5) {
-    border-right: 1px solid #e5e5e5;
+    border-right: 2px solid var(--color-hairline);
   }
 
   .office:nth-child(1),
   .office:nth-child(3) {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 2px solid var(--color-hairline);
   }
 }
 
@@ -9186,8 +9227,19 @@ a:focus-visible {
 }
 
 .marquee__logo {
-  height: 44px;
+  /* One knob for the strip's size. The media queries below set only this and
+     the width cap follows it. */
+  --logo-h: 44px;
+  height: var(--logo-h);
   width: auto;
+  /* Wide wordmarks were sized by height alone, so Bingo Fiesta ran to 250px
+     beside a 37px TrailMates. 3.9x the height caps the widest at ~172, where
+     Gameson, Visual Objects and Microsoft Azure already sit, so nothing under
+     the cap moves. object-fit is what keeps a capped logo from being squashed:
+     the box becomes 172x44 and the mark is letterboxed inside it at its own
+     ratio. */
+  max-width: calc(var(--logo-h) * 3.9);
+  object-fit: contain;
   display: block;
   border-radius: 8px;
   filter: grayscale(1);
@@ -9237,7 +9289,7 @@ a:focus-visible {
   }
 
   .marquee__logo {
-    height: 32px;
+    --logo-h: 32px;
   }
 }
 
@@ -9251,7 +9303,7 @@ a:focus-visible {
   }
 
   .marquee__logo {
-    height: 26px;
+    --logo-h: 26px;
   }
 }
 
@@ -10227,7 +10279,7 @@ canvas {
 
   /* Partner logos (Cobalt, Ember, …) read too small beside the heading. */
   .marquee__logo {
-    height: 38px;
+    --logo-h: 38px;
   }
 
   /* Contact copy was inset twice: page gutter plus 22px of panel padding. */
@@ -10242,7 +10294,7 @@ canvas {
 
 @media (max-width: 767.98px) {
   .marquee__logo {
-    height: 34px;
+    --logo-h: 34px;
   }
 
   /* ------------------------------------------------------------
@@ -14536,10 +14588,6 @@ body.nav-open .contact-dock {
   color: var(--color-black);
 }
 
-/* Only the fill changed here. The box is the one it has always had — taking
-   the 382x240 away as well moved the other two columns, and the ask was the
-   background. The class name still reads --blue; it is what five media queries
-   use to mean "the Trustpilot one". */
 .review-stat--blue {
   width: 382px;
   height: 240px;
@@ -14548,6 +14596,7 @@ body.nav-open .contact-dock {
   justify-content: center;
   padding: 30px;
   border-radius: var(--radius-24);
+  background: var(--color-primary);
 }
 
 .trustpilot-card-inner {
@@ -14568,9 +14617,7 @@ body.nav-open .contact-dock {
   font-family: var(--font-display);
   font-weight: var(--fw-semibold);
   font-size: 28px;
-  /* Was #ffffff for the blue fill. On the row's white ground that is invisible,
-     so it takes the same colour the other two cards' review text uses. */
-  color: var(--color-black);
+  color: #ffffff;
 }
 
 .trustpilot-card-score {
@@ -14583,7 +14630,7 @@ body.nav-open .contact-dock {
   font-family: var(--font-display);
   font-weight: var(--fw-medium);
   font-size: var(--fs-16);
-  color: var(--color-black);
+  color: #ffffff;
 }
 
 .reviews-bar__card > .review-stat:not(.review-stat--blue) {
@@ -14600,7 +14647,10 @@ body.nav-open .contact-dock {
    desktop, so stretching here ran them the full height of the card, corner to
    corner, and the row read as a three-cell table rather than a card. */
 .reviews-bar__divider {
-  width: 1px;
+  /* 2px, like the footer panel's border. 1px is 1.25 device pixels on a 125%
+     display, so where a rule lands decides whether it draws at full strength
+     or three quarters, and these two land differently. */
+  width: 2px;
   align-self: stretch;
   margin-block: 40px;
   background: var(--color-accent);

@@ -10,7 +10,10 @@ export function ScrollGenerativeText({
   tag = "h2",
   id,
 }: {
-  text: string;
+  /* A node, not just a string, so a heading can carry its own line break
+     where the design puts one. The three other call sites still pass plain
+     strings. */
+  text: React.ReactNode;
   speed?: number;
   delay?: number;
   className?: string;
@@ -87,7 +90,17 @@ export function TechPartnerIntro() {
     <div className="intro">
       <div className="section-head">
         <ScrollGenerativeText
-          text="The Best Global Technology Partner: Empowering Businesses with Future-Ready Digital Solutions."
+          text={
+            <>
+              The Best Global Technology Partner:{" "}
+              {/* The Figma breaks here. The span is inline until 1240px, so
+                  this is one sentence to a screen reader and to selection
+                  either way. */}
+              <span className="section-head__title-break">
+                Empowering Businesses with Future-Ready Digital Solutions.
+              </span>
+            </>
+          }
           speed={22}
           delay={100}
           className="section-head__title"

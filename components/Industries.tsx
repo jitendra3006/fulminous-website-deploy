@@ -239,7 +239,7 @@ export function Industries() {
                   <span className="trustpilot-card-title">Trustpilot</span>
                 </div>
                 <div className="trustpilot-card-score">
-                  <div className="stars" role="img" aria-label="Rated 4.9 out of 5 stars">
+                  <div className="stars" role="img" aria-label="Rated 5.0 out of 5 from 50 reviews">
                     <svg className="stars__icon" style={{ fill: "#f09d4d" }}>
                       <use href="#icon-star" />
                     </svg>
@@ -256,7 +256,7 @@ export function Industries() {
                       <use href="#icon-star" />
                     </svg>
                   </div>
-                  <span className="trustpilot-card-text">4.9/5 Review</span>
+                  <span className="trustpilot-card-text">5.0, 50 Review</span>
                 </div>
               </div>
             </div>
