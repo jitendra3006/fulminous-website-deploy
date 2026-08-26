@@ -267,12 +267,6 @@
   --color-primary: #164a9e;
   --color-primary-dark: #0f3a7e;
   --color-accent: #f09d4d;
-  /* The accent held back, for a rule that sits inside something already drawn
-     in the accent. The three separators in the footer offices panel are the
-     same hue and the same 2px as the border framing them, and at full
-     strength all four read as one grid; a little under it they read as
-     separators inside a panel. */
-  --color-hairline: rgba(240, 157, 77, 0.6);
   --color-star: #dfb300;
   --color-text: #333333;
   --color-text-muted: #5c5c5c;
@@ -7729,14 +7723,16 @@ button {
 }
 
 .office-divider {
-  /* Same 2px as the panel border — see the note there for why 1px drew these
-     three at three different strengths. */
-  width: 2px;
+  /* Thinner than the 2px border framing it, which is the point — but not by
+     much, because width is what keeps the three even. A rule narrower than a
+     whole device pixel is split by wherever it lands, and these three land on
+     three different fractions. Measured at 1536 on a 125% display, 1.5px is
+     the thinnest that still draws all three at equal strength. */
+  width: 1.5px;
   align-self: stretch;
-  /* A shade under the border that frames them, so the three fade slightly
-     rather than matching it stroke for stroke. Was #e5e5e5, which read as a
+  /* The same accent as the border framing them. Was #e5e5e5, which read as a
      seam in the panel rather than part of it. */
-  background: var(--color-hairline);
+  background: var(--color-accent);
 }
 
 .footer__bottom {
@@ -7797,9 +7793,9 @@ button {
   .office-divider {
     display: block;
     width: 100%;
-    height: 2px;
+    height: 1.5px;
     align-self: center;
-    background: var(--color-hairline);
+    background: var(--color-accent);
   }
 }
 
@@ -7838,12 +7834,12 @@ button {
      the left column. */
   .office:nth-child(1),
   .office:nth-child(5) {
-    border-right: 2px solid var(--color-hairline);
+    border-right: 1.5px solid var(--color-accent);
   }
 
   .office:nth-child(1),
   .office:nth-child(3) {
-    border-bottom: 2px solid var(--color-hairline);
+    border-bottom: 1.5px solid var(--color-accent);
   }
 }
 
@@ -14596,7 +14592,6 @@ body.nav-open .contact-dock {
   justify-content: center;
   padding: 30px;
   border-radius: var(--radius-24);
-  background: var(--color-primary);
 }
 
 .trustpilot-card-inner {
@@ -14616,8 +14611,12 @@ body.nav-open .contact-dock {
 .trustpilot-card-title {
   font-family: var(--font-display);
   font-weight: var(--fw-semibold);
-  font-size: 28px;
-  color: #ffffff;
+  /* 42, not 28. In the Figma the word runs ~259px across a 1658px card; at
+     28px it reached 135. Beside a 64px star it is a logo, not a caption. */
+  font-size: 42px;
+  /* Was #ffffff for the blue fill. With no fill it takes the same ink the
+     other two columns use, or it would be white on white. */
+  color: var(--color-black);
 }
 
 .trustpilot-card-score {
@@ -14626,11 +14625,20 @@ body.nav-open .contact-dock {
   gap: 10px;
 }
 
+/* The five score stars are 16px everywhere else on the page; the Figma draws
+   this row ~144px wide, which is 20px each. Scoped to this column so the hero
+   and testimonial rows keep theirs. */
+.trustpilot-card-score .stars__icon {
+  width: 20px;
+  height: 20px;
+}
+
 .trustpilot-card-text {
   font-family: var(--font-display);
   font-weight: var(--fw-medium);
-  font-size: var(--fs-16);
-  color: #ffffff;
+  /* 20 to sit with the 42px title, and what the Figma measures. */
+  font-size: var(--fs-20);
+  color: var(--color-black);
 }
 
 .reviews-bar__card > .review-stat:not(.review-stat--blue) {
@@ -14638,37 +14646,10 @@ body.nav-open .contact-dock {
   min-width: 0;
 }
 
-/* The hairlines that split the row into three, in the same accent as the
-   footer's office panel.
-
-   The 40px inset is the point. In the footer the dividers stretch inside a
-   panel that has 40px of padding, so they stop well short of its edges and
-   read as separators; .reviews-bar__card has no padding of its own on the
-   desktop, so stretching here ran them the full height of the card, corner to
-   corner, and the row read as a three-cell table rather than a card. */
-.reviews-bar__divider {
-  /* 2px, like the footer panel's border. 1px is 1.25 device pixels on a 125%
-     display, so where a rule lands decides whether it draws at full strength
-     or three quarters, and these two land differently. */
-  width: 2px;
-  align-self: stretch;
-  margin-block: 40px;
-  background: var(--color-accent);
-  flex: 0 0 auto;
-}
-
 @media (max-width: 767.98px) {
     .reviews-bar__card {
       gap: 32px;
       padding: 30px 24px;
-    }
-
-    /* The row wraps to one card per line here, so a vertical rule between
-       them has nothing to divide. Hidden rather than turned horizontal: the
-       cards are already generously spaced by the 32px gap, and the footer's
-       equivalent does the same at this width. */
-    .reviews-bar__divider {
-      display: none;
     }
 
     .review-stat--blue {
@@ -15050,6 +15031,20 @@ body.nav-open .contact-dock {
   /* On the primary blue this needs to be a light warm tone, not a red that
      disappears into the panel. */
   color: #ffd9b0;
+}
+
+/* Reserved space costs nothing to keep while there is a message and 24px of
+   dead air while there is not — and it stacked on the form’s own 30px gap, so
+   the button sat 70px below the last thing you can read. Collapsed while
+   empty, the button is 30px down like every other row of this form; a message
+   appearing pushes it back down by those 24px, which happens on a press rather
+   than on load. Collapsed rather than display:none so the live region stays in
+   the accessibility tree and still announces. */
+.contact__captcha-error:empty {
+  margin-top: 0;
+  min-height: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 @media (max-width: 767.98px) {
