@@ -7594,34 +7594,6 @@ button {
   gap: 14px;
 }
 
-/* The rules between the four link columns. An item of its own rather than a
-   border on a column: .footer__cols is space-between, so the free space is
-   distributed around every child and a standalone item lands centred between
-   its neighbours, where a border would sit hard against one side.
-
-   Hidden by default and shown only from 1320px. The rules are flex items, so
-   they take width of their own and the row now wraps a little earlier than it
-   did - measured one row at 1320 and two at 1300, against 1200/1100 before
-   they existed. A vertical rule across a wrapped row divides nothing.
-
-   1.5px matches the offices panel below. At a 1920 viewport on a 125% display
-   one of the three lands on a half device pixel and draws a shade lighter;
-   2px is even everywhere but reads heavier than the panel it is meant to
-   match, and matching it is the point. */
-.footer__col-divider {
-  display: none;
-}
-
-@media (min-width: 1320px) {
-  .footer__col-divider {
-    display: block;
-    width: 1.5px;
-    align-self: stretch;
-    background: var(--color-accent);
-    flex: 0 0 auto;
-  }
-}
-
 .footer__heading {
   margin: 0;
   font-family: var(--font-display);

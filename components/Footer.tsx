@@ -110,11 +110,6 @@ export function Footer() {
               </ul>
             </nav>
 
-
-            {/* Between the link columns, the way the offices panel below
-                separates the four offices. Presentational — each column is
-                already its own landmark to assistive tech. */}
-            <div className="footer__col-divider" aria-hidden="true" />
             <nav className="footer__col" aria-label="More services">
               <ul className="footer__list">
                 <li>NFT Development</li>
@@ -129,11 +124,6 @@ export function Footer() {
               </ul>
             </nav>
 
-
-            {/* Between the link columns, the way the offices panel below
-                separates the four offices. Presentational — each column is
-                already its own landmark to assistive tech. */}
-            <div className="footer__col-divider" aria-hidden="true" />
             <nav className="footer__col" aria-label="Company">
               <h3 className="footer__heading">Company</h3>
               <ul className="footer__list">
@@ -210,11 +200,6 @@ export function Footer() {
               </ul>
             </nav>
 
-
-            {/* Between the link columns, the way the offices panel below
-                separates the four offices. Presentational — each column is
-                already its own landmark to assistive tech. */}
-            <div className="footer__col-divider" aria-hidden="true" />
             <div className="footer__col">
               <h3 className="footer__heading">Contact</h3>
               {/* Non-breaking spaces inside the brackets. With ordinary
