@@ -10397,7 +10397,9 @@ canvas {
 
   .contact__submit {
     padding: 12px 20px;
-    border-radius: 12px;
+    /* No radius here. It was 12px against the 16 this button has everywhere
+       else, so the same control changed shape between a phone and everything
+       wider. Padding and type size still come down; the shape does not. */
     font-size: var(--fs-15);
   }
 
