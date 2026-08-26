@@ -14677,8 +14677,21 @@ body.nav-open .contact-dock {
     inset-inline-start: calc(var(--rev-gap) / 2);
   }
 
+  /* The extra 0.2px is a phase correction, not a design offset.
+
+     The two rules are 473 css px apart — two gaps plus the 382px Trustpilot
+     column plus the rule, less the gap/2 each is shifted by. At a 1.25 device
+     ratio that is 591.25 device pixels, so the pair sits a quarter of a pixel
+     out of step and Chrome rounds each on its own: the left one drew two device
+     pixels wide and the right one drew one.
+
+     Measured across window widths 1512 to 1536, the two absolute positions
+     move about but the difference between their sub-pixel phases is constant,
+     so one fixed nudge corrects it everywhere. 0.2px takes the separation to
+     472.8, which is 591.0 device pixels exactly — a whole number, so both
+     rules land on the same boundary and round the same way. */
   .reviews-bar__divider:nth-child(4) {
-    inset-inline-start: calc(var(--rev-gap) / -2);
+    inset-inline-start: calc(var(--rev-gap) / -2 - 0.2px);
   }
 
   .reviews-bar__card > .review-stat:first-child {
@@ -14700,22 +14713,13 @@ body.nav-open .contact-dock {
    the row read as a three-cell table rather than one card. */
 .reviews-bar__divider {
   /* 1px, the same declaration as .office-divider in the footer, so the two
-     rows are one line by definition rather than by coincidence.
+     rows draw one line by definition rather than by coincidence.
 
-     Getting them to *render* identically at every window width is not
-     available at this thickness, and it is worth writing down why. The two are
-     separated by 473.19 css px — 2 x --rev-gap plus the 382px Trustpilot column
-     plus this width, less the gap/2 each is offset by. At a 1.25 device ratio
-     that is 591.48 device pixels, so the pair is permanently half a device
-     pixel out of phase with each other, and Chrome rounds each one on its own.
-     Measured across 1512-1536 in 5px steps, every width from 0.8 to 2.4 comes
-     out matched at some of those widths and a pixel apart at others; nothing
-     under about 2 css px is matched at all of them, because the phase gap is
-     in the separation, not in the width.
-
-     So: 1px, which is the thinnest, matches the footer, and is matched at the
-     window widths measured either side of the common 1536. Going to 2px would
-     be matched everywhere at twice the weight. */
+     Making the pair render identically is a matter of phase, not width — see
+     the 0.2px nudge on the second one below. At a 1.25 device ratio a 1px
+     rule is 1.25 device pixels, so where it lands decides whether it paints
+     one pixel or two, and the two rules only round the same way if the
+     distance between them is a whole number of device pixels. */
   width: 1px;
   align-self: stretch;
   margin-block: 40px;
@@ -14741,11 +14745,24 @@ body.nav-open .contact-dock {
     .reviews-bar__card {
       --rev-gap: 32px;
       padding: 30px 24px;
+      /* Same reason as the 768-1023 band: the outer two are flex: 1 1 0 and a
+         flex item shrinks before it wraps, so instead of moving to their own
+         line beside the 340px Trustpilot column they collapsed - measured 56px
+         wide at 600 and 135 at 767. Stacked, they draw at their own size. */
+      flex-direction: column;
+    }
+
+    .reviews-bar__card > .review-stat {
+      flex: 0 0 auto;
+      width: auto;
+      max-width: 100%;
     }
 
     .review-stat--blue {
       width: 100%;
       max-width: 340px;
+      /* Stacked, so the 240px box would only add air. */
+      height: auto;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -14766,6 +14783,28 @@ body.nav-open .contact-dock {
 @media (min-width: 768px) and (max-width: 1023.98px) {
     .reviews-bar__card {
       padding: 30px 24px;
+      /* The three cannot sit on one line here — the Trustpilot column is a
+         fixed 382 and the other two logos are about 253 each, so the row wants
+         ~888 plus gaps against 720 of content box at 768. flex-wrap was already
+         on, but the outer two are flex: 1 1 0 and a flex item shrinks before it
+         wraps, so they collapsed to 60px instead of moving to their own line.
+         A column stack, the same as below 768. */
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Their width comes from the stack now, not from a share of the row, so
+       they stop being shrinkable and draw at their natural size. */
+    .reviews-bar__card > .review-stat {
+      flex: 0 0 auto;
+      width: auto;
+      max-width: 100%;
+    }
+
+    /* The 240px box holds this column level with two logos sitting in a row.
+       Stacked one per line it is just air, so it sizes to its content. */
+    .review-stat--blue {
+      height: auto;
     }
 }
 
