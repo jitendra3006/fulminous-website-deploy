@@ -14729,7 +14729,11 @@ body.nav-open .contact-dock {
   width: 1px;
   align-self: stretch;
   margin-block: 40px;
-  background: var(--color-accent);
+  /* The accent held back. These two are separators inside a card, not a frame
+     around it, and at full strength they carried more weight than the logos
+     they sit between. The footer panel keeps the solid accent because its
+     rules sit inside a border drawn in the same colour. */
+  background: rgba(240, 157, 77, 0.55);
   flex: 0 0 auto;
 }
 
