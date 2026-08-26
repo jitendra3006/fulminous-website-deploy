@@ -7723,12 +7723,14 @@ button {
 }
 
 .office-divider {
-  /* Thinner than the 2px border framing it, which is the point — but not by
-     much, because width is what keeps the three even. A rule narrower than a
-     whole device pixel is split by wherever it lands, and these three land on
-     three different fractions. Measured at 1536 on a 125% display, 1.5px is
-     the thinnest that still draws all three at equal strength. */
-  width: 1.5px;
+  /* 1px, thinner than the 2px border framing it and — the point — the same as
+     each other. Counted out of a real screenshot at 1536 on a 125% display,
+     every width from 1.2 to 1.75 drew the middle rule at 2 device pixels and
+     the outer two at 1, because the four offices are spread by space-between
+     over 613px of slack and land on three different sub-pixel phases. 1px is
+     the only thin value where all three come out at 1; the next one that
+     matches is 2px, which is the border. */
+  width: 1px;
   align-self: stretch;
   /* The same accent as the border framing them. Was #e5e5e5, which read as a
      seam in the panel rather than part of it. */
@@ -7793,7 +7795,7 @@ button {
   .office-divider {
     display: block;
     width: 100%;
-    height: 1.5px;
+    height: 1px;
     align-self: center;
     background: var(--color-accent);
   }
@@ -7834,12 +7836,12 @@ button {
      the left column. */
   .office:nth-child(1),
   .office:nth-child(5) {
-    border-right: 1.5px solid var(--color-accent);
+    border-right: 1px solid var(--color-accent);
   }
 
   .office:nth-child(1),
   .office:nth-child(3) {
-    border-bottom: 1.5px solid var(--color-accent);
+    border-bottom: 1px solid var(--color-accent);
   }
 }
 
@@ -14697,12 +14699,11 @@ body.nav-open .contact-dock {
    stretching here ran them the full height of the card, corner to corner, and
    the row read as a three-cell table rather than one card. */
 .reviews-bar__divider {
-  /* 1.75, not the panel’s 1.5. These two sit at different places in the row, so
-     they split across device pixels at different widths: at 1.5px one of the
-     two draws at three quarters strength at 1536 and 1440 on a 125% display,
-     and 1.75 is the nearest width that draws both evenly at every viewport and
-     ratio measured. */
-  width: 1.75px;
+  /* 1.25px. Counted out of a real screenshot at 1536 on a 125% display, this
+     is where both rules land on a single device pixel each: 1px and 1px. At
+     1.5 they split 1 and 3, and from 1.6 up they are both 3 - even, but three
+     times the line that was asked for. */
+  width: 1.25px;
   align-self: stretch;
   margin-block: 40px;
   background: var(--color-accent);
