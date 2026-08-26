@@ -14536,16 +14536,18 @@ body.nav-open .contact-dock {
   color: var(--color-black);
 }
 
-/* Trustpilot sits in the row like the other two, not in a filled card.
-   The 382x240 and the fill went together: with no fill there is nothing for a
-   fixed box to hold, and the three read as equal columns instead of one being
-   a panel dropped between two logos. The class name stays because five media
-   queries use it to mean "the Trustpilot one". */
+/* Only the fill changed here. The box is the one it has always had — taking
+   the 382x240 away as well moved the other two columns, and the ask was the
+   background. The class name still reads --blue; it is what five media queries
+   use to mean "the Trustpilot one". */
 .review-stat--blue {
+  width: 382px;
+  height: 240px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 30px;
+  border-radius: var(--radius-24);
 }
 
 .trustpilot-card-inner {
@@ -14584,18 +14586,23 @@ body.nav-open .contact-dock {
   color: var(--color-black);
 }
 
-/* All three, now that Trustpilot is not a fixed-width panel. */
-.reviews-bar__card > .review-stat {
+.reviews-bar__card > .review-stat:not(.review-stat--blue) {
   flex: 1 1 0;
   min-width: 0;
 }
 
-/* The hairlines that split the row into three. Same construction as
-   .office-divider in the footer — a 1px child that stretches to the row's
-   height — and the same accent, which is what the Figma draws both in. */
+/* The hairlines that split the row into three, in the same accent as the
+   footer's office panel.
+
+   The 40px inset is the point. In the footer the dividers stretch inside a
+   panel that has 40px of padding, so they stop well short of its edges and
+   read as separators; .reviews-bar__card has no padding of its own on the
+   desktop, so stretching here ran them the full height of the card, corner to
+   corner, and the row read as a three-cell table rather than a card. */
 .reviews-bar__divider {
   width: 1px;
   align-self: stretch;
+  margin-block: 40px;
   background: var(--color-accent);
   flex: 0 0 auto;
 }
@@ -14620,9 +14627,10 @@ body.nav-open .contact-dock {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* The press feedback was a blue glow for the blue card. With no fill
-       there is nothing to lift, and a shadow on a transparent box draws a
-       rectangle around nothing. */
+    .review-stat--blue:active {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(22, 74, 158, 0.3);
+    }
 
     .reviews-bar {
       padding-bottom: 48px;
