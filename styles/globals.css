@@ -14699,11 +14699,24 @@ body.nav-open .contact-dock {
    stretching here ran them the full height of the card, corner to corner, and
    the row read as a three-cell table rather than one card. */
 .reviews-bar__divider {
-  /* 1.25px. Counted out of a real screenshot at 1536 on a 125% display, this
-     is where both rules land on a single device pixel each: 1px and 1px. At
-     1.5 they split 1 and 3, and from 1.6 up they are both 3 - even, but three
-     times the line that was asked for. */
-  width: 1.25px;
+  /* 1px, the same declaration as .office-divider in the footer, so the two
+     rows are one line by definition rather than by coincidence.
+
+     Getting them to *render* identically at every window width is not
+     available at this thickness, and it is worth writing down why. The two are
+     separated by 473.19 css px — 2 x --rev-gap plus the 382px Trustpilot column
+     plus this width, less the gap/2 each is offset by. At a 1.25 device ratio
+     that is 591.48 device pixels, so the pair is permanently half a device
+     pixel out of phase with each other, and Chrome rounds each one on its own.
+     Measured across 1512-1536 in 5px steps, every width from 0.8 to 2.4 comes
+     out matched at some of those widths and a pixel apart at others; nothing
+     under about 2 css px is matched at all of them, because the phase gap is
+     in the separation, not in the width.
+
+     So: 1px, which is the thinnest, matches the footer, and is matched at the
+     window widths measured either side of the common 1536. Going to 2px would
+     be matched everywhere at twice the weight. */
+  width: 1px;
   align-self: stretch;
   margin-block: 40px;
   background: var(--color-accent);
