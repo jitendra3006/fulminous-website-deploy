@@ -31,7 +31,15 @@ export function ScrollGenerativeText({
   );
 }
 
-function AnimatedCounter({ target, duration = 1600 }: { target: number; duration?: number }) {
+function AnimatedCounter({
+  target,
+  duration = 1600,
+  suffix,
+}: {
+  target: number;
+  duration?: number;
+  suffix?: React.ReactNode;
+}) {
   const wrapRef = useRef<HTMLSpanElement>(null);
   const valueRef = useRef<HTMLSpanElement>(null);
 
@@ -102,17 +110,29 @@ function AnimatedCounter({ target, duration = 1600 }: { target: number; duration
     };
   }, [target, duration]);
 
-  /* The hidden copy sizes the box to the final value in the real font, and
-     the live one is laid over it, so a digit appearing cannot move anything.
+  /* The hidden copy sizes the box to the final value in the real font, and the
+     live one is laid over it, so a digit appearing cannot move anything.
      The server renders the target too, which is the honest value to have in
-     the markup and means no shift when hydration takes over. */
+     the markup and means no shift when hydration takes over.
+
+     The suffix (the "+") goes inside both layers rather than staying a sibling
+     of the counter, and that is what keeps the number centred. The reserved box
+     is the width of the whole finished string, so the live layer can centre its
+     own content inside it: "84" on the way to "190" sits in the middle of the
+     card instead of hugging the right edge of a box held open for one more
+     digit. The finished state is unchanged - at the target the live content
+     fills the reserve exactly. */
   return (
     <span className="counter" ref={wrapRef}>
       <span className="counter__reserve" aria-hidden="true">
         {target}
+        {suffix}
       </span>
-      <span className="counter__value" ref={valueRef}>
-        {target}
+      <span className="counter__live">
+        <span className="counter__value" ref={valueRef}>
+          {target}
+        </span>
+        {suffix}
       </span>
     </span>
   );
@@ -215,25 +235,41 @@ export function TechPartnerStats() {
     <div className="stats">
       <div className="stat stat--light">
         <p className="stat__number">
-          <AnimatedCounter target={50} duration={1600} /><span className="stat__plus">+</span>
+          <AnimatedCounter
+            target={50}
+            duration={1600}
+            suffix={<span className="stat__plus">+</span>}
+          />
         </p>
         <p className="stat__label">Team Members</p>
       </div>
       <div className="stat stat--dark">
         <p className="stat__number">
-          <AnimatedCounter target={190} duration={1800} /><span className="stat__plus">+</span>
+          <AnimatedCounter
+            target={190}
+            duration={1800}
+            suffix={<span className="stat__plus">+</span>}
+          />
         </p>
         <p className="stat__label">Projects Delivered</p>
       </div>
       <div className="stat stat--light">
         <p className="stat__number">
-          <AnimatedCounter target={45} duration={1500} /><span className="stat__plus">+</span>
+          <AnimatedCounter
+            target={45}
+            duration={1500}
+            suffix={<span className="stat__plus">+</span>}
+          />
         </p>
         <p className="stat__label">Apps Developed</p>
       </div>
       <div className="stat stat--dark">
         <p className="stat__number">
-          <AnimatedCounter target={130} duration={1700} /><span className="stat__plus">+</span>
+          <AnimatedCounter
+            target={130}
+            duration={1700}
+            suffix={<span className="stat__plus">+</span>}
+          />
         </p>
         <p className="stat__label">Happy Clients</p>
       </div>

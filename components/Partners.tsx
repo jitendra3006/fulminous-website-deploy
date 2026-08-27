@@ -86,22 +86,22 @@ export function Partners() {
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/PlateRate.webp" alt="PlateRate logo" width={130} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/PlateRate.webp" alt="PlateRate logo" width={130} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Be-Active-You.webp" alt="Be Active You logo" width={130} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Be-Active-You.webp" alt="Be Active You logo" width={130} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Gameson.webp" alt="Gameson logo" width={130} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Gameson.webp" alt="Gameson logo" width={130} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/ConocoPhillips.png" alt="ConocoPhillips logo" width={118} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/ConocoPhillips.png" alt="ConocoPhillips logo" width={118} height={40} />
             </li>
             {/* Every width/height below carries that file's real ratio so the
                 row reserves the right box before the PNG decodes —
@@ -111,27 +111,27 @@ export function Partners() {
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Visual Objects.png" alt="Visual Objects logo" width={140} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Visual Objects.png" alt="Visual Objects logo" width={140} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/C3S.webp" alt="Complete Student Support System logo" width={70} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/C3S.webp" alt="Complete Student Support System logo" width={70} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Ekolo.webp" alt="Ekolo logo" width={49} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Ekolo.webp" alt="Ekolo logo" width={49} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Microsoft Azure.webp" alt="Microsoft Azure logo" width={138} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Microsoft Azure.webp" alt="Microsoft Azure logo" width={138} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/BCI Computers.webp" alt="BCI Computers logo" width={100} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/BCI Computers.webp" alt="BCI Computers logo" width={100} height={40} />
             </li>
             {/* Real client logos replace the placeholder Orbit…Ember marks.
                 The source files arrived on a shared 500x200 canvas, so each
@@ -143,82 +143,82 @@ export function Partners() {
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/StayInsure.jpg" alt="Stay Insure logo" width={89} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/StayInsure.jpg" alt="Stay Insure logo" width={89} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Tapasya-Classes.jpg" alt="Tapasya Classes logo" width={53} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Tapasya-Classes.jpg" alt="Tapasya Classes logo" width={53} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Easy-Recovery.jpg" alt="Easy Recovery logo" width={39} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Easy-Recovery.jpg" alt="Easy Recovery logo" width={39} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/FaceVue-Aesthetics.jpg" alt="FaceVue Aesthetics logo" width={40} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/FaceVue-Aesthetics.jpg" alt="FaceVue Aesthetics logo" width={40} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Muknogy-Micro-Finance.webp" alt="Muknogy Micro Finance Foundation logo" width={86} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Muknogy-Micro-Finance.webp" alt="Muknogy Micro Finance Foundation logo" width={86} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Planet-Alpha-Corp.webp" alt="Planet Alpha Corp Forest Carbon Legacy logo" width={178} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Planet-Alpha-Corp.webp" alt="Planet Alpha Corp Forest Carbon Legacy logo" width={178} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/PCI.webp" alt="PCI logo" width={40} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/PCI.webp" alt="PCI logo" width={40} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Sanatan-Bazaar.webp" alt="Sanatan Bazaar logo" width={55} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Sanatan-Bazaar.webp" alt="Sanatan Bazaar logo" width={55} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Techno-Winner.webp" alt="Techno Winner logo" width={36} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Techno-Winner.webp" alt="Techno Winner logo" width={36} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/DSR-Ludo.webp" alt="DSR Ludo logo" width={51} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/DSR-Ludo.webp" alt="DSR Ludo logo" width={51} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Kuchoriya-Tech-Soft.jpg" alt="Kuchoriya Tech Soft logo" width={42} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Kuchoriya-Tech-Soft.jpg" alt="Kuchoriya Tech Soft logo" width={42} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Star-Ludo.jpg" alt="Star Ludo logo" width={40} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Star-Ludo.jpg" alt="Star Ludo logo" width={40} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/InvestInn.webp" alt="InvestInn logo" width={167} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/InvestInn.webp" alt="InvestInn logo" width={167} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Bingo-Fiesta.webp" alt="Bingo Fiesta logo" width={228} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Bingo-Fiesta.webp" alt="Bingo Fiesta logo" width={228} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/Capitol-Cafe-Restaurant.webp" alt="Capitol Cafe and Restaurant logo" width={44} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/Capitol-Cafe-Restaurant.webp" alt="Capitol Cafe and Restaurant logo" width={44} height={40} />
             </li>
             <li className="marquee__item">
               <img
               decoding="async"
-              loading="eager" fetchPriority="low" className="marquee__logo" src="/assets/TrailMates.webp" alt="TrailMates logo" width={34} height={40} />
+              loading="lazy" fetchPriority="low" className="marquee__logo" src="/assets/TrailMates.webp" alt="TrailMates logo" width={34} height={40} />
             </li>
           </ul>
         </div>

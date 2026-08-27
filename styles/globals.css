@@ -2942,9 +2942,22 @@ button {
 
 /* The counter reserves its final width so counting up cannot reflow the stat
    or rewrap the label under it. .counter__reserve is a hidden copy of the
-   target that sets the box in the real font; .counter__value is laid over it,
-   right-aligned, so the "+" beside it never moves and the finished state is
-   pixel-identical to a plain text node. */
+   finished string - digits and the "+" together - that sets the box in the real
+   font; .counter__live is laid over it and centres the digits actually on
+   screen.
+
+   Centred, not right-aligned. Right-aligning pinned the live value to the right
+   edge of a box held open for the final digit count, so while 190 counted up
+   every value below 100 was drawn one whole digit to the right of where it
+   belonged. Measured at 1440: the visible ink sat up to 28.3px right of its own
+   card's centre, worst at the start, and the two cards with three-digit targets
+   drifted visibly while the two with two-digit targets did not - which is why
+   the row looked crooked mid-count.
+
+   Centring costs nothing at the end: at the target the live content is exactly
+   as wide as the reserve, so the finished state is pixel-identical to a plain
+   text node, and the box never changes width at any point, so there is still
+   nothing here that can shift the label or the card. */
 .counter {
   position: relative;
   display: inline-block;
@@ -2954,10 +2967,14 @@ button {
   visibility: hidden;
 }
 
-.counter__value {
+/* Inline flow, not flex: the reserve is a single line box and this layer is the
+   same size with the same font, so the baseline lands in exactly the same place
+   and the "+" keeps the vertical alignment it had as a sibling. */
+.counter__live {
   position: absolute;
   inset: 0;
-  text-align: right;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .stat--light .stat__number {
@@ -13299,22 +13316,58 @@ body.nav-open .contact-dock {
   }
 
   /* ---- The sticky "Ask anything..." pill steps out of the way ----
-     It is fixed 38px off the bottom at z-index 999999, so on a 586px
-     viewport it sits at y=492 and covered the bottom rows of the two
-     middle columns — the part of the panel that had only just been
-     brought back on screen. While a dropdown is open the pill is
-     unreachable anyway (the panel is over it), so it fades out for as
-     long as the hover lasts and comes straight back.
+     Only for the panel that actually reaches it, and only at the heights
+     where it actually does.
 
-     :has() is what makes this work without touching the component:
-     the panels open on hover, so there is no class on <body> to key
-     off. The expanded .ai-panel-dock is deliberately not included —
-     if it is open the user is typing in it, and it should not vanish
-     because the pointer crossed the nav. */
-  body:has(.site-nav__item--has-dropdown:hover) .sticky-ai-dock-container,
-  body:has(.site-nav__item--has-dropdown.is-open) .sticky-ai-dock-container {
-    opacity: 0;
-    visibility: hidden;
+     This used to key off any .site-nav__item--has-dropdown being hovered,
+     which hid the pill for all three menus at every height below 700px.
+     Two of those three never come near it. Measured at 1440 wide, panel
+     bottom against pill top:
+
+       height   Who We Are   Services   Technology
+         700      +279         +120        +5
+         650      +240          +87       -20  collides
+         600      +206          +65       -36  collides
+         586      +196          +57       -43  collides
+         550      +165          +31       -67  collides
+         500      +120          -11       -78  both collide
+
+     So Who We Are has at least 120px of clearance at every height and
+     should never hide the pill; Services only touches it below ~520px;
+     Technology, the tallest panel, is the one the original rule was really
+     for. Hiding the pill on the other two was pure loss: at 125% browser
+     zoom a 1080p window lands just under 700px of CSS height, so on an
+     ordinary desktop the chatbot vanished whenever the pointer crossed the
+     nav, with a clear 120-279px gap between the two.
+
+     :has() is what makes this work without touching the component: the
+     panels open on hover, so there is no class on <body> to key off, and
+     the panel is a descendant of the item that opens it, so naming both
+     picks out which menu is open. The expanded .ai-panel-dock is
+     deliberately not included - if it is open the user is typing in it, and
+     it should not vanish because the pointer crossed the nav. */
+  /* 690, not the 700 of the block this sits in: measured, Technology's
+     clearance is +8px at 750 tall and +5px at 700, and only goes negative
+     just under 690. Hiding the pill at 700 while leaving it up at 750 - for
+     the sake of 3px - is the kind of inconsistency that reads as a bug, and
+     700 is exactly where a 1080p window lands at 125% browser zoom, so it
+     was the height most likely to be seen. */
+  @media (max-height: 690px) {
+    body:has(.site-nav__item--has-dropdown:hover .mega-dropdown--technology) .sticky-ai-dock-container,
+    body:has(.site-nav__item--has-dropdown.is-open .mega-dropdown--technology) .sticky-ai-dock-container {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* Services is 100px shorter than Technology and only overlaps once the
+     window is under ~520px tall. Measured clearance at 550px is 31px. */
+  @media (max-height: 520px) {
+    body:has(.site-nav__item--has-dropdown:hover .mega-dropdown--services) .sticky-ai-dock-container,
+    body:has(.site-nav__item--has-dropdown.is-open .mega-dropdown--services) .sticky-ai-dock-container {
+      opacity: 0;
+      visibility: hidden;
+    }
   }
 
   .sticky-ai-dock-container {
