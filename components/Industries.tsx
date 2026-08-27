@@ -116,7 +116,7 @@ export function Industries() {
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Travel &amp; Hospitality</h3>
                 <p className="industry-card__desc">
-                  The worldwide hospitality market is expected to increase at a remarkable pace to
+                  The worldwide hospitality market keeps growing, and software is how guests book.
                 </p>
               </div>
             </article>
@@ -172,7 +172,7 @@ export function Industries() {
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Food &amp; Restaurant</h3>
                 <p className="industry-card__desc">
-                  The Best Custom Real Estate Web-App Development Company
+                  Ordering, delivery and table service, built for restaurants.
                 </p>
               </div>
             </article>
