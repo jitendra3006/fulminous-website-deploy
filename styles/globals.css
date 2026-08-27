@@ -2898,7 +2898,18 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* flex-start, not center. Centring made the number’s position a function of
+     how tall the content under it happened to be: when a label wrapped to two
+     lines the whole group grew and re-centred, so the number rose. Measured at
+     1024 with a 181px row, the four numbers sat at 41px and 30px from their own
+     card tops — an 11px spread across one row.
+
+     Anchored to the start, the number is the first item, so its offset is the
+     card’s padding-top and nothing below it can move it: not label length, not
+     wrapping, not the row height the tallest sibling forces. The label follows
+     at a fixed gap, so the spacing between them is identical too. Nothing moves
+     on the desktop, where the content already filled the card exactly. */
+  justify-content: flex-start;
   gap: var(--space-12);
   padding: 30px 40px;
   border-radius: var(--radius-24);
