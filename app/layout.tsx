@@ -35,8 +35,8 @@ import {
    rename. Only the Poppins latin weights that render above the fold are listed:
 
        400  body / .hero__eyebrow on desktop
-       500  .hero__with, .hero__eyebrow under 768px
-       600  .hero__subheading
+       500  .hero__with, .hero__subheading on desktop, .hero__eyebrow under 768px
+       600  .hero__subheading under 768px
        700  the h1 (UA default weight for h1) on desktop
        800  the h1 under 768px, where the mobile rule overrides to 800
 
@@ -49,13 +49,27 @@ import {
 
    crossOrigin is required even though these are same-origin: font fetches are
    CORS-mode, and a preload whose mode does not match the eventual request is
-   discarded and downloaded a second time. */
-const PRELOADED_FONTS = [
-  "/fonts/poppins-400-latin.woff2",
-  "/fonts/poppins-500-latin.woff2",
-  "/fonts/poppins-600-latin.woff2",
-  "/fonts/poppins-700-latin.woff2",
-  "/fonts/poppins-800-latin.woff2",
+   discarded and downloaded a second time.
+
+   Each entry carries the widths it is above the fold at, because the hero
+   does not render the same weights at both. A phone shows the eyebrow at
+   500, the subheading at 600 and the h1 at 800; a desktop shows 400, 500 and
+   the UA's own bold 700 for the h1. Preloading the union meant every visitor
+   fetched five files at High priority to paint three of them — 42 kB racing
+   the stylesheet on the one connection that decides FCP.
+
+   `media` on a preload is honoured the way it is on a stylesheet link: a
+   hint whose query does not match is not fetched. A browser that ignores the
+   attribute preloads all five, which is where this started, so there is no
+   regression to fall back to. Either way the two weights a viewport does not
+   need still load if something below the fold asks for them — they just stop
+   competing with the hero for the first bytes. */
+const PRELOADED_FONTS: Array<{ href: string; media?: string }> = [
+  { href: "/fonts/poppins-400-latin.woff2", media: "(min-width: 768px)" },
+  { href: "/fonts/poppins-500-latin.woff2" },
+  { href: "/fonts/poppins-600-latin.woff2", media: "(max-width: 767.98px)" },
+  { href: "/fonts/poppins-700-latin.woff2", media: "(min-width: 768px)" },
+  { href: "/fonts/poppins-800-latin.woff2", media: "(max-width: 767.98px)" },
 ];
 
 export const metadata: Metadata = {
@@ -198,31 +212,24 @@ export default function RootLayout({
        same-origin, so there is no third-party handshake left to warm up. */
     <html lang="en">
       <head>
-        {/* The domain icon sprite. It carries the 39 Expertise Across Domains
-            icons, which used to be a string table inside Domains.tsx and so
-            were compiled into the page chunk — 50KB of the 76KB that chunk
-            weighed gzipped, for markup the accordion had already written into
-            the HTML. As a file they are downloaded once instead of twice.
-
-            prefetch, not preload: the section is well below the fold, so this
-            has no business on the critical path. Measured against no hint at
-            all it was the same on TBT and slightly better on Speed Index —
-            the browser finds the <use> references in the accordion markup and
-            fetches the sprite during load either way, so the hint only makes
-            the priority explicit. */}
-        <link
-          rel="prefetch"
-          href="/assets/icons/domains-sprite.svg?v=1"
-          as="image"
-          type="image/svg+xml"
-        />
-        {PRELOADED_FONTS.map((href) => (
+        {/* The domain icon sprite used to be prefetched from here. The line
+            that justified it — "the browser fetches the sprite during load
+            either way, so the hint only makes the priority explicit" — turned
+            out to be the reason to stop: fetching it during load at all is
+            50 kB over the wire for a section nobody has scrolled to, and it
+            landed inside the window that decides LCP. Domains.tsx now parks
+            the <use> reference in data-href and hands it over when the
+            section is a screen and a half away, so there is nothing left to
+            hint at and the request has left the critical path entirely. See
+            armSprite() there. */}
+        {PRELOADED_FONTS.map(({ href, media }) => (
           <link
             key={href}
             rel="preload"
             href={href}
             as="font"
             type="font/woff2"
+            media={media}
             crossOrigin="anonymous"
           />
         ))}

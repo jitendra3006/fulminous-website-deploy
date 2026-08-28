@@ -484,18 +484,48 @@ export function HeroBackground() {
       syncRunning();
     };
 
+    /* Behind `load`, not just behind an idle slot.
+       ------------------------------------------------------------------
+       requestIdleCallback with a 900ms timeout is a deadline, not a
+       preference: if the main thread is busy — which during a cold load it
+       is, hydrating the page — the callback is run anyway at 900ms. That put
+       initScene's work (a full-canvas gradient rasterised into an offscreen
+       canvas, four gradients, and 32 particle sprites each convolved with a
+       separable Gaussian in JS) inside the window that decides LCP and TBT,
+       which is the one window it has no claim on. Nothing here is content:
+       it is a drifting constellation behind a hero that reads perfectly well
+       on its own gradient.
+
+       So wait for `load` first and only then ask for an idle slot, with a
+       short timeout so a permanently busy thread still gets a starfield. On
+       a warm connection load fires in a few hundred ms and nothing about
+       this is perceptible; on a cold 4G phone the dots arrive a beat after
+       the hero instead of competing with it. */
     const scheduler = window as typeof window & {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
       cancelIdleCallback?: (id: number) => void;
     };
-    let cancelStart: () => void;
-    if (typeof scheduler.requestIdleCallback === "function") {
-      const id = scheduler.requestIdleCallback(start, { timeout: 900 });
-      cancelStart = () => scheduler.cancelIdleCallback?.(id);
+    let idleId = 0;
+    let timerId = 0;
+    const scheduleStart = () => {
+      if (typeof scheduler.requestIdleCallback === "function") {
+        idleId = scheduler.requestIdleCallback(start, { timeout: 500 });
+      } else {
+        timerId = window.setTimeout(start, 200);
+      }
+    };
+    let removeLoad = () => {};
+    if (document.readyState === "complete") {
+      scheduleStart();
     } else {
-      const id = window.setTimeout(start, 300);
-      cancelStart = () => clearTimeout(id);
+      window.addEventListener("load", scheduleStart, { once: true });
+      removeLoad = () => window.removeEventListener("load", scheduleStart);
     }
+    const cancelStart = () => {
+      removeLoad();
+      if (idleId) scheduler.cancelIdleCallback?.(idleId);
+      if (timerId) clearTimeout(timerId);
+    };
 
     /* Coalesced to one frame, and a no-op when the box has not really changed.
        ------------------------------------------------------------------

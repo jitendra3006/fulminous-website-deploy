@@ -1,7 +1,21 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+/* No next/image.
+   ------------------------------------------------------------------
+   next.config.mjs sets images.unoptimized, and all seven call sites here
+   passed `unoptimized` themselves, so the component was doing nothing an
+   <img> does not: no resizing, no srcset, no loader, no placeholder. What it
+   did do was pull its runtime into the page's initial JavaScript as a chunk
+   of its own — 16 kB raw, 6 kB over the wire, plus a request — because this
+   file was the only thing on the page importing it.
+
+   The plain tags below reproduce exactly what next/image emitted for these
+   props: the same src/alt/width/height, loading="lazy" (its default) and
+   decoding="async". Its two other attributes are dropped on purpose —
+   data-nimg is a marker nothing reads, and style="color:transparent" hides
+   alt text while an image loads, which cannot matter for icons whose alt is
+   deliberately empty. */
 
 /* The six domains, in the order the tab rail lists them. The accordion below
    1024px is driven off this rather than off the rail's DOM, so the icon for a
@@ -397,9 +411,47 @@ const DOMAIN_ICON_ALIAS: Record<string, string> = {
    a month of stale-while-revalidate; changing an icon means changing this. */
 const SPRITE = "/assets/icons/domains-sprite.svg?v=1";
 
+/* The sprite is parked, not linked, until the section comes near the viewport.
+   ------------------------------------------------------------------
+   `content-visibility: auto` on .domains stops this section being styled and
+   laid out until it is needed, and the note above assumed that covered its
+   icons too. It does not: an external `<use href>` is resolved when the
+   reference is parsed, not when the element renders, so the file was fetched
+   during the initial load whether or not anyone had scrolled — 131 kB of SVG,
+   50 kB over the wire, the single largest asset on the page, arriving in the
+   same window as the hero and counted against LCP for it.
+
+   So the markup ships with the URL parked in `data-href`, which nothing
+   resolves, and the observer in the component moves it onto `href` once
+   .domains is within a screen and a half of the viewport. That is far enough
+   ahead that the icons are decoded long before the section is looked at, and
+   the request is off the critical path entirely.
+
+   `spriteArmed` is module scope rather than React state on purpose: the
+   desktop panel is written with innerHTML from inside an effect, and
+   re-running that effect to swap an attribute would rebuild the panel and
+   reset the active tab under anyone who had already picked one. A flag read
+   at call time means the next panel render emits a real href with no
+   re-render at all, while the markup already in the document is patched in
+   place by armSprite(). */
+let spriteArmed = false;
+
+function armSprite(scope: ParentNode | null) {
+  spriteArmed = true;
+  const parked = (scope ?? document).querySelectorAll<SVGUseElement>("use[data-href]");
+  for (let i = 0; i < parked.length; i++) {
+    const el = parked[i];
+    const href = el.getAttribute("data-href");
+    if (!href) continue;
+    el.removeAttribute("data-href");
+    el.setAttribute("href", href);
+  }
+}
+
 function useSymbol(id: string): string {
+  const attr = spriteArmed ? "href" : "data-href";
   return (
-    '<svg aria-hidden="true" focusable="false"><use href="' + SPRITE + '#' + id + '"></use></svg>'
+    '<svg aria-hidden="true" focusable="false"><use ' + attr + '="' + SPRITE + '#' + id + '"></use></svg>'
   );
 }
 
@@ -483,6 +535,31 @@ export function Domains() {
       stopAccAnim();
     };
   }, [stopAccAnim]);
+
+  /* Hand the icons their real sprite URL a screen and a half before the
+     section arrives. See the note beside armSprite. An engine without
+     IntersectionObserver arms immediately, which is exactly the behaviour
+     this replaced. */
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || spriteArmed) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      armSprite(root);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        armSprite(root);
+      },
+      { rootMargin: "150% 0px" }
+    );
+    io.observe(root);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -692,13 +769,14 @@ export function Domains() {
                     onClick={(e) => toggleDomain(index, e.currentTarget)}
                   >
                     <span className="domain-acc__icon">
-                      <Image
+                      <img
                         src={DOMAIN_ICONS[index]}
                         alt=""
                         aria-hidden="true"
                         width={22}
                         height={22}
-                        unoptimized
+                        loading="lazy"
+                        decoding="async"
                       />
                     </span>
                     <span className="domain-acc__label">{domain.label}</span>
@@ -762,37 +840,37 @@ export function Domains() {
               aria-selected="true"
             >
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Emerging Technologies & AI.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/assets/icons/Emerging Technologies & AI.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Emerging Technologies &amp; AI</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Backend Development.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/assets/icons/Backend Development.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Backend Development</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Frontend Development.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/assets/icons/Frontend Development.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Frontend Development</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Mobile Technologies.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/assets/icons/Mobile Technologies.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Mobile Technologies</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/CMS & Ecommerce.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/assets/icons/CMS & Ecommerce.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">CMS &amp; Ecommerce</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <Image className="domain-tab__icon" src="/assets/icons/Cloud Platforms.svg" alt="" width={24} height={24} unoptimized style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/assets/icons/Cloud Platforms.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Cloud Platforms</span>
             </button>

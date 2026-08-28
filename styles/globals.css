@@ -15249,6 +15249,36 @@ body.nav-open .contact-dock {
   contain-intrinsic-size: auto 824px;
 }
 
+/* The last thing on the page and the second-tallest thing on it: 2301px at
+   390px wide, four link columns, three office blocks and five images, all of
+   it styled and laid out before the hero could paint. It was left out of the
+   list above with the sections that end the page, not on any reasoning of its
+   own. Same treatment, same first guess — its measured height on a phone. */
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2301px;
+}
+
+/* ============================================================
+   TECH-POWERED GROWTH CARD — a phone-sized copy of the artwork
+   ------------------------------------------------------------
+   The desktop file is 1000x750 and 57 kB, and it is the largest single
+   asset the page still fetches during a cold load: the card sits 327px
+   below the fold on a 390px phone, which is inside the margin
+   content-visibility treats as near-viewport, so nothing defers it and it
+   competes with the hero for bandwidth.
+
+   Below 1024px the card is at most ~358px wide, so 800px of source covers
+   a 2x screen with room to spare — 36 kB instead of 57 kB for pixels no
+   phone can tell apart behind a panel. Desktop keeps the full-size file:
+   the base rule is untouched and this only overrides the URL.
+   ============================================================ */
+@media (max-width: 1023.98px) {
+  .intro-card--growth::before {
+    background-image: url("/assets/Tech-Powered Growth-800.webp");
+  }
+}
+
 /* An engine without content-visibility simply renders everything, which is
    what it did before, so no fallback is needed. But a print or a
    find-in-page has to see all of it, and reduced-motion users are the
@@ -15265,7 +15295,8 @@ body.nav-open .contact-dock {
   .testimonials,
   .cases,
   .blogs,
-  .contact {
+  .contact,
+  .footer {
     content-visibility: visible;
   }
 }

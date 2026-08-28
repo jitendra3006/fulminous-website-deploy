@@ -702,16 +702,24 @@ export function Showcase() {
                         </ul>
                       </div>
                       <div className="showcase__col--media">
-                        {/* fetchPriority="low" is the whole point of this attribute
-                            here: React hoists a <link rel="preload" as="image"> into
-                            <head> for any image it renders that is not loading="lazy",
-                            and this one is the first carousel slide — far below the
-                            fold on every viewport. It was being fetched at high
-                            priority ahead of the hero, competing with LCP for the
-                            first bytes. The hint removes the preload; it does not
-                            defer the image, which still loads eagerly in document
-                            order so the carousel can measure it. Nothing about how or
-                            where it paints changes. */}
+                        {/* lazy, like every other slide. fetchPriority="low" was
+                            added here first, to stop React hoisting a
+                            <link rel="preload" as="image"> into <head> for the one
+                            image on the page that is not loading="lazy". That killed
+                            the preload but kept the fetch: 46 kB still went out in
+                            document order, and this section starts 3100px down a
+                            phone. It was the second-largest thing on the wire during
+                            a load nobody had scrolled through, and every byte before
+                            the paint counts against LCP.
+
+                            "so the carousel can measure it" was the reason given for
+                            keeping it eager, and it does not hold: measureTallestSlide
+                            lays out hidden clones and reads their heights, and the
+                            image's box comes from its width/height attributes and the
+                            stylesheet, not from decoded pixels. Slides 2..n have been
+                            loading="lazy" the whole time and are measured by the same
+                            pass. fetchPriority stays for the case where the section is
+                            already near the viewport on a deep link. */}
                         <img
               decoding="async"
                           className="showcase__image"
@@ -719,7 +727,7 @@ export function Showcase() {
                           alt={SLIDES_DATA[0].imgAlt}
                           width={440}
                           height={440}
-                          loading="eager"
+                          loading="lazy"
                           fetchPriority="low"
                         />
                       </div>
