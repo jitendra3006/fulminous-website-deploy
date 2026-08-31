@@ -14465,9 +14465,14 @@ body.nav-open .contact-dock {
     display: none;
   }
 
+  /* 44%, up from the 34% this shipped at. On request: the mark read as small
+     inside the circle once the wordmark came out from under it — at 34% of a
+     48px core on a 320px screen it was a 16px sparkle in the middle of a lot
+     of blue. Still a share of the circle rather than a px value, so it tracks
+     --fai-core through both phone bands on its own. */
   .fai__core svg {
-    width: 34%;
-    height: 34%;
+    width: 44%;
+    height: 44%;
   }
 
   .fai__node {
