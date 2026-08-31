@@ -14429,6 +14429,76 @@ body.nav-open .contact-dock {
 }
 
 /* ==========================================================================
+   MOBILE ORBIT TUNING — below 641px only
+   --------------------------------------------------------------------------
+   The orbit ratios and the node pills were sized against short labels
+   ("Chatbots"). The longer ones — "Generative AI", "AI Consulting", "Test
+   generation" — run wide enough on a phone-width stage to overlap the centre
+   core and crowd their neighbours. Pushing the orbit out and pulling the core
+   and the pills in gives every lens clearance from both.
+
+   The core loses its wordmark here for the same reason: at --fai-core 19% of
+   a phone-width stage there is no room for "Fulminous AI" over a
+   "CAPABILITIES" pill, and neither is carrying information the phone does not
+   already have — the eyebrow above the section says FULMINOUS AI and the
+   active lens is named on its own tab. So the circle keeps the spark mark
+   alone, sized as a share of itself rather than in px, which means it tracks
+   --fai-core through both bands below without needing its own override in
+   each.
+
+   .fai__core's flex-direction and gap are deliberately not reset: with the
+   two spans display:none the circle has a single centred child and neither
+   property has anything left to act on.
+
+   641px and up is untouched — the stage is wide enough there, and the core
+   keeps its wordmark on tablet and desktop exactly as it is today.
+   ========================================================================== */
+
+@media (max-width: 640.98px) {
+  .fai {
+    --fai-r: 33%;
+    --fai-core: 19%;
+  }
+
+  .fai__corename,
+  .fai__corelens {
+    display: none;
+  }
+
+  .fai__core svg {
+    width: 34%;
+    height: 34%;
+  }
+
+  .fai__node {
+    gap: 5px;
+    min-height: 36px;
+    padding: 6px 9px 6px 7px;
+  }
+
+  .fai__nodelabel { font-size: 10px; }
+  .fai__num { width: 16px; height: 16px; border-radius: 5px; font-size: 8px; }
+}
+
+/* Smallest phones — 320px-wide devices and similar. The band above still runs
+   tight there, so the same levers go a step further. */
+@media (max-width: 340px) {
+  .fai {
+    --fai-r: 35%;
+    --fai-core: 17%;
+  }
+
+  .fai__node {
+    gap: 4px;
+    min-height: 32px;
+    padding: 5px 7px 5px 6px;
+  }
+
+  .fai__nodelabel { font-size: 9px; }
+  .fai__num { width: 14px; height: 14px; font-size: 7px; }
+}
+
+/* ==========================================================================
    TABLET — 641px and up
    ========================================================================== */
 
