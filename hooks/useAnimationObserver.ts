@@ -165,7 +165,21 @@ export function useAnimationObserver() {
        .content-stack's bottom edge when the reader is at the foot of the page,
        or the stack would stop intersecting and every animation would start up
        again behind the footer. */
-    const CORNER_CLEARANCE = 140;
+    /* 140 when this only had to decide when to pause the hero's ambient
+       animations: that needed just enough clearance to cover the stack's own
+       rounded top corners (100px on desktop, 40px below 768px), the last place
+       the hero shows through while the stack is arriving.
+
+       .is-covered now also drives `visibility: hidden` on .hero — see the
+       block beside that rule for the fast-fling flash it fixes — and that
+       raises the stakes on the other edge. Hiding late is harmless; un-hiding
+       late is a missing hero. So the clearance is sized for the way back UP:
+       the class has to be gone before the stack's top edge returns to the
+       viewport top, and on a fast fling an IntersectionObserver callback can
+       arrive a frame or two after the scroll it describes. 400px covers more
+       than three frames of a 10,000px/s fling; pausing the ambient loops
+       260px further down the page is not measurable. */
+    const CORNER_CLEARANCE = 400;
     const stack = document.querySelector(".content-stack");
     const heroEl = document.querySelector(".hero");
     let heroCover: IntersectionObserver | null = null;

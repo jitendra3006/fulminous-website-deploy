@@ -13418,6 +13418,51 @@ body.nav-open .contact-dock {
    left out on purpose, so a reader who lands deep-linked and scrolls up still
    gets the hero's entrance rather than finding it already spent.
    ============================================================ */
+/* ============================================================
+   AND WHILE IT IS COVERED, IT DOES NOT PAINT AT ALL
+   ------------------------------------------------------------
+   Pausing the animations stops the hero doing work behind the stack.
+   This stops it being *drawn* behind the stack, which is a different
+   bug: on a fast fling the blue hero flashes through the white panel
+   for a frame or two.
+
+   The cause is that these are two separate compositor layers that
+   scroll at different rates. .hero is position:sticky for the whole
+   22,000px document, so its layer never moves; .content-stack (z-index
+   20, opaque white, its own layer because of the rounded top corners
+   plus overflow:clip) moves with the scroll. Fling the page and the
+   compositor scrolls ahead of rasterisation — and wherever the stack's
+   layer has not been painted yet, what shows through is not the page
+   background, it is the one thing parked permanently underneath it.
+   Slow scrolling never shows it because rasterisation keeps up.
+
+   Measured across the document at 1920x1080, from the moment
+   .is-covered is set the hero is either entirely behind the stack
+   (pinned at top:100 bottom:1080 with the stack's top edge above the
+   viewport) or scrolled out of the viewport altogether at the foot of
+   the page. There is no scroll position where the class is on and a
+   hero pixel is meant to be visible, so not painting it can only
+   remove artefacts.
+
+   visibility, not display or content-visibility: the hero has to keep
+   its box. It is the sticky element the whole scroll geometry is built
+   on, and it is what .content-stack's own position is measured
+   against — removing it from layout would move the entire page.
+   visibility:hidden is paint-only, so the flash goes and nothing
+   shifts. It also costs nothing to toggle: no layout, no reflow.
+
+   useAnimationObserver's CORNER_CLEARANCE was widened from 140 to 400
+   alongside this. 140 was sized for the corner radius alone, which is
+   all the animation pause needed; this rule wants margin on the way
+   back UP as well, so that a fling that outruns the observer by a
+   frame or two can never reach a scroll position where the hero should
+   be showing and is not. 400px is more than three frames of a fast
+   fling, and pausing the ambient loops 260px later is not measurable.
+   ============================================================ */
+.hero.is-covered {
+  visibility: hidden;
+}
+
 /* The five HTML ones freeze in place, for the reason above. */
 .hero.is-covered::before,
 .hero.is-covered .hero__orb::before,
@@ -15409,5 +15454,84 @@ body.nav-open .contact-dock {
 @media (max-width: 767.98px) {
   .contact__captcha-input {
     flex: 1 1 100%;
+  }
+}
+
+/* ============================================================
+   HERO ENTRANCE — THE SAME ARRIVAL, PLAYED AT DOUBLE SPEED
+   ------------------------------------------------------------
+   Speed Index is the area under the "how much of the viewport is
+   final" curve, and on a phone this hero is the viewport. Every piece
+   of it enters with `both`/`backwards` fill, which means it starts at
+   opacity 0 and the pixels under it are not final until its animation
+   ends. Measured on the served build at 412px, the last one ended
+   1500ms after the hero first painted:
+
+     eyebrow        0.70s + 0.10s delay  ->  800ms
+     AI dock        0.85s + 0            ->  850ms
+     WhatsApp       0.60s + 0.35s        ->  950ms
+     "Vision"       0.80s + 0.22s        -> 1020ms
+     badge 1        0.80s + 0.30s        -> 1100ms
+     Call           0.60s + 0.50s        -> 1100ms
+     subline        0.70s + 0.58s        -> 1280ms
+     badge 2        0.80s + 0.50s        -> 1300ms
+     badge 3        0.80s + 0.70s        -> 1500ms
+
+   So for a second and a half after FCP the screen is still filling in,
+   and Lighthouse charges every one of those milliseconds to Speed
+   Index. Nothing else on this page is close: the network is done, the
+   main thread is idle, and the only reason the picture is not finished
+   is that the stylesheet asked it to arrive slowly.
+
+   This halves the whole timeline. Same keyframes, same easing curves,
+   same order, same stagger shape — every piece still enters, still
+   from the same direction, still one after another. It just takes
+   660ms end to end instead of 1500ms, which at phone speed still reads
+   as a deliberate entrance rather than a snap.
+
+   Mobile only, in the last block of the file so it outranks the
+   earlier declarations at equal specificity. The >=768px timeline in
+   the min-width blocks is untouched.
+   ============================================================ */
+@media (max-width: 767.98px) {
+  .hero__eyebrow {
+    animation: heroIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both 0.04s;
+  }
+
+  .hero__word {
+    animation: heroIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero__headline .hero__word:nth-of-type(1) { animation-delay: 0.1s; }
+  .hero__headline .hero__word:nth-of-type(2) { animation-delay: 0.16s; }
+  .hero__headline .hero__word:nth-of-type(3) { animation-delay: 0.22s; }
+
+  .hero__subline {
+    animation: heroIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both 0.24s;
+  }
+
+  .hero__reviews .hero__review-card {
+    animation: reviewCardReveal 0.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero__reviews .hero__review-card:nth-child(1) { animation-delay: 0.14s; }
+  .hero__reviews .hero__review-card:nth-child(2) { animation-delay: 0.22s; }
+  .hero__reviews .hero__review-card:nth-child(3) { animation-delay: 0.3s; }
+
+  .sticky-ai-dock-container {
+    animation: heroIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  }
+
+  /* The shorthand replaces both animations on this button, so the idle
+     ping has to be restated or it is dropped. Its own 1.4s delay is
+     unchanged — it is an attractor for a settled page, not part of the
+     entrance. */
+  .contact-dock__btn--whatsapp {
+    animation: contactDockIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both,
+      contactDockPing 2.8s ease-out 1.4s infinite;
+  }
+
+  .contact-dock__btn--call {
+    animation: contactDockIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
   }
 }
