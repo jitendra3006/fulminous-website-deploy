@@ -1,7 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
-  <!-- Continuous rounded border — unchanged from the supplied badge: same
-       #D4A843 at 2px, same 14px radius, same 1px inset. -->
-  <rect x="1" y="1" width="298" height="298" rx="14" ry="14" fill="white" stroke="#D4A843" stroke-width="2"/>
+<!-- viewBox is cropped to the artwork rather than left at the 0 0 300 300 the
+     coordinates are authored in. The border rect used to reach the edges of
+     that box, so `object-fit: contain` scaled the badge to fill its tile; with
+     the rect gone the drawing measures 218x216 (getBBox) and would have been
+     scaled to 73% of the tile — visibly lighter than the twelve badges around
+     it, which fill about 85%. The window below is that 85%: square, centred on
+     the drawing's real centre of (150, 152), leaving an even ~19 units of air.
+     Nothing inside is moved; only what is framed changes. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="22 24 256 256" width="256" height="256">
+  <!-- No border box. The supplied badge carried a white plate with a #D4A843
+       rounded border, which made sense as a standalone asset but not in the
+       awards wall: every other tile there is bare artwork sitting on the grid's
+       own #f4f6fb plate, so this one read as a framed card inside a card. The
+       plate is also what .award-card already exists to provide — see the note
+       beside it about mostly-white badges dissolving into the section ground.
+       Dropping the rect takes the white fill with it, so the artwork sits
+       straight on that plate like its twelve neighbours. -->
 
   <!-- Wreath and trophy, stacked above the wordmark rather than beside it.
        The cluster is drawn in its original coordinates and placed as a whole:

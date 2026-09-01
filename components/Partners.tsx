@@ -313,7 +313,7 @@ export function Partners() {
                 <div className="award-card">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/goodfirms-badge-recognized.svg" alt="Recognized on Goodfirms" width={300} height={300} />
+              loading="lazy" src="/assets/goodfirms-badge-recognized.svg" alt="Recognized on Goodfirms" width={256} height={256} />
                 </div>
                 <div className="award-card">
                   <img
