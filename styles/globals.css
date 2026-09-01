@@ -5029,6 +5029,25 @@ button {
   color: #a7a7a7;
 }
 
+/* Clicked, this field lights the same amber as the Get in Touch form's inputs.
+   ------------------------------------------------------------------
+   It had no focus rule of its own, so it fell through to the global
+   `input:focus-visible { outline: 2px solid var(--color-primary) }` further
+   down and drew a blue outline outside its own navy border — two rings in two
+   different blues. .contact__input:focus is the one field on the page that was
+   already doing this properly: it turns the outline off and draws an amber ring
+   in its place. Same declarations here, plus the border itself so the control
+   reads as one amber shape rather than an amber ring around a navy box.
+
+   `:focus`, not `:focus-visible`, to match .contact__input — a text field
+   matches focus-visible on a plain mouse click anyway, so the two behave the
+   same here, and using the same selector keeps the pair easy to compare. */
+.cta-quote__input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 10px rgba(240, 157, 77, 0.5);
+}
+
 .cta-quote__btn {
   width: 282px;
   padding: 20px;
@@ -6344,9 +6363,11 @@ button {
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
+  /* The phone override has to follow the base rule to amber too, or the
+     control goes back to a navy ring below 768px. */
   .cta-quote__input:focus {
-    border-color: var(--color-primary, #164a9e);
-    box-shadow: 0 0 0 3px rgba(22, 74, 158, 0.12);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent), 0 0 10px rgba(240, 157, 77, 0.5);
   }
 
   .cta-quote__btn {
@@ -9685,10 +9706,13 @@ canvas {
     font-size: var(--fs-13);
   }
 
+  /* Follows the base rules above to amber; this override exists only to soften
+     the ring for the panel's tighter fields, so it keeps that job and changes
+     hue with them. */
   .ai-panel .ai-modal-input:focus,
   .ai-panel .ai-modal-textarea:focus {
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+    box-shadow: 0 0 0 1px var(--color-accent), 0 0 8px rgba(240, 157, 77, 0.45);
   }
 
   .ai-panel .ai-modal-input {
@@ -10128,10 +10152,17 @@ canvas {
   color: #94a3b8;
 }
 
+/* Same amber as .contact__input:focus and .cta-quote__input:focus — these were
+   the page's third focus colour, a #3b82f6 that belongs to no token. */
 .ai-modal-input:focus {
   background: #ffffff;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+  /* The base rule's `outline: none` is not enough: the cascade resolves per
+     declaration, and `input:focus-visible` further down is more specific than
+     `.ai-modal-input`, so the 2px primary outline would still paint over the
+     amber ring. It has to be turned off in the focus rule itself. */
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 10px rgba(240, 157, 77, 0.5);
 }
 
 .ai-modal-textarea {
@@ -10153,10 +10184,15 @@ canvas {
   color: #94a3b8;
 }
 
+/* Nothing renders .ai-modal-textarea today — it is left over from an earlier
+   version of this panel and no component emits it. Carried to amber with the
+   inputs it is grouped with anyway, so the block does not go back to two focus
+   colours the day something starts using it. */
 .ai-modal-textarea:focus {
   background: #ffffff;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent), 0 0 10px rgba(240, 157, 77, 0.5);
 }
 
 .ai-modal-actions {

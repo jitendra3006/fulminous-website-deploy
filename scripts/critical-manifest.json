@@ -1,6 +1,6 @@
 {
  "generated": "2026-09-01",
- "rules": 1770,
+ "rules": 1771,
  "criticalCount": 500,
  "deferred": [
   ".container",
@@ -274,6 +274,7 @@
   ".cta-quote__form",
   ".cta-quote__input",
   ".cta-quote__input::placeholder",
+  ".cta-quote__input:focus",
   ".cta-quote__btn",
   ".cta-quote__btn:hover",
   ".cta-quote__note",
