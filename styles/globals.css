@@ -14896,7 +14896,12 @@ body.nav-open .contact-dock {
 
 .trustpilot-card-text {
   font-family: var(--font-display);
-  font-weight: var(--fw-medium);
+  /* 600, not the 500 this used to carry. The Upwork and GoodFirms columns bake
+     "4.9/5 Review" into their logo artwork at a visibly heavier weight, so at
+     500 the middle column's score read lighter than the two it sits between —
+     the one row on the page where three labels are meant to match. 600 also
+     matches .trustpilot-card-title directly above it. Requested. */
+  font-weight: var(--fw-semibold);
   /* 20 to sit with the 42px title, and what the Figma measures. */
   font-size: var(--fs-20);
   color: var(--color-black);
