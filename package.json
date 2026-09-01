@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/split-css.js",
     "start": "next start",
     "lint": "next lint",
-    "optimize:images": "node scripts/optimize-images.js"
+    "optimize:images": "node scripts/optimize-images.js",
+    "css:manifest": "node scripts/critical-manifest.js"
   },
   "dependencies": {
     "next": "^14.2.15",

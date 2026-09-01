@@ -234,22 +234,29 @@ export function Industries() {
             <div className="review-stat review-stat--blue">
               <div className="trustpilot-card-inner">
                 <div className="trustpilot-card-head">
-                  {/* The Trustpilot mark, not a generic five-pointer. Sharper points
-                      than the old path drew, and the darker triangle in the lower
-                      right is part of the logo - it is what makes it read as
-                      Trustpilot rather than as a star. Measured off the Figma: the
-                      fill is #00b67a, which the old path already used. */}
-                  <svg className="trustpilot-star-svg" viewBox="0 0 512 512" width="64" height="64" aria-hidden="true">
-                    <path
-                      fill="#00b67a"
-                      d="M512 195.9H320.4L256 0l-64.4 195.9H0l155.1 121L90.7 512 256 391l165.2 121-64.3-195.1z"
-                    />
-                    <path fill="#005128" d="M371.2 356.1l-14.5-44.9L256 391z" />
-                  </svg>
-                  <span className="trustpilot-card-title">Trustpilot</span>
+                  {/* The G2 mark, in the slot the Trustpilot star used to hold.
+                      Padded to a square canvas in /assets rather than shipped at
+                      its native 293x301, because the card forces this box to
+                      64x64 on desktop and 42x42 below 640 and a non-square source
+                      would come out squashed by those rules.
+
+                      aria-hidden with an empty alt: the wordmark beside it and
+                      the score's own aria-label already name the rating, so a
+                      third announcement of "G2" is noise to a screen reader. */}
+                  <img
+                    decoding="async"
+                    loading="lazy"
+                    className="trustpilot-star-svg"
+                    src="/assets/g2-logo.webp"
+                    alt=""
+                    aria-hidden="true"
+                    width={64}
+                    height={64}
+                  />
+                  <span className="trustpilot-card-title">G2</span>
                 </div>
                 <div className="trustpilot-card-score">
-                  <div className="stars" role="img" aria-label="Rated 4.9 out of 5 stars">
+                  <div className="stars" role="img" aria-label="Rated 4.8 out of 5 stars">
                     <svg className="stars__icon">
                       <use href="#icon-star" />
                     </svg>
@@ -266,7 +273,7 @@ export function Industries() {
                       <use href="#icon-star" />
                     </svg>
                   </div>
-                  <span className="trustpilot-card-text">4.9/5 Review</span>
+                  <span className="trustpilot-card-text">4.8/5 Review</span>
                 </div>
               </div>
             </div>
