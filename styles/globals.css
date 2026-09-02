@@ -478,6 +478,24 @@ button {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* The duration alone did not actually stop anything.
+       ------------------------------------------------------------
+       26 of this page's animations are `infinite`, and an infinite
+       animation with a 0.01ms duration is still a *running* animation: it
+       restarts forever and Chrome keeps it on the animation timeline, so it
+       goes on forcing a style recalc and a repaint every frame. Measured on
+       the live page with the preference on: 2989ms of main-thread task time
+       and 981ms of style recalc per 3s — indistinguishable from the
+       preference being off, which is the one thing it must not be.
+
+       Capping the iteration count is what ends them. Each one runs its
+       single 0.01ms pass, finishes, and leaves the timeline. Nothing about
+       the resting design changes: the decorative loops (pulses, sheens,
+       twinkles) all declare their resting state at 0%/100% and carry the
+       default `fill-mode: none`, so a finished pass reverts to exactly the
+       base style; the entrance animations keep their own `both`/`forwards`
+       fill and so still hold their end state. */
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
@@ -2525,6 +2543,30 @@ button {
   padding: calc(var(--section-gap) / 2) 0;
   border-radius: 0;
   background: linear-gradient(180deg, #f4f8ff 0%, #ffffff 28.365%, #ffffff 42.308%, #f4f8ff 100%);
+}
+
+/* An element more than 300px from the viewport has its ambient loops taken off
+   the animation timeline. Added and removed per element by the
+   IntersectionObserver in TechPartnerIntro.tsx, which carries the measurements;
+   this is the same `animation: none` device the covered hero uses further down,
+   and for the same reason — a paused animation still costs a style recalc and a
+   repaint on every frame, a removed one costs nothing. content-visibility does
+   not do this job either: it was measured and does not stop the animation tick.
+
+   Per card and not per section on purpose. .tech-partner is 3,337px tall and
+   its top sits on the fold, so the section is always intersecting while the
+   cards that actually animate are far below it.
+
+   Only `animation` is touched, so this cannot move a pixel or shift a layout:
+   every animation in these subtrees drives transform or background-position,
+   and each reverts to its own base style when it is not running. */
+.is-anim-idle,
+.is-anim-idle::before,
+.is-anim-idle::after,
+.is-anim-idle *,
+.is-anim-idle *::before,
+.is-anim-idle *::after {
+  animation: none !important;
 }
 
 .tech-partner__inner {
@@ -15332,12 +15374,38 @@ body.nav-open .contact-dock {
    phone, so guessing high means the scroll height starts a little long and
    settles shorter, moving content that is below the fold rather than in it.
 
-   .hero and .tech-partner are deliberately absent. The hero is what the
-   first paint is for, and .tech-partner begins inside the first
-   viewport-and-a-bit — deferring it would move work into the moment the
-   user starts scrolling, which is the one moment it must not cost
-   anything.
+   .hero is deliberately absent: it is what the first paint is for.
+
+   .tech-partner used to be absent too, on the reasoning that it begins
+   inside the first viewport-and-a-bit, so deferring it would move work into
+   the moment the user starts scrolling — the one moment it must not cost
+   anything. That was measured on the deployed build and it is not what
+   happens.
+
+   The section is 3,337px tall and renders 173 text nodes, all but its first
+   sliver of it below the fold, and eagerly: it was the largest block of
+   layout still being done before the first pixel. Adding it here is worth
+   **FCP and LCP 1824ms -> 1516ms, -308ms**, medians of interleaved runs on
+   the live URL at 4x CPU and Slow 4G.
+
+   The scroll cost the old note feared does not appear, because the section
+   sits inside the relevance margin content-visibility works to: it is
+   skipped for the first paint and then rendered immediately afterwards,
+   inside the same load, well before anyone can scroll. Measured over the
+   first 2,500px of scrolling — the exact window the objection was about —
+   worst frame 41ms -> 39ms, p95 20ms -> 19ms, and the section is fully laid
+   out (3,337px, inner 3,213px) with an unchanged 22,460px document by the
+   time load settles. Load CLS stays 0.0000.
    ============================================================ */
+/* First guess measured on a phone like every other one here: 3313px at 360px
+   wide and 3321px at 412px. It is only ever the placeholder for the sliver of
+   time before the section renders — see the note above — and the document
+   height is unchanged at 22,460px either way. */
+.tech-partner {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 3321px;
+}
+
 .showcase {
   content-visibility: auto;
   contain-intrinsic-size: auto 999px;
@@ -15398,7 +15466,13 @@ body.nav-open .contact-dock {
 
 .contact {
   content-visibility: auto;
-  contain-intrinsic-size: auto 824px;
+  /* 1054, not the 824 this was set to: the section has grown since it was
+     measured (the captcha row is inside it now) and it renders 1054px at both
+     360px and 412px wide. A placeholder 230px short is a real reveal jump —
+     .contact__inner was one of the sources behind the intermittent
+     scroll-time layout shifts, and the other twelve values here still match
+     their sections to within a few pixels. */
+  contain-intrinsic-size: auto 1054px;
 }
 
 /* The last thing on the page and the second-tallest thing on it: 2301px at

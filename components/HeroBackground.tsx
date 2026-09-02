@@ -392,7 +392,38 @@ export function HeroBackground() {
       builtDpr = dpr;
     };
 
-    const render = () => {
+    /* The drift speeds below are all per-frame deltas, and they were tuned on a
+       60Hz screen. requestAnimationFrame does not promise 60Hz — it promises
+       the display's refresh rate — so on a 120Hz phone every one of them was
+       applied twice as often: the constellation drifted at double the intended
+       speed and the loop cost twice the main thread to do it. Measured on this
+       page with an uncapped loop, 101.7 frames/s.
+
+       So the frame is governed to 60Hz and the motion is scaled by how long the
+       frame actually took. At 60Hz `step` is 1 and every number below means
+       exactly what it meant before — the same pixels, the same speeds. Above
+       60Hz the extra frames are skipped rather than drawn, and the clamp at 2
+       stops a stalled tab from teleporting the particles when it resumes. */
+    const FRAME_MS = 1000 / 60;
+    let lastFrameAt = 0;
+
+    const render = (now = 0) => {
+      /* Re-armed first, so an early return still keeps the loop alive and
+         `animId` always holds a live handle for syncRunning to cancel. */
+      animId = requestAnimationFrame(render);
+
+      let step = 1;
+      if (lastFrameAt) {
+        const elapsed = now - lastFrameAt;
+        if (elapsed < FRAME_MS - 1) return; // faster than 60Hz: skip the frame
+        step = Math.min(elapsed / FRAME_MS, 2);
+      }
+      lastFrameAt = now;
+
+      drawFrame(step);
+    };
+
+    const drawFrame = (step: number) => {
       /* 1. Rich Layered Base Gradient — pre-rendered, see buildStaticLayers().
          No clearRect first: this layer is fully opaque and covers the whole
          canvas, so it overwrites the previous frame on its own. The clear was
@@ -401,8 +432,8 @@ export function HeroBackground() {
 
       // 2. Render Drifting Ambient Glow Blobs
       glowOrbs.forEach((orb) => {
-        orb.x += orb.vx;
-        orb.y += orb.vy;
+        orb.x += orb.vx * step;
+        orb.y += orb.vy * step;
 
         if (orb.x < width * 0.1 || orb.x > width * 0.9) orb.vx *= -1;
         if (orb.y < height * 0.05 || orb.y > height * 0.45) orb.vy *= -1;
@@ -437,13 +468,13 @@ export function HeroBackground() {
       // 4. Render Neural Constellation Nodes & Energy Links
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
+        p.x += p.vx * step;
+        p.y += p.vy * step;
 
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height * 0.7) p.vy *= -1;
 
-        p.alpha += Math.sin(now * p.pulseSpeed) * 0.006;
+        p.alpha += Math.sin(now * p.pulseSpeed) * 0.006 * step;
         const currentAlpha = Math.max(0.18, Math.min(0.85, p.alpha));
 
         /* Core and glow in one blit. The sprite already holds both arcs with
@@ -481,8 +512,6 @@ export function HeroBackground() {
           }
         }
       }
-
-      animId = requestAnimationFrame(render);
     };
 
     /* Deferred to the first idle slot rather than started during hydration.
@@ -496,19 +525,60 @@ export function HeroBackground() {
     let visible = true;
     let covered = false;
 
+    /* A reader who has asked for less motion gets the constellation, not an
+       empty gradient — it is drawn exactly once and then left alone.
+       ------------------------------------------------------------------
+       The global prefers-reduced-motion rule in globals.css only reaches CSS
+       animations; a canvas rAF loop is invisible to it, so this loop used to
+       keep running at the full refresh rate for exactly the readers who had
+       asked it not to. Stopping after one frame honours the request and costs
+       nothing, and because the frame is still painted the hero looks the same
+       as everyone else's — the stars simply do not drift. */
+    const reduceMotion =
+      typeof window.matchMedia === "function"
+        ? window.matchMedia("(prefers-reduced-motion: reduce)")
+        : null;
+    let staticFrameDrawn = false;
+
     /* Single place that decides whether the loop should be running, so the two
        observers below cannot fight over `animId`. The `!animId` guard matters:
-       render() re-arms itself at the end of every frame, so calling it while a
+       render() re-arms itself at the start of every frame, so calling it while a
        frame is already scheduled would leave two loops running at once. */
     const syncRunning = () => {
       const shouldRun = started && visible && !covered;
+
+      if (shouldRun && reduceMotion?.matches) {
+        /* One frame, then nothing. Re-drawn if the scene was rebuilt (a resize
+           clears the canvas), which is why this is not a one-shot flag on
+           `started`. */
+        if (!staticFrameDrawn) {
+          staticFrameDrawn = true;
+          drawFrame(1);
+        }
+        if (animId) {
+          cancelAnimationFrame(animId);
+          animId = 0;
+        }
+        return;
+      }
+
       if (shouldRun) {
         if (!animId) render();
       } else if (animId) {
         cancelAnimationFrame(animId);
         animId = 0;
+        /* So the next start measures its own first interval instead of
+           inheriting however long the loop was parked. */
+        lastFrameAt = 0;
       }
     };
+
+    /* Someone can turn the preference on or off while the page is open. */
+    const onMotionPrefChange = () => {
+      staticFrameDrawn = false;
+      syncRunning();
+    };
+    reduceMotion?.addEventListener("change", onMotionPrefChange);
 
     const start = () => {
       started = true;
@@ -585,6 +655,10 @@ export function HeroBackground() {
         buildOcclusionObserver();
         if (w === builtW && h === builtH && d === builtDpr) return;
         initScene();
+        /* A rebuild clears the canvas, so a reduced-motion reader needs their
+           one frame painted again at the new size. */
+        staticFrameDrawn = false;
+        syncRunning();
       });
     };
 
@@ -667,6 +741,7 @@ export function HeroBackground() {
       visibility.disconnect();
       occlusion?.disconnect();
       window.removeEventListener("resize", handleResize);
+      reduceMotion?.removeEventListener("change", onMotionPrefChange);
     };
   }, []);
 

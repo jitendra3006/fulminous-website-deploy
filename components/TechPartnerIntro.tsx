@@ -139,8 +139,67 @@ function AnimatedCounter({
 }
 
 export function TechPartnerIntro() {
+  /* The section's ambient loops are taken off the animation timeline while it
+     is nowhere near the screen.
+     ------------------------------------------------------------------
+     .tech-partner carries fifteen `infinite` animations — twelve
+     cardImageSheen and three introCardFloat — and a census of the live page
+     at the top of the scroll found none of them inside the viewport and all
+     fifteen running. They are the largest cluster of off-screen animation on
+     the page, and an animation the reader cannot see still costs a style
+     recalc and a repaint on every frame: measured on the live page, taking
+     just this section's animations off the timeline saved 180ms of
+     main-thread task time and 300ms of style recalc per 3 seconds.
+
+     `animation: none` and not `animation-play-state: paused` — a paused
+     animation is still an active animation and was measured at no saving at
+     all. content-visibility was measured too, and does not stop the
+     animation tick either (2985ms against 2989ms).
+
+     Nothing about the design changes. Every one of these is a decorative
+     loop with no end state, they animate only transform and background
+     position so no layout can shift either way, and the 300px margin means
+     they are already running by the time the section is on screen. */
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = rootRef.current?.closest(".tech-partner");
+    if (!section || typeof IntersectionObserver !== "function") return;
+
+    /* Watched per card, not per section. The section is 3,337px tall with its
+       top on the fold, so it is always intersecting — it is the cards further
+       down it that are off screen, and they are what carry the loops. */
+    const cards = section.querySelectorAll<HTMLElement>(
+      ".intro-card, .service-card__image"
+    );
+    if (!cards.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          entry.target.classList.toggle("is-anim-idle", !entry.isIntersecting);
+        }
+      },
+      { rootMargin: "300px 0px" }
+    );
+
+    /* Idle until the observer says otherwise. Its first callback arrives a
+       frame later, and on a cold load every one of these is below the fold. */
+    cards.forEach((card) => {
+      card.classList.add("is-anim-idle");
+      io.observe(card);
+    });
+
+    return () => {
+      io.disconnect();
+      /* Left running, not idle: the class is only ever an optimisation, and a
+         remount must not be able to strand a card without its animation. */
+      cards.forEach((card) => card.classList.remove("is-anim-idle"));
+    };
+  }, []);
+
   return (
-    <div className="intro">
+    <div className="intro" ref={rootRef}>
       <div className="section-head">
         <ScrollGenerativeText
           text={
