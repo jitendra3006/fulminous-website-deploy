@@ -1067,14 +1067,18 @@ button {
   margin-right: 4px;
 }
 
+/* The aura breathes; the tile itself does not move.
+   This used to animate transform: translateY(0 -> -2px) alongside the glow, so
+   the badge bobbed on a 3s loop. It sits inline with "Discuss. Design. Develop"
+   and with the arrow pointing at it, and against that fixed baseline the drift
+   read as the tile being loose rather than as life. Below desktop it was
+   already held still, by a copy of this pulse with the transform taken out. */
 @keyframes aiBadgeAuraPulse {
   0%, 100% {
     box-shadow: 0 6px 20px rgba(22, 74, 158, 0.16), 0 0 0 0 rgba(37, 176, 247, 0.4);
-    transform: translateY(0);
   }
   50% {
     box-shadow: 0 10px 30px rgba(22, 74, 158, 0.28), 0 0 0 10px rgba(37, 176, 247, 0);
-    transform: translateY(-2px);
   }
 }
 
@@ -12991,25 +12995,12 @@ body.nav-open .contact-dock {
    hover slide comes with it and is harmless on touch, where there is no
    hover to trigger it. */
 
-/* The hero's AI tile bobs 2px up and back on a 3s loop — aiBadgeAuraPulse
-   animates transform alongside its glow. Below desktop the tile is small and
-   sits right under the headline, where that drift reads as the badge being
-   loose rather than as life. This is the same pulse with the transform taken
-   out: the aura still breathes, the tile does not move. */
-@keyframes aiBadgeAuraPulseStill {
-  0%, 100% {
-    box-shadow: 0 6px 20px rgba(22, 74, 158, 0.16), 0 0 0 0 rgba(37, 176, 247, 0.4);
-  }
-  50% {
-    box-shadow: 0 10px 30px rgba(22, 74, 158, 0.28), 0 0 0 10px rgba(37, 176, 247, 0);
-  }
-}
-
 @media (max-width: 1023.98px) {
-  /* The mobile block further up sets box-shadow with !important, so the
-     animation needs it too or the keyframes lose to it. */
+  /* The same pulse as desktop, restated only because the mobile block further
+     up sets box-shadow with !important — without a matching !important here
+     the keyframes lose to it and the aura stops breathing. */
   .hero__ai-badge {
-    animation: aiBadgeAuraPulseStill 3s ease-in-out infinite !important;
+    animation: aiBadgeAuraPulse 3s ease-in-out infinite !important;
   }
 }
 
