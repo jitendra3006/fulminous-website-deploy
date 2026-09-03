@@ -8,6 +8,29 @@ interface AiQueryPanelProps {
   initialQuery?: string;
 }
 
+/* The ten confetti pieces on the confirmation line. Each is a destination
+   relative to the centre of the line, a turn to make on the way, a colour and a
+   small offset off the start; the keyframe in globals.css reads them as custom
+   properties, so ten trajectories cost one animation.
+
+   Hand-placed, not randomised — Math.random would hand the server and the
+   client different values and break hydration. Shorter throws than the contact
+   form's burst because the layer that clips this one is only 76px tall, and
+   three colours the card already uses: brand blue, the accent orange, and the
+   green this line turns on success. */
+const CONFETTI = [
+  { dx: "-58px", dy: "-16px", spin: "-150deg", c: "#164a9e", delay: "0ms" },
+  { dx: "-42px", dy: "-30px", spin: "120deg", c: "var(--color-accent)", delay: "40ms" },
+  { dx: "-22px", dy: "-34px", spin: "-100deg", c: "#15803d", delay: "10ms" },
+  { dx: "-6px", dy: "-30px", spin: "180deg", c: "#164a9e", delay: "60ms" },
+  { dx: "18px", dy: "-34px", spin: "-130deg", c: "var(--color-accent)", delay: "20ms" },
+  { dx: "40px", dy: "-28px", spin: "160deg", c: "#15803d", delay: "50ms" },
+  { dx: "60px", dy: "-14px", spin: "-90deg", c: "#164a9e", delay: "80ms" },
+  { dx: "-34px", dy: "22px", spin: "140deg", c: "var(--color-accent)", delay: "30ms" },
+  { dx: "8px", dy: "26px", spin: "-170deg", c: "#164a9e", delay: "70ms" },
+  { dx: "46px", dy: "20px", spin: "110deg", c: "#15803d", delay: "0ms" },
+];
+
 /**
  * Inline expansion of the sticky "Ask anything..." dock — not a modal.
  *
@@ -170,10 +193,29 @@ export function AiQueryPanel({ isOpen, onClose, initialQuery = "" }: AiQueryPane
                 </>
               ) : (
                 <>
+                  {/* Out of the flex flow (absolute, see globals.css), so it
+                      adds no gap between the tick and the sentence. */}
+                  <span className="ai-panel-confetti" aria-hidden="true">
+                    {CONFETTI.map((piece, i) => (
+                      <span
+                        key={i}
+                        className="ai-panel-confetti-piece"
+                        style={
+                          {
+                            "--dx": piece.dx,
+                            "--dy": piece.dy,
+                            "--spin": piece.spin,
+                            "--c": piece.c,
+                            "--delay": piece.delay,
+                          } as React.CSSProperties
+                        }
+                      />
+                    ))}
+                  </span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
-                  Query Submitted Successfully
+                  Thanks for your query
                 </>
               )}
             </div>

@@ -34,6 +34,38 @@ import React from "react";
 const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const CODE_LENGTH = 5;
 
+/* The twelve confetti pieces. Each one is a destination relative to the centre
+   of the line, a turn to make on the way there, a colour and a tiny offset off
+   the start; one keyframe in globals.css reads them as custom properties, so
+   twelve trajectories cost one animation.
+
+   Hand-placed rather than randomised: Math.random here would give the server
+   and the client different values and break hydration, and a fixed spread beats
+   most random ones anyway — this one fans wider than it is tall and throws
+   more pieces up than down, which is what a popper does.
+
+   Three colours, all already on the page: white and the pale warm tone the
+   panel's own error line uses, plus --color-accent, which is the orange in the
+   section heading above. Nothing here introduces a colour the design does not
+   already have.
+
+   Delays span 90ms, not zero: a burst where every piece leaves on the same
+   frame looks mechanical, and 90ms is short enough to still read as one event. */
+const CONFETTI = [
+  { dx: "-88px", dy: "-34px", spin: "-160deg", c: "#ffffff", delay: "0ms" },
+  { dx: "-64px", dy: "-58px", spin: "120deg", c: "var(--color-accent)", delay: "40ms" },
+  { dx: "-38px", dy: "-72px", spin: "-90deg", c: "#ffe3b0", delay: "10ms" },
+  { dx: "-14px", dy: "-80px", spin: "200deg", c: "#ffffff", delay: "70ms" },
+  { dx: "14px", dy: "-78px", spin: "-140deg", c: "var(--color-accent)", delay: "20ms" },
+  { dx: "40px", dy: "-68px", spin: "170deg", c: "#ffffff", delay: "60ms" },
+  { dx: "66px", dy: "-54px", spin: "-110deg", c: "#ffe3b0", delay: "30ms" },
+  { dx: "90px", dy: "-30px", spin: "150deg", c: "var(--color-accent)", delay: "80ms" },
+  { dx: "-76px", dy: "22px", spin: "-130deg", c: "#ffe3b0", delay: "50ms" },
+  { dx: "-30px", dy: "34px", spin: "100deg", c: "#ffffff", delay: "90ms" },
+  { dx: "32px", dy: "32px", spin: "-180deg", c: "var(--color-accent)", delay: "0ms" },
+  { dx: "78px", dy: "20px", spin: "140deg", c: "#ffffff", delay: "50ms" },
+];
+
 type Mode = "image" | "question";
 
 function randomCode() {
@@ -104,6 +136,7 @@ export function ContactCaptcha() {
   const [sum, setSum] = React.useState(() => ({ a: 0, b: 0, answer: "" }));
   const [entry, setEntry] = React.useState("");
   const [error, setError] = React.useState("");
+  const [sent, setSent] = React.useState(false);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   const issue = React.useCallback((next: Mode) => {
@@ -151,11 +184,41 @@ export function ContactCaptcha() {
       return;
     }
 
-    /* Everything checks out. There is no endpoint on this form yet, so there is
-       deliberately no success message here: telling someone their enquiry was
-       sent when nothing was sent is worse than telling them nothing. Wire the
-       submit to an API route and the call goes here. */
+    /* Everything checks out. The confirmation below is UI only — there is still
+       no endpoint on this form, so nothing has left the browser at this point.
+       Wire the submit to an API route and the call goes here, before setSent,
+       so the message follows a real response rather than standing in for one. */
     setError("");
+    setSent(true);
+  }
+
+  /* Once it has been sent, the challenge and the button have nothing left to
+     do, so the confirmation takes their place rather than stacking under them.
+     role="status" on the line itself: it appears in response to a press, and a
+     polite live region is what announces that without stealing focus. */
+  if (sent) {
+    return (
+      <p className="contact__thanks" role="status" aria-live="polite">
+        <span className="contact__thanks-confetti" aria-hidden="true">
+          {CONFETTI.map((piece, i) => (
+            <span
+              key={i}
+              className="contact__thanks-piece"
+              style={
+                {
+                  "--dx": piece.dx,
+                  "--dy": piece.dy,
+                  "--spin": piece.spin,
+                  "--c": piece.c,
+                  "--delay": piece.delay,
+                } as React.CSSProperties
+              }
+            />
+          ))}
+        </span>
+        Thanks for your query
+      </p>
+    );
   }
 
   return (

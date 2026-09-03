@@ -1,6 +1,6 @@
 {
  "generated": "2026-09-02",
- "rules": 1773,
+ "rules": 1783,
  "criticalCount": 502,
  "deferred": [
   ".container",
@@ -1273,6 +1273,16 @@
   ".contact__captcha-error:empty",
   "@media (max-width:767.98px) » .contact__captcha-input",
   "@media (max-width:767.98px) » .hero__headline .hero__word:nth-of-type(2) #2",
-  "@media (max-width:767.98px) » .hero__headline .hero__word:nth-of-type(3) #2"
+  "@media (max-width:767.98px) » .hero__headline .hero__word:nth-of-type(3) #2",
+  ".contact__thanks",
+  "@keyframes contactThanksIn",
+  "@media (prefers-reduced-motion:reduce) » .contact__thanks",
+  ".contact__thanks-confetti",
+  ".contact__thanks-piece",
+  "@keyframes contactConfettiBurst",
+  "@media (prefers-reduced-motion:reduce) » .contact__thanks-confetti",
+  ".ai-panel-confetti",
+  ".ai-panel-confetti-piece",
+  "@media (prefers-reduced-motion:reduce) » .ai-panel-confetti"
  ]
 }

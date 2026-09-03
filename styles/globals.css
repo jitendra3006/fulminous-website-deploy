@@ -13033,6 +13033,9 @@ body.nav-open .contact-dock {
 }
 
 .ai-panel-status {
+  /* Anchor for the confetti layer below; nothing else in this row is
+     positioned, so this only gives the burst something to sit against. */
+  position: relative;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -13052,6 +13055,62 @@ body.nav-open .contact-dock {
 .ai-panel-status .ai-modal-spinner {
   border-color: rgba(22, 74, 158, 0.25);
   border-top-color: #164a9e;
+}
+
+/* ============================================================
+   THE BURST ON THE PANEL'S CONFIRMATION LINE
+   ------------------------------------------------------------
+   Same idea as the one on the contact form's success line, and it
+   borrows that line's keyframe — contactConfettiBurst reads its whole
+   trajectory from --dx/--dy/--spin, so a second copy of it here would
+   be twenty identical lines in a sheet that has had every kilobyte
+   argued over. What it cannot borrow is the look: that burst is white
+   and cream because it goes off against the primary blue panel, and
+   this one sits on a white card, so the pieces are the card's own ink
+   — brand blue, the accent orange, and the green this line already
+   turns on success.
+
+   The clipping box is not optional. .ai-panel is a scroll container
+   (overflow-y: auto, so overflow-x resolves to auto with it), and an
+   absolutely positioned child that flies past its padding would add to
+   the panel's scrollable area — a confirmation that makes the popup
+   scrollable for a second. overflow: hidden on this layer keeps every
+   piece inside a box the panel already has room for, which is also why
+   the travel is shorter than the contact form's.
+
+   position: relative goes on .ai-panel-status above so this can be
+   absolute against it: out of flow, so it takes no part in that flex
+   row and cannot add one of its 9px gaps between the tick and the text.
+   ============================================================ */
+.ai-panel-confetti {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 76px;
+  margin-top: -38px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ai-panel-confetti-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 7px;
+  border-radius: 1px;
+  background: var(--c);
+  opacity: 0;
+  animation: contactConfettiBurst 0.95s cubic-bezier(0.16, 0.85, 0.3, 1)
+    var(--delay) both;
+}
+
+/* The sentence is the content; the burst is decoration. */
+@media (prefers-reduced-motion: reduce) {
+  .ai-panel-confetti {
+    display: none;
+  }
 }
 
 @media (max-width: 575.98px) {
@@ -15667,6 +15726,123 @@ body.nav-open .contact-dock {
   min-height: 0;
   height: 0;
   overflow: hidden;
+}
+
+/* ============================================================
+   THE SUCCESS LINE, AND THE BURST THAT COMES WITH IT
+   ------------------------------------------------------------
+   Shown in place of the captcha row and the submit button once the
+   form has validated. New selectors only — nothing above is
+   redefined, and none of this has a box on the page until
+   ContactCaptcha sets its `sent` state, so the section renders
+   exactly as it did before anyone presses the button.
+
+   The confetti is twelve empty <span>s, 5x9px each, coloured from the
+   brand palette. No glyphs, no images, no library: nothing here costs
+   a request, a font lookup or a decode.
+
+   It fires once and stops — `both`, not `infinite`. A loop on a
+   confirmation line reads as an animation that has got stuck, and
+   this is a business enquiry form rather than a game. 1.05s end to
+   end, so it is finished before anyone has read the sentence twice.
+
+   The burst origin is the centre of the line: the layer is a
+   zero-size box pinned there, and each piece flies out from it on its
+   own --dx/--dy/--spin, set inline in the component, so one keyframe
+   drives all twelve. The easing is a hard ease-out, which is what
+   makes it read as a popper losing momentum rather than twelve rects
+   sliding apart. transform and opacity only — both composite, so this
+   cannot cost layout in a section that has just run a validation
+   pass — and pointer-events:none, so it cannot intercept a click.
+   ============================================================ */
+.contact__thanks {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  /* Matches the submit button's box so replacing one with the other
+     does not change the height of the form. */
+  min-height: 56px;
+  padding: 16px 24px;
+  border-radius: var(--radius-16);
+  background: rgba(255, 255, 255, 0.14);
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-16);
+  color: var(--color-white);
+  text-align: center;
+  animation: contactThanksIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes contactThanksIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* A zero-size origin at the centre of the line. Nothing to lay out, and
+   the pieces are free to travel past the edges of the message without a
+   clipping box to fight. */
+.contact__thanks-confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.contact__thanks-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 9px;
+  border-radius: 1px;
+  background: var(--c);
+  opacity: 0;
+  animation: contactConfettiBurst 1.05s cubic-bezier(0.16, 0.85, 0.3, 1)
+    var(--delay) both;
+}
+
+/* Out, turning, and gone. The travel is deliberately short — the far
+   pieces stop about 90px out, which keeps the whole burst inside the
+   width of the line it came from at every breakpoint. */
+@keyframes contactConfettiBurst {
+  from {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0.6);
+  }
+  12% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--spin)) scale(1);
+  }
+}
+
+/* Anyone who has asked for less motion gets the sentence and nothing
+   else. The line is the content; the burst is decoration, and twelve
+   rects frozen mid-flight would read as debris rather than as a
+   celebration held still. */
+@media (prefers-reduced-motion: reduce) {
+  .contact__thanks {
+    animation: none;
+  }
+
+  .contact__thanks-confetti {
+    display: none;
+  }
 }
 
 @media (max-width: 767.98px) {
