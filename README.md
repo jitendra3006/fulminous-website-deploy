@@ -22,7 +22,7 @@ npm run dev          # http://localhost:3000
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
 | `npm run lint` | `next lint` |
-| `npm run optimize:images` | Re-encode oversized rasters in `public/assets` to WebP and repoint every reference (see [Assets](#assets)) |
+| `npm run optimize:images` | Re-encode oversized rasters in `public/next-assets` to WebP and repoint every reference (see [Assets](#assets)) |
 
 **Environment**
 
@@ -44,7 +44,7 @@ hooks/        useHeaderObserver, useAnimationObserver, useMobileMenu
 lib/          site-config.ts — single source of truth for the SEO/contact layer
 scripts/      optimize-images.js
 styles/       globals.css
-public/       assets/ (images, SVG icons)
+public/       next-assets/ (images, SVG icons)
 ```
 
 ---
@@ -153,7 +153,7 @@ underlying component architecture.
   measures its awards column inside `requestIdleCallback` (with a `setTimeout`
   fallback for Safari) instead of during hydration, where the clone was a burst of
   DOM writes and the measure a forced reflow.
-- **Long-lived caching** for `/assets/*`: `max-age=2592000, stale-while-revalidate=604800`
+- **Long-lived caching** for `/next-assets/*`: `max-age=2592000, stale-while-revalidate=604800`
   (30 days + a week). Not `immutable` — these filenames are not content-hashed, so
   a logo swap has to be able to go live.
 - Lazy loading and `decoding="async"` throughout; the few marquee logos that must

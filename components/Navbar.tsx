@@ -676,7 +676,7 @@ export function Navbar() {
               it on image-aspect-ratio. The rendered width is still 177px; the
               stylesheet takes the height from the ratio now. */}
           <img
-            src="/assets/Fulminous-Logo.webp"
+            src="/next-assets/Fulminous-Logo.webp"
             alt="Fulminous Software logo"
             width={373}
             height={92}

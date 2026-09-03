@@ -23,7 +23,7 @@ const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
 const sharp = require("sharp");
-const ASSETS = path.join(ROOT, "public/assets");
+const ASSETS = path.join(ROOT, "public/next-assets");
 const KEEP = path.join(ROOT, ".image-originals");
 
 const CAPS = [
@@ -58,7 +58,7 @@ walk(ROOT);
 const referenced = new Map();
 for (const file of CODE) {
   const s = fs.readFileSync(file, "utf8");
-  for (const m of s.matchAll(/\/assets\/([^"'`)]+?\.(?:png|jpe?g))/gi)) {
+  for (const m of s.matchAll(/\/next-assets\/([^"'`)]+?\.(?:png|jpe?g))/gi)) {
     const name = decodeURIComponent(m[1]);
     if (!referenced.has(name)) referenced.set(name, []);
     referenced.get(name).push(file);

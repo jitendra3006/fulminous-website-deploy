@@ -51,15 +51,15 @@ export function Cases() {
                 <div className="case-thumb__shots">
                   <img
               decoding="async"
-              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/assets/Trailmates-16.webp" alt="" width={462} height={1000} />
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/next-assets/Trailmates-16.webp" alt="" width={462} height={1000} />
                   <img
               decoding="async"
-              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/assets/Trailmates-18.webp" alt="" width={462} height={1000} />
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/next-assets/Trailmates-18.webp" alt="" width={462} height={1000} />
                   <img
               decoding="async"
               loading="lazy"
                     className="case-thumb__shot case-thumb__shot--front"
-                    src="/assets/Trailmates-1.webp"
+                    src="/next-assets/Trailmates-1.webp"
                     alt="Trailmates app screenshot" width={462} height={1000} />
                 </div>
               </div>
@@ -84,15 +84,15 @@ export function Cases() {
                 <div className="case-thumb__shots">
                   <img
               decoding="async"
-              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/assets/Bingo-2.webp" alt="" width={462} height={1000} />
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/next-assets/Bingo-2.webp" alt="" width={462} height={1000} />
                   <img
               decoding="async"
-              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/assets/Bingo-3.webp" alt="" width={462} height={1000} />
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/next-assets/Bingo-3.webp" alt="" width={462} height={1000} />
                   <img
               decoding="async"
               loading="lazy"
                     className="case-thumb__shot case-thumb__shot--front"
-                    src="/assets/Bingo-1.webp"
+                    src="/next-assets/Bingo-1.webp"
                     alt="Bingo game app screenshot" width={585} height={1266} />
                 </div>
               </div>
@@ -117,15 +117,15 @@ export function Cases() {
               <div className="case-thumb__shots">
                 <img
               decoding="async"
-              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/assets/HotelOps-2.webp" alt="" width={462} height={1000} />
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-l" src="/next-assets/HotelOps-2.webp" alt="" width={462} height={1000} />
                 <img
               decoding="async"
-              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/assets/HotelOps-1.webp" alt="" width={462} height={1000} />
+              loading="lazy" className="case-thumb__shot case-thumb__shot--back-r" src="/next-assets/HotelOps-1.webp" alt="" width={462} height={1000} />
                 <img
               decoding="async"
               loading="lazy"
                   className="case-thumb__shot case-thumb__shot--front"
-                  src="/assets/HotelOps-3.webp"
+                  src="/next-assets/HotelOps-3.webp"
                   alt="HotelOps website screenshot" width={462} height={1000} />
               </div>
             </div>

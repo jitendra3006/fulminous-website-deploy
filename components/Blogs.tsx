@@ -69,7 +69,7 @@ export function Blogs() {
               <img
               decoding="async"
               loading="lazy"
-                src="/assets/Blog-1.webp"
+                src="/next-assets/Blog-1.webp"
                 alt="Three colleagues smiling over a laptop in a bright open-plan office"
                 width={375}
                 height={228}
@@ -91,7 +91,7 @@ export function Blogs() {
               <img
               decoding="async"
               loading="lazy"
-                src="/assets/Blog-2.webp"
+                src="/next-assets/Blog-2.webp"
                 alt="Hand touching a hexagonal diagram of social engineering attack types"
                 width={375}
                 height={228}
@@ -113,7 +113,7 @@ export function Blogs() {
               <img
               decoding="async"
               loading="lazy"
-                src="/assets/Blog-3.webp"
+                src="/next-assets/Blog-3.webp"
                 alt="Team reviewing a whiteboard of sticky notes during a sprint planning session"
                 width={375}
                 height={228}

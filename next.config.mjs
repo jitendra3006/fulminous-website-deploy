@@ -114,7 +114,7 @@ const nextConfig = {
 
            Fonts and JS under /_next are hashed and already get a year from
            Next. */
-        source: "/assets/:path*",
+        source: "/next-assets/:path*",
         headers: [
           {
             key: "Cache-Control",

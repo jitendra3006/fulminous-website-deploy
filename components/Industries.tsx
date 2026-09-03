@@ -66,7 +66,7 @@ export function Industries() {
                 <div className="industry-card__icon-wrap">
                   <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/HealthCare.svg?v=2" alt="HealthCare" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/HealthCare.svg?v=2" alt="HealthCare" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
                 </div>
                 <div className="industry-card__text">
                   <h3 className="industry-card__title">HealthCare</h3>
@@ -80,7 +80,7 @@ export function Industries() {
                 <div className="industry-card__icon-wrap">
                   <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/Banking & Finance.svg?v=2" alt="Banking & Finance" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/Banking & Finance.svg?v=2" alt="Banking & Finance" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
                 </div>
                 <div className="industry-card__text">
                   <h3 className="industry-card__title">Banking &amp; Finance</h3>
@@ -94,7 +94,7 @@ export function Industries() {
                 <div className="industry-card__icon-wrap">
                   <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/Real-Estate.svg?v=2" alt="Real Estate" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/Real-Estate.svg?v=2" alt="Real Estate" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
                 </div>
                 <div className="industry-card__text">
                   <h3 className="industry-card__title">Real Estate</h3>
@@ -111,7 +111,7 @@ export function Industries() {
               <div className="industry-card__icon-wrap">
                 <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/Travel & Hospitality.svg?v=2" alt="Travel & Hospitality" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/Travel & Hospitality.svg?v=2" alt="Travel & Hospitality" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Travel &amp; Hospitality</h3>
@@ -125,7 +125,7 @@ export function Industries() {
               <div className="industry-card__icon-wrap">
                 <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/Media & Entertainment.svg?v=2" alt="Media & Entertainment" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/Media & Entertainment.svg?v=2" alt="Media & Entertainment" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Media &amp; Entertainment</h3>
@@ -139,7 +139,7 @@ export function Industries() {
               <div className="industry-card__icon-wrap">
                 <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/E-commerce & Retail.svg?v=2" alt="E-commerce & Retail" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/E-commerce & Retail.svg?v=2" alt="E-commerce & Retail" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">E-commerce &amp; Retail</h3>
@@ -153,7 +153,7 @@ export function Industries() {
               <div className="industry-card__icon-wrap">
                 <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/Education & e-Learning.svg?v=2" alt="Education & e-Learning" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/Education & e-Learning.svg?v=2" alt="Education & e-Learning" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Education &amp; e-Learning</h3>
@@ -167,7 +167,7 @@ export function Industries() {
               <div className="industry-card__icon-wrap">
                 <img
               decoding="async"
-              loading="lazy" className="industry-card__icon" src="/assets/icons/Food & Restaurant.svg?v=2" alt="Food & Restaurant" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
+              loading="lazy" className="industry-card__icon" src="/next-assets/icons/Food & Restaurant.svg?v=2" alt="Food & Restaurant" width="48" height="48" style={{ width: "48px", height: "48px", objectFit: "contain" }} />
               </div>
               <div className="industry-card__text">
                 <h3 className="industry-card__title">Food &amp; Restaurant</h3>
@@ -218,7 +218,7 @@ export function Industries() {
               decoding="async"
               loading="lazy"
                 className="review-stat__logo"
-                src="/assets/upwork.webp"
+                src="/next-assets/upwork.webp"
                 alt="Upwork 4.9 out of 5 review rating"
                 width={347}
                 height={68}
@@ -235,7 +235,7 @@ export function Industries() {
               <div className="trustpilot-card-inner">
                 <div className="trustpilot-card-head">
                   {/* The G2 mark, in the slot the Trustpilot star used to hold.
-                      Padded to a square canvas in /assets rather than shipped at
+                      Padded to a square canvas in /next-assets rather than shipped at
                       its native 293x301, because the card forces this box to
                       64x64 on desktop and 42x42 below 640 and a non-square source
                       would come out squashed by those rules.
@@ -247,7 +247,7 @@ export function Industries() {
                     decoding="async"
                     loading="lazy"
                     className="trustpilot-star-svg"
-                    src="/assets/g2-logo.webp"
+                    src="/next-assets/g2-logo.webp"
                     alt=""
                     aria-hidden="true"
                     width={64}
@@ -289,7 +289,7 @@ export function Industries() {
               decoding="async"
               loading="lazy"
                 className="review-stat__logo"
-                src="/assets/GoodFirms.webp"
+                src="/next-assets/GoodFirms.webp"
                 alt="GoodFirms 4.9 out of 5 review rating"
                 width={253}
                 height={39}

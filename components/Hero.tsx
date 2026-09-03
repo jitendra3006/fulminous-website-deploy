@@ -102,7 +102,7 @@ export function Hero() {
               supply the ratio, which is what the unsized-images audit and the
               hero fit pass both want. */}
           <img
-            src="/assets/arrow.png"
+            src="/next-assets/arrow.png"
             className="ai_annimation"
             alt="arrow"
             width={150}
@@ -147,7 +147,7 @@ export function Hero() {
           {/* Card 1: Clutch */}
           <div className="hero__review-card">
             <img
-              src="/assets/clutch.webp"
+              src="/next-assets/clutch.webp"
               width={900}
               height={317}
               alt="Reviewed on Clutch 5.0 out of 5.0"
@@ -158,7 +158,7 @@ export function Hero() {
           {/* Card 2: Trustpilot */}
           <div className="hero__review-card">
             <img
-              src="/assets/Trustpilot.webp"
+              src="/next-assets/Trustpilot.webp"
               width={900}
               height={317}
               alt="Reviewed on Trustpilot 5.0 out of 5.0"
@@ -169,7 +169,7 @@ export function Hero() {
           {/* Card 3: Google */}
           <div className="hero__review-card">
             <img
-              src="/assets/Google-reviews.webp"
+              src="/next-assets/Google-reviews.webp"
               width={900}
               height={317}
               alt="Reviewed on Google 5.0 out of 5.0"

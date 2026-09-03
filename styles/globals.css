@@ -2729,7 +2729,7 @@ button {
   content: "";
   position: absolute;
   inset: -10px;
-  background-image: url("/assets/Tech-Powered Growth.webp");
+  background-image: url("/next-assets/Tech-Powered Growth.webp");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -15538,7 +15538,7 @@ body.nav-open .contact-dock {
    ============================================================ */
 @media (max-width: 1023.98px) {
   .intro-card--growth::before {
-    background-image: url("/assets/Tech-Powered Growth-800.webp");
+    background-image: url("/next-assets/Tech-Powered Growth-800.webp");
   }
 }
 

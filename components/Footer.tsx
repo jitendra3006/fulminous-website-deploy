@@ -12,7 +12,7 @@ export function Footer() {
               decoding="async"
               loading="lazy"
                 className="footer__logo"
-                src="/assets/Fulminous-Logo.webp"
+                src="/next-assets/Fulminous-Logo.webp"
                 alt="Fulminous Software logo"
                 width={177}
                 height={46}
@@ -211,7 +211,7 @@ export function Footer() {
             <div className="office">
               <img
               decoding="async"
-              loading="lazy" className="office__map" src="/assets/UK Office.webp" alt="Map of UK office location" width={520} height={223} />
+              loading="lazy" className="office__map" src="/next-assets/UK Office.webp" alt="Map of UK office location" width={520} height={223} />
               <p className="office__name">UK Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> 31 Lemington Gardens, IG39TX, Seven kings, London
@@ -222,7 +222,7 @@ export function Footer() {
             <div className="office">
               <img
               decoding="async"
-              loading="lazy" className="office__map" src="/assets/USA Office.webp" alt="Map of USA office location" width={520} height={223} />
+              loading="lazy" className="office__map" src="/next-assets/USA Office.webp" alt="Map of USA office location" width={520} height={223} />
               <p className="office__name">USA Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> 1113, WA Gamble Rd, Manning, South Carolina, 29102
@@ -233,7 +233,7 @@ export function Footer() {
             <div className="office">
               <img
               decoding="async"
-              loading="lazy" className="office__map" src="/assets/AUS Office.webp" alt="Map of Australia office location" width={520} height={223} />
+              loading="lazy" className="office__map" src="/next-assets/AUS Office.webp" alt="Map of Australia office location" width={520} height={223} />
               <p className="office__name">AUS Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> 20 Mckinlay Ave Adelaide 5086, AUS
@@ -244,7 +244,7 @@ export function Footer() {
             <div className="office">
               <img
               decoding="async"
-              loading="lazy" className="office__map" src="/assets/IND Office.webp" alt="Map of India office location" width={520} height={223} />
+              loading="lazy" className="office__map" src="/next-assets/IND Office.webp" alt="Map of India office location" width={520} height={223} />
               <p className="office__name">IND Office</p>
               <p className="office__addr">
                 <strong>Address:</strong> B-54 Kings Rd, Nirman Nagar, Jaipur, Raj. 302019

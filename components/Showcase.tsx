@@ -15,7 +15,7 @@ import { isExternalHref, live } from "@/lib/site-config";
 const SLIDES_DATA = [
   {
     name: "Game Development Services",
-    iconImg: "/assets/icons/Game Developemnt Services.svg",
+    iconImg: "/next-assets/icons/Game Developemnt Services.svg",
     desc: "Top game development experts deliver amazing gaming experiences with innovative game apps and software :",
     links: [
       { href: live("/betting-app-development"), label: "Betting App Development" },
@@ -25,12 +25,12 @@ const SLIDES_DATA = [
       { href: live("/bingo-game-development-company"), label: "Bingo Game Development" },
       { href: live("/poker-game-development-company"), label: "Poker Game Development" },
     ],
-    imgSrc: "/assets/Game-Development-Banner.webp",
+    imgSrc: "/next-assets/Game-Development-Banner.webp",
     imgAlt: "Game Development Services illustration",
   },
   {
     name: "Dedicated Teams & Staff Augmentation",
-    iconImg: "/assets/icons/Software Development.svg",
+    iconImg: "/next-assets/icons/Software Development.svg",
     desc: "Fulminous Software helps you to access the services of dedicated teams and staff augmentation for affordable development :",
     links: [
       { href: live("/outsourcing-services"), label: "Dedicated Development Teams" },
@@ -40,12 +40,12 @@ const SLIDES_DATA = [
       { href: live("/software-development-consulting-company"), label: "Technical Consulting" },
       { href: live("/software-consulting-development-services"), label: "Managed Development Services" },
     ],
-    imgSrc: "/assets/Dedicated-Teams-IMG.webp",
+    imgSrc: "/next-assets/Dedicated-Teams-IMG.webp",
     imgAlt: "A development team working together in an office",
   },
   {
     name: "Quality Assurance",
-    iconImg: "/assets/icons/Quality Assurance.svg",
+    iconImg: "/next-assets/icons/Quality Assurance.svg",
     desc: "We evaluate the performance of software solutions in all aspects and provide support for enhancement :",
     links: [
       /* The live site publishes one QA page, not six. All six labels point
@@ -57,12 +57,12 @@ const SLIDES_DATA = [
       { href: live("/software-testing-services"), label: "Mobile App Testing" },
       { href: live("/software-testing-services"), label: "QA Consulting" },
     ],
-    imgSrc: "/assets/Quality-Assurance-IMG.webp",
+    imgSrc: "/next-assets/Quality-Assurance-IMG.webp",
     imgAlt: "Quality Assurance illustration",
   },
   {
     name: "E-commerce Solutions",
-    iconImg: "/assets/icons/E-commerce Solutions.svg",
+    iconImg: "/next-assets/icons/E-commerce Solutions.svg",
     desc: "Now, develop custom e-commerce platforms with the assistance of our experts in various e-commerce platforms :",
     links: [
       { href: live("/ecommerce-development-services"), label: "E-commerce Website" },
@@ -72,12 +72,12 @@ const SLIDES_DATA = [
       { href: live("/ecommerce-software-development"), label: "Payment Gateway Integration" },
       { href: live("/it-infrastructure-support-services"), label: "Maintenance & Support" },
     ],
-    imgSrc: "/assets/E-commerce-Solutions-IMG.webp",
+    imgSrc: "/next-assets/E-commerce-Solutions-IMG.webp",
     imgAlt: "E-commerce Solutions illustration",
   },
   {
     name: "Cloud & DevOps",
-    iconImg: "/assets/icons/Cloud & DevOps.svg",
+    iconImg: "/next-assets/icons/Cloud & DevOps.svg",
     desc: "Fulminous Software offers complete cloud development solutions, bringing you maximum accessibility :",
     links: [
       { href: live("/legacy-to-cloud-modernization-services"), label: "Cloud Migration" },
@@ -87,12 +87,12 @@ const SLIDES_DATA = [
       { href: live("/cloud-computing-development-services"), label: "Containerization & Orchestration" },
       { href: live("/it-infrastructure-support-services"), label: "Performance Monitoring" },
     ],
-    imgSrc: "/assets/Cloud-&-DevOps-IMG.webp",
+    imgSrc: "/next-assets/Cloud-&-DevOps-IMG.webp",
     imgAlt: "Cloud & DevOps illustration",
   },
   {
     name: "AI Development",
-    iconImg: "/assets/icons/AI Development.svg",
+    iconImg: "/next-assets/icons/AI Development.svg",
     desc: "Fulminous Software develops the latest AI solutions for all your business needs :",
     links: [
       { href: live("/enterprise-ai-development-company"), label: "AI Development Services" },
@@ -102,12 +102,12 @@ const SLIDES_DATA = [
       { href: live("/ai-agent-development-company"), label: "AI Agent Development" },
       { href: live("/ai-consulting-services"), label: "AI Consulting Services" },
     ],
-    imgSrc: "/assets/AI-Develoment.webp",
+    imgSrc: "/next-assets/AI-Develoment.webp",
     imgAlt: "AI Development illustration",
   },
   {
     name: "Mobile App Development",
-    iconImg: "/assets/icons/Mobile App Development.svg",
+    iconImg: "/next-assets/icons/Mobile App Development.svg",
     desc: "We develop custom mobile apps with trending features and engaging designs :",
     links: [
       { href: live("/mobile-application-development"), label: "Mobile App Development" },
@@ -117,12 +117,12 @@ const SLIDES_DATA = [
       { href: live("/cross-platform-application-development-services"), label: "Cross-Platform App Development" },
       { href: live("/wearable-app-development-services"), label: "Wearable App Development" },
     ],
-    imgSrc: "/assets/Mobile-App-Development-IMG.webp",
+    imgSrc: "/next-assets/Mobile-App-Development-IMG.webp",
     imgAlt: "Mobile App Development illustration",
   },
   {
     name: "Web Development",
-    iconImg: "/assets/icons/Web Development .svg",
+    iconImg: "/next-assets/icons/Web Development .svg",
     desc: "Now get responsive and feature-rich website solutions for your businesses :",
     links: [
       { href: live("/web-application-development-company"), label: "Web Application Development" },
@@ -132,12 +132,12 @@ const SLIDES_DATA = [
       { href: live("/website-development-services"), label: "Custom Web Development" },
       { href: live("/progressive-web-apps-development-services"), label: "Progressive Web Apps (PWA)" },
     ],
-    imgSrc: "/assets/Web-Development-IMG.webp",
+    imgSrc: "/next-assets/Web-Development-IMG.webp",
     imgAlt: "Web Development illustration",
   },
   {
     name: "UI/UX Design",
-    iconImg: "/assets/icons/ui-ux design.svg",
+    iconImg: "/next-assets/icons/ui-ux design.svg",
     desc: "We design highly engaging and attractive UI UX for your digital platforms :",
     links: [
       { href: live("/ui-ux-design-services"), label: "UI UX Design" },
@@ -147,12 +147,12 @@ const SLIDES_DATA = [
       { href: live("/mobile-app-ui-ux-design-services"), label: "Mobile App Design" },
       { href: live("/best-manufacturing-website-design-company"), label: "Manufacturing Web Design" },
     ],
-    imgSrc: "/assets/UI-UX-Design.webp",
+    imgSrc: "/next-assets/UI-UX-Design.webp",
     imgAlt: "UI/UX Design illustration",
   },
   {
     name: "Software Development",
-    iconImg: "/assets/Software-Development-Services.png",
+    iconImg: "/next-assets/Software-Development-Services.png",
     desc: "We develop all types of software solutions that can grow your business :",
     links: [
       { href: live("/custom-healthcare-software-development"), label: "Custom Health Software" },
@@ -162,7 +162,7 @@ const SLIDES_DATA = [
       { href: live("/software-development"), label: "Enterprise Software Solutions" },
       { href: live("/top-saas-application-development-company"), label: "SaaS Product Development" },
     ],
-    imgSrc: "/assets/Software-Development-Code.webp",
+    imgSrc: "/next-assets/Software-Development-Code.webp",
     imgAlt: "Software developer writing code on a laptop",
   },
 ];

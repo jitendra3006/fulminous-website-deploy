@@ -25,17 +25,17 @@ export function Contact() {
                 <div className="hex-badge">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/BusinessFirms.webp" alt="BusinessFirms badge" width={355} height={400} />
+              loading="lazy" src="/next-assets/BusinessFirms.webp" alt="BusinessFirms badge" width={355} height={400} />
                 </div>
                 <div className="hex-badge">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/iTRate.webp" alt="iTRate badge" width={400} height={452} />
+              loading="lazy" src="/next-assets/iTRate.webp" alt="iTRate badge" width={400} height={452} />
                 </div>
                 <div className="hex-badge">
                   <img
               decoding="async"
-              loading="lazy" src="/assets/SelectedFirms.webp" alt="SelectedFirms badge" width={354} height={400} />
+              loading="lazy" src="/next-assets/SelectedFirms.webp" alt="SelectedFirms badge" width={354} height={400} />
                 </div>
               </div>
             </div>

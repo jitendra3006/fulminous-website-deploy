@@ -21,12 +21,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
    1024px is driven off this rather than off the rail's DOM, so the icon for a
    domain is declared once next to its label. */
 const DOMAIN_ICONS = [
-  "/assets/icons/Emerging Technologies & AI.svg",
-  "/assets/icons/Backend Development.svg",
-  "/assets/icons/Frontend Development.svg",
-  "/assets/icons/Mobile Technologies.svg",
-  "/assets/icons/CMS & Ecommerce.svg",
-  "/assets/icons/Cloud Platforms.svg",
+  "/next-assets/icons/Emerging Technologies & AI.svg",
+  "/next-assets/icons/Backend Development.svg",
+  "/next-assets/icons/Frontend Development.svg",
+  "/next-assets/icons/Mobile Technologies.svg",
+  "/next-assets/icons/CMS & Ecommerce.svg",
+  "/next-assets/icons/Cloud Platforms.svg",
 ];
 
 const AccChevron = () => (
@@ -41,43 +41,43 @@ const DOMAINS_DATA = [
     sub: "We create smart solutions using all the latest technologies",
     skills: [
       {
-        iconImg: "/assets/AI & ML.svg",
+        iconImg: "/next-assets/AI & ML.svg",
         icon: "icon-bot",
         title: "AI & ML",
         desc: "Models trained on your data, shipped to production",
       },
       {
-        iconImg: "/assets/Generative AI Development.svg",
+        iconImg: "/next-assets/Generative AI Development.svg",
         icon: "icon-sparkles",
         title: "Generative AI Development",
         desc: "LLM features, retrieval and prompt pipelines",
       },
       {
-        iconImg: "/assets/Chatbot & Virtual Assistant Development.svg",
+        iconImg: "/next-assets/Chatbot & Virtual Assistant Development.svg",
         icon: "icon-qa",
         title: "Chatbot & Virtual Assistant Development",
         desc: "Assistants that answer, qualify and hand over",
       },
       {
-        iconImg: "/assets/IoT Solutions.svg",
+        iconImg: "/next-assets/IoT Solutions.svg",
         icon: "icon-cloud",
         title: "IoT Solutions",
         desc: "Connected devices, telemetry and control",
       },
       {
-        iconImg: "/assets/Blockchain Development Business Intelligence.svg",
+        iconImg: "/next-assets/Blockchain Development Business Intelligence.svg",
         icon: "logo-react",
         title: "Blockchain Development Business Intelligence",
         desc: "Distributed ledgers and the reporting around them",
       },
       {
-        iconImg: "/assets/ARVR Application Development.svg",
+        iconImg: "/next-assets/ARVR Application Development.svg",
         icon: "logo-frontend",
         title: "AR/VR Application Development",
         desc: "Immersive product, training and showroom apps",
       },
       {
-        iconImg: "/assets/Automation & Workflow Solutions.svg",
+        iconImg: "/next-assets/Automation & Workflow Solutions.svg",
         icon: "logo-vue",
         title: "Automation & Workflow Solutions",
         desc: "Manual steps replaced with reliable pipelines",
@@ -89,43 +89,43 @@ const DOMAINS_DATA = [
     sub: "Fulminous Software uses trending technologies to develop backend systems for web and mobile applications",
     skills: [
       {
-        iconImg: "/assets/Node.js Development Services.svg",
+        iconImg: "/next-assets/Node.js Development Services.svg",
         icon: "logo-node",
         title: "Node.js Development Services",
         desc: "Event-driven APIs and services built on Node",
       },
       {
-        iconImg: "/assets/Dot NET Development Services (2).svg",
+        iconImg: "/next-assets/Dot NET Development Services (2).svg",
         icon: "logo-mern",
         title: "Dot NET Development Services",
         desc: "Enterprise services and APIs on .NET and C#",
       },
       {
-        iconImg: "/assets/PHP Web Development.svg",
+        iconImg: "/next-assets/PHP Web Development.svg",
         icon: "logo-php",
         title: "PHP Web Development",
         desc: "Server-rendered PHP apps and REST back ends",
       },
       {
-        iconImg: "/assets/CodeIgniter Framework.svg",
+        iconImg: "/next-assets/CodeIgniter Framework.svg",
         icon: "logo-codeigniter",
         title: "CodeIgniter Framework",
         desc: "Lightweight CodeIgniter builds that stay fast",
       },
       {
-        iconImg: "/assets/CakePHP Web Development.svg",
+        iconImg: "/next-assets/CakePHP Web Development.svg",
         icon: "logo-cakephp",
         title: "CakePHP Web Development",
         desc: "Convention-driven CakePHP applications",
       },
       {
-        iconImg: "/assets/JavaScript Development Solutions.svg",
+        iconImg: "/next-assets/JavaScript Development Solutions.svg",
         icon: "logo-js",
         title: "JavaScript Development Solutions",
         desc: "One JavaScript stack across server and client",
       },
       {
-        iconImg: "/assets/Python Development Services.svg",
+        iconImg: "/next-assets/Python Development Services.svg",
         icon: "logo-python",
         title: "Python Development Services",
         desc: "Python services, data work and integrations",
@@ -137,37 +137,37 @@ const DOMAINS_DATA = [
     sub: "Fulminous Software is proficient in the latest frontend solutions to make your platforms highly engaging and easy to use",
     skills: [
       {
-        iconImg: "/assets/JavaScript Development Solutions.svg",
+        iconImg: "/next-assets/JavaScript Development Solutions.svg",
         icon: "logo-react",
         title: "React.js Development Services",
         desc: "Component-driven React interfaces at any scale",
       },
       {
-        iconImg: "/assets/Angular Development Solutions.svg",
+        iconImg: "/next-assets/Angular Development Solutions.svg",
         icon: "logo-angular",
         title: "Angular Development Solutions",
         desc: "Typed, testable Angular for enterprise apps",
       },
       {
-        iconImg: "/assets/Full-Stack Development Services.svg",
+        iconImg: "/next-assets/Full-Stack Development Services.svg",
         icon: "logo-frontend",
         title: "Full-Stack Development Services",
         desc: "One team owning the browser and the server",
       },
       {
-        iconImg: "/assets/MEAN Stack Development.svg",
+        iconImg: "/next-assets/MEAN Stack Development.svg",
         icon: "logo-mean",
         title: "MEAN Stack Development",
         desc: "Mongo, Express, Angular and Node end to end",
       },
       {
-        iconImg: "/assets/MERN Stack Development.svg",
+        iconImg: "/next-assets/MERN Stack Development.svg",
         icon: "logo-mern",
         title: "MERN Stack Development",
         desc: "Mongo, Express, React and Node end to end",
       },
       {
-        iconImg: "/assets/Custom Frontend Solutions.svg",
+        iconImg: "/next-assets/Custom Frontend Solutions.svg",
         icon: "logo-vue",
         title: "Custom Frontend Solutions",
         desc: "Interfaces built to your design, not a template",
@@ -179,43 +179,43 @@ const DOMAINS_DATA = [
     sub: "Fulminous Software is proficient in the latest frontend solutions to make your platforms highly engaging and easy to use",
     skills: [
       {
-        iconImg: "/assets/iOS.svg",
+        iconImg: "/next-assets/iOS.svg",
         icon: "logo-ios",
         title: "iOS Application Development",
         desc: "Native Swift apps built for the App Store",
       },
       {
-        iconImg: "/assets/React Native.svg",
+        iconImg: "/next-assets/React Native.svg",
         icon: "logo-react",
         title: "React Native Development",
         desc: "One React codebase on iOS and Android",
       },
       {
-        iconImg: "/assets/Android.svg",
+        iconImg: "/next-assets/Android.svg",
         icon: "logo-android",
         title: "Android Application Development",
         desc: "Native Kotlin apps built for Google Play",
       },
       {
-        iconImg: "/assets/Java Development Services.svg",
+        iconImg: "/next-assets/Java Development Services.svg",
         icon: "logo-java",
         title: "Java Development Services",
         desc: "Java services and Android on one language",
       },
       {
-        iconImg: "/assets/Hybrid Framework.svg",
+        iconImg: "/next-assets/Hybrid Framework.svg",
         icon: "logo-hybrid",
         title: "Hybrid Framework",
         desc: "Cross-platform builds where budget matters",
       },
       {
-        iconImg: "/assets/Flutter.svg",
+        iconImg: "/next-assets/Flutter.svg",
         icon: "logo-flutter",
         title: "Flutter Application Development",
         desc: "A single Flutter codebase at native speed",
       },
       {
-        iconImg: "/assets/Ionic Framework Development.svg",
+        iconImg: "/next-assets/Ionic Framework Development.svg",
         icon: "logo-ionic",
         title: "Ionic Framework Development",
         desc: "Web skills shipped as installable apps",
@@ -227,37 +227,37 @@ const DOMAINS_DATA = [
     sub: "Fulminous Software develops websites and online stores using popular CMS and eCommerce platforms",
     skills: [
       {
-        iconImg: "/assets/WordPress Development Services.svg",
+        iconImg: "/next-assets/WordPress Development Services.svg",
         icon: "logo-wordpress",
         title: "WordPress Development Services",
         desc: "WordPress builds your team can edit safely",
       },
       {
-        iconImg: "/assets/Drupal Development Services.svg",
+        iconImg: "/next-assets/Drupal Development Services.svg",
         icon: "logo-drupal",
         title: "Drupal Development Services",
         desc: "Structured Drupal for content-heavy sites",
       },
       {
-        iconImg: "/assets/Woocommerce Development Services.svg",
+        iconImg: "/next-assets/Woocommerce Development Services.svg",
         icon: "logo-woocommerce",
         title: "Woocommerce Development Services",
         desc: "WooCommerce storefronts wired to your stock",
       },
       {
-        iconImg: "/assets/Sanity CMS Development.svg",
+        iconImg: "/next-assets/Sanity CMS Development.svg",
         icon: "logo-sanity",
         title: "Sanity CMS Development",
         desc: "Sanity as a headless source of truth",
       },
       {
-        iconImg: "/assets/Strapi Development.svg",
+        iconImg: "/next-assets/Strapi Development.svg",
         icon: "logo-strapi",
         title: "Strapi Development",
         desc: "Strapi APIs your front end can rely on",
       },
       {
-        iconImg: "/assets/Platform Implementation.svg",
+        iconImg: "/next-assets/Platform Implementation.svg",
         icon: "logo-platform",
         title: "Platform Implementation",
         desc: "Commerce platforms configured and launched",
@@ -269,49 +269,49 @@ const DOMAINS_DATA = [
     sub: "Fulminous Software is proficient in the latest cloud platforms and tools",
     skills: [
       {
-        iconImg: "/assets/IoT Solutions.svg",
+        iconImg: "/next-assets/IoT Solutions.svg",
         icon: "icon-iot",
         title: "IoT Development Services",
         desc: "Device fleets managed from the cloud",
       },
       {
-        iconImg: "/assets/Cloud Computing Services.svg",
+        iconImg: "/next-assets/Cloud Computing Services.svg",
         icon: "icon-cloud",
         title: "Cloud Computing Services",
         desc: "Workloads sized, hosted and kept running",
       },
       {
-        iconImg: "/assets/AWS Development Services.svg",
+        iconImg: "/next-assets/AWS Development Services.svg",
         icon: "logo-aws",
         title: "AWS Development Services",
         desc: "AWS architecture built to scale and audit",
       },
       {
-        iconImg: "/assets/Azure DevOps Services.svg",
+        iconImg: "/next-assets/Azure DevOps Services.svg",
         icon: "logo-azure",
         title: "Azure DevOps Services",
         desc: "Azure pipelines from commit to production",
       },
       {
-        iconImg: "/assets/Cloud Migration Services.svg",
+        iconImg: "/next-assets/Cloud Migration Services.svg",
         icon: "icon-migration",
         title: "Cloud Migration Services",
         desc: "Lift and reshape what already runs on metal",
       },
       {
-        iconImg: "/assets/Infrastructure Management.svg",
+        iconImg: "/next-assets/Infrastructure Management.svg",
         icon: "icon-infra",
         title: "Infrastructure Management",
         desc: "Infrastructure as code, monitored and patched",
       },
       {
-        iconImg: "/assets/DevOps Automation.svg",
+        iconImg: "/next-assets/DevOps Automation.svg",
         icon: "logo-devops",
         title: "DevOps Automation",
         desc: "Builds, tests and releases without hand-holding",
       },
       {
-        iconImg: "/assets/Cloud Security Solutions.svg",
+        iconImg: "/next-assets/Cloud Security Solutions.svg",
         icon: "icon-security",
         title: "Cloud Security Solutions",
         desc: "Least privilege, secrets and audit trails",
@@ -407,9 +407,9 @@ const DOMAIN_ICON_ALIAS: Record<string, string> = {
    content-visibility: auto so the request does not happen until the section
    comes near the viewport.
 
-   ?v=1 because the filename is not content-hashed and /assets is served with
+   ?v=1 because the filename is not content-hashed and /next-assets is served with
    a month of stale-while-revalidate; changing an icon means changing this. */
-const SPRITE = "/assets/icons/domains-sprite.svg?v=1";
+const SPRITE = "/next-assets/icons/domains-sprite.svg?v=1";
 
 /* The sprite is parked, not linked, until the section comes near the viewport.
    ------------------------------------------------------------------
@@ -840,37 +840,37 @@ export function Domains() {
               aria-selected="true"
             >
               <span className="domain-tab__icon-box">
-                <img className="domain-tab__icon" src="/assets/icons/Emerging Technologies & AI.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/next-assets/icons/Emerging Technologies & AI.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Emerging Technologies &amp; AI</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <img className="domain-tab__icon" src="/assets/icons/Backend Development.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/next-assets/icons/Backend Development.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Backend Development</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <img className="domain-tab__icon" src="/assets/icons/Frontend Development.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/next-assets/icons/Frontend Development.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Frontend Development</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <img className="domain-tab__icon" src="/assets/icons/Mobile Technologies.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/next-assets/icons/Mobile Technologies.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Mobile Technologies</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <img className="domain-tab__icon" src="/assets/icons/CMS & Ecommerce.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/next-assets/icons/CMS & Ecommerce.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">CMS &amp; Ecommerce</span>
             </button>
             <button className="domain-tab" type="button" role="tab" aria-selected="false">
               <span className="domain-tab__icon-box">
-                <img className="domain-tab__icon" src="/assets/icons/Cloud Platforms.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                <img className="domain-tab__icon" src="/next-assets/icons/Cloud Platforms.svg" alt="" width={24} height={24} loading="lazy" decoding="async" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
               </span>
               <span className="domain-tab__label">Cloud Platforms</span>
             </button>

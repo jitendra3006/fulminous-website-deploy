@@ -55,7 +55,7 @@ export function Testimonials() {
               decoding="async"
               loading="lazy"
                 className="tphoto__img"
-                src="/assets/Brett McCammon.webp"
+                src="/next-assets/Brett McCammon.webp"
                 alt="Portrait of Brett McCammon" width={528} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Brett McCammon</p>
@@ -70,7 +70,7 @@ export function Testimonials() {
               decoding="async"
               loading="lazy"
                 className="tphoto__img"
-                src="/assets/Heung jun Kwon.webp"
+                src="/next-assets/Heung jun Kwon.webp"
                 alt="Portrait of Heung jun Kwon" width={530} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Heung jun Kwon</p>
@@ -152,7 +152,7 @@ export function Testimonials() {
               decoding="async"
               loading="lazy"
                 className="tphoto__img"
-                src="/assets/Kwame Duah.webp"
+                src="/next-assets/Kwame Duah.webp"
                 alt="Portrait of Kwame Duah" width={500} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Kwame Duah</p>
@@ -167,7 +167,7 @@ export function Testimonials() {
               decoding="async"
               loading="lazy"
                 className="tphoto__img"
-                src="/assets/Carla Vernón.webp"
+                src="/next-assets/Carla Vernón.webp"
                 alt="Portrait of Carla Vernón" width={532} height={760} />
               <div className="tphoto__meta">
                 <p className="tphoto__name">Carla Vernón</p>

@@ -80,7 +80,7 @@ const graph = {
       logo: {
         "@type": "ImageObject",
         "@id": LOGO_ID,
-        url: `${SITE_URL}/assets/Fulminous-Logo.webp`,
+        url: `${SITE_URL}/next-assets/Fulminous-Logo.webp`,
         /* The dimensions of the file this URL actually serves. They used to
            say 7286x1800, which was the original PNG before the image pass
            re-encoded it to webp at 373x92 — structured data that does not
