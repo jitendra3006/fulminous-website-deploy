@@ -258,8 +258,8 @@ export function TechPartnerIntro() {
           </p>
           <p className="intro-card__para">
             Started from India, we are now serving clients across the USA, UK, Australia, Canada,
-            UAE, and beyond. With a visionary goal, the company was founded in 2018, and since then,
-            we have successfully delivered 135+ projects in various industries with 95% client
+            UAE, and beyond. With a visionary goal, the company was founded in 2019, and since then,
+            we have successfully delivered 190+ projects in various industries with 95% client
             satisfaction.
           </p>
         </article>
