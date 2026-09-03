@@ -1909,6 +1909,43 @@ button {
     overflow: hidden;
   }
 
+  /* AND WHILE IT IS CLOSED, ITS CONTENTS ARE NOT LAID OUT
+     ------------------------------------------------------------
+     The closed drawer is `visibility: hidden` (above, so the panel can
+     transition rather than snap), and visibility is paint-only: Blink still
+     builds and lays out every box inside it. Measured at 412px on the served
+     build, that is 208 of the 416 layout objects in the document's first
+     layout — the whole navigation, shaped and measured, for something no one
+     can see. It landed on the critical path in one piece: a single 339 ms
+     Layout at 4x CPU throttle, which is half of the time to first paint, and
+     the h1 behind it is the LCP element.
+
+     content-visibility: hidden skips the subtree's layout, paint and style
+     until the drawer opens. It is safe here in a way it would not be
+     elsewhere in this file because .site-nav is `position: fixed` with an
+     explicit width and an explicit height (100dvh - header): the size
+     containment that comes with content-visibility cannot change the panel's
+     box, and nothing inside a fixed-position box can move the document. CLS
+     is unaffected for the same reason — the only state where the geometry
+     differs is the state where nothing is rendered.
+
+     Both open signals have to be absent. .site-nav.is-open is the React
+     state; body.nav-open is the scroll lock — either one alone means open,
+     and the contents must be laid out before the transition's first frame.
+
+     The cost is moved, not removed: the first tap on the hamburger now pays
+     that layout, inside a 0.32s transition whose opacity and transform run on
+     the compositor. Every below-fold section on this page already makes the
+     same trade with content-visibility: auto.
+
+     Accessibility is unchanged: visibility: hidden already kept this subtree
+     out of the a11y tree and out of the tab order while closed, which is why
+     useMobileMenu's focus trap and Navbar's tab filter only ever run with the
+     drawer open. */
+  body:not(.nav-open) .site-nav:not(.is-open) .mobile-drawer__content {
+    content-visibility: hidden;
+  }
+
   /* The two levels stack in here, one on top of the other. Absolute so the
      outgoing level does not add its height to the incoming one mid-slide. */
   /* flex-basis 0, not auto. Every level inside is absolutely positioned, so

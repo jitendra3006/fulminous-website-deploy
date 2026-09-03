@@ -1,7 +1,7 @@
 {
  "generated": "2026-09-02",
- "rules": 1772,
- "criticalCount": 501,
+ "rules": 1773,
+ "criticalCount": 502,
  "deferred": [
   ".container",
   ".stars",
