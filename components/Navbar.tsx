@@ -867,7 +867,7 @@ export function Navbar() {
                         driven by the shared table. */}
                     <ul className="mega-dropdown__list" aria-label="Company">
                       <li>
-                        <a href={live("/about-us")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/about-us")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">About Us</span>
                             <span className="mega-dropdown__item-desc">Get creative inspiration</span>
@@ -877,7 +877,7 @@ export function Navbar() {
                       <li>
                         {/* The live site has no separate team page; /about-us
                             is where the company and its people are described. */}
-                        <a href={live("/about-us")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/about-us")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Team</span>
                             <span className="mega-dropdown__item-desc">Stunning web design</span>
@@ -885,7 +885,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href={live("/career")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/career")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Career</span>
                             <span className="mega-dropdown__item-desc">Join our global team</span>
@@ -907,7 +907,7 @@ export function Navbar() {
                   <div className="mega-dropdown__col">
                     <ul className="mega-dropdown__list" aria-label="Why Fulminous">
                       <li>
-                        <a href={live("/client-reviews")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/client-reviews")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Client Reviews</span>
                             <span className="mega-dropdown__item-desc">Impactful storytelling</span>
@@ -915,7 +915,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href={live("/our-clients")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/our-clients")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Clients</span>
                             <span className="mega-dropdown__item-desc">Functional digital products</span>
@@ -923,7 +923,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href={live("/our-partners")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/our-partners")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Our Partners</span>
                             <span className="mega-dropdown__item-desc">Beautiful crafted prints</span>
@@ -931,7 +931,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href={live("/fulminous-software-awards-recognition")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/fulminous-software-awards-recognition")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Awards &amp; Memberships</span>
                             <span className="mega-dropdown__item-desc">Recognized industry leader</span>
@@ -945,7 +945,7 @@ export function Navbar() {
                   <div className="mega-dropdown__col">
                     <ul className="mega-dropdown__list" aria-label="Partner With Us">
                       <li>
-                        <a href={live("/associate-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/associate-partnership")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Associate Partnership</span>
                             <span className="mega-dropdown__item-desc">Collaborative growth</span>
@@ -953,7 +953,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href={live("/strategic-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/strategic-partnership")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Strategic Partnership</span>
                             <span className="mega-dropdown__item-desc">Long-term synergy</span>
@@ -961,7 +961,7 @@ export function Navbar() {
                         </a>
                       </li>
                       <li>
-                        <a href={live("/referral-partnership")} target="_blank" rel="noopener noreferrer" className="mega-dropdown__item" onClick={handleLinkClick}>
+                        <a href={live("/referral-partnership")} className="mega-dropdown__item" onClick={handleLinkClick}>
                           <span className="mega-dropdown__item-text">
                             <span className="mega-dropdown__item-title">Referral Partnership</span>
                             <span className="mega-dropdown__item-desc">Earn referral rewards</span>
@@ -1004,8 +1004,6 @@ export function Navbar() {
                       <a
                         className="btn--outline-primary mega-dropdown__btn"
                         href={live("/services")}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         onClick={handleLinkClick}
                         style={{ marginTop: "16px", display: "inline-block" }}
                       >

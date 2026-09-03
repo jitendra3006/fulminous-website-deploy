@@ -56,8 +56,6 @@ export function Blogs() {
           <a
             className="btn btn--primary blogs__more"
             href={live("/blog")}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             View more Blogs
           </a>

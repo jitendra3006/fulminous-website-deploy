@@ -39,8 +39,6 @@ export function Cases() {
           <a
             className="btn btn--primary cases__more"
             href={live("/portfolios")}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             View Case studies
           </a>

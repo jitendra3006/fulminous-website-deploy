@@ -131,8 +131,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/about-us")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     About Us
                   </a>
@@ -141,8 +139,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/services")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Services
                   </a>
@@ -151,8 +147,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/career")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Career
                   </a>
@@ -161,8 +155,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/contact-us")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Contact us
                   </a>
@@ -171,8 +163,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/portfolios")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Portfolio
                   </a>
@@ -181,8 +171,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/privacy-policy")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Privacy Policy
                   </a>
@@ -191,8 +179,6 @@ export function Footer() {
                   <a
                     className="footer__link"
                     href={live("/refund-policy")}
-                    target="_blank"
-                    rel="noopener noreferrer"
                   >
                     Refund Policy
                   </a>
@@ -279,11 +265,11 @@ export function Footer() {
               which it already inherits, so the row looks unchanged. Wire it
               up once the client publishes a disclaimer page. */}
           <p className="footer__legal">
-            <a href={live("/privacy-policy")} target="_blank" rel="noopener noreferrer">
+            <a href={live("/privacy-policy")}>
               Privacy Policy
             </a>{" "}
             | Disclaimer |{" "}
-            <a href={live("/term-and-conditions")} target="_blank" rel="noopener noreferrer">
+            <a href={live("/term-and-conditions")}>
               Terms and Conditions
             </a>
           </p>

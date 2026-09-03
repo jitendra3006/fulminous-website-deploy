@@ -805,8 +805,6 @@ export function Showcase() {
           <a
             className="btn btn--primary services__cta"
             href={live("/services")}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             View All Services
           </a>
