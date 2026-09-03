@@ -5415,7 +5415,7 @@ button {
      scale(var(--ai-zoom)) through the entrance and the same filter above, so
      the still is framed and graded exactly as the first frame would be, and
      cover/50% 46% mirror the object-fit and object-position on this element. */
-  background-image: url("/assets/fulminous-ai-scene.webp");
+  background-image: url("/next-assets/fulminous-ai-scene.webp");
   background-size: cover;
   background-position: 50% 46%;
   background-repeat: no-repeat;

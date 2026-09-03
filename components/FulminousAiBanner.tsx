@@ -68,7 +68,7 @@ import { live } from "@/lib/site-config";
    eyebrow card is a sibling of the panel, not a child: the panel's clip-path
    would cut it in half at the diagonal it is supposed to straddle. */
 
-const SCENE_SRC = "/assets/fulminous-ai-scene.mp4";
+const SCENE_SRC = "/next-assets/fulminous-ai-scene.mp4";
 
 /* Ratio of the band on screen at which the reveal fires and the clip starts.
    Below it the band is not yet worth playing; the clip only pauses once the band
@@ -255,7 +255,7 @@ export function FulminousAiBanner() {
         <video
           ref={videoRef}
           className="ai-banner__video"
-          poster="/assets/fulminous-ai-scene.webp"
+          poster="/next-assets/fulminous-ai-scene.webp"
           preload="none"
           muted
           loop

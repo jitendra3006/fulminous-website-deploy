@@ -490,7 +490,7 @@ export function FulminousAi() {
 
               {/* Pose A — ready stance, held while the lightning charges */}
               <Image
-                src="/assets/wizard-character-pure.png"
+                src="/next-assets/wizard-character-pure.png"
                 alt="Fulminous AI Wizard standing ready with his charged magical staff"
                 width={420}
                 height={500}
@@ -500,7 +500,7 @@ export function FulminousAi() {
 
               {/* Pose B — hard-cut to on the frame the staff hits the ground */}
               <Image
-                src="/assets/wizard-strike-pose.png"
+                src="/next-assets/wizard-strike-pose.png"
                 alt=""
                 aria-hidden="true"
                 width={606}
