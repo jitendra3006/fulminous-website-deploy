@@ -18,15 +18,14 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://fulminoussoftware.com"
 ).replace(/\/+$/, "");
 
-/* Where the company's existing service / policy / blog pages actually
-   live today. Kept separate from SITE_URL on purpose: this homepage does
-   not implement /services/*, /blog or /privacy-policy, so links to that
-   content have to resolve against the site that does serve it. When this
-   build eventually replaces the live site, changing this one constant to
-   "" turns every one of those links back into a same-origin path. */
-export const CONTENT_SITE_URL = "https://fulminoussoftware.com";
+/* Origin prefix for the company's service / policy / blog pages. Now
+   empty, so `live("/services")` yields the same-origin path "/services"
+   instead of an absolute link back to the old host. Set it to a full
+   origin (e.g. "https://fulminoussoftware.com") only if this build has
+   to point at a different site for that content again. */
+export const CONTENT_SITE_URL = "";
 
-/** A page on the live content site. Every path passed here was checked
+/** A content page of the site. Every path passed here was checked
  *  to return HTTP 200 — see the report accompanying this change. */
 export const live = (path: string) => `${CONTENT_SITE_URL}${path}`;
 
