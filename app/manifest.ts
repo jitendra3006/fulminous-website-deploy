@@ -43,11 +43,12 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "productivity", "developer"],
     icons: [
       {
-        src: "/icon.svg",
-        type: "image/svg+xml",
-        /* "any" because an SVG scales to every slot the launcher asks for,
-           which is the whole reason the tab icon is vector here. */
-        sizes: "any",
+        src: "/favicon.ico",
+        type: "image/x-icon",
+        /* The three bitmaps the .ico actually carries, named individually so a
+           launcher picks the closest one instead of rescaling whichever it
+           finds first. Larger slots fall through to the 180px icon below. */
+        sizes: "16x16 32x32 48x48",
         purpose: "any",
       },
       {

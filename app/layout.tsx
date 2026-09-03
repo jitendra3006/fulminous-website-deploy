@@ -178,12 +178,12 @@ export const metadata: Metadata = {
     },
   },
 
-  /* app/manifest.ts is a file convention, but unlike icon.svg it does not
+  /* app/manifest.ts is a file convention, but unlike favicon.ico it does not
      inject its own <link>. Naming the route here is what emits
      <link rel="manifest" href="/manifest.webmanifest">. */
   manifest: "/manifest.webmanifest",
 
-  /* No `icons` key on purpose. app/icon.svg and app/apple-icon.png are file
+  /* No `icons` key on purpose. app/favicon.ico and app/apple-icon.png are file
      conventions — Next emits the <link rel="icon"> and
      <link rel="apple-touch-icon"> tags from them, with hashed URLs. Listing
      paths here by hand would override that and hard-code URLs that the
