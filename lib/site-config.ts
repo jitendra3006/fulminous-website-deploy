@@ -64,7 +64,7 @@ export const CONTACT = {
   usaPhone: "+1-803-999-3940",
   ukPhone: "+44-7867048979",
   indiaPhone: "+91-9680567092",
-  email: "help@fulminous.tech",
+  email: "info@fulminoussoftware.com",
 } as const;
 
 export const OFFICES = [

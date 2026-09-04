@@ -276,9 +276,16 @@ export function Footer() {
                 <p>+ 44 7867048979 (&nbsp;UK&nbsp;)</p>
                 <p>+ 91 9680567092 (&nbsp;IND&nbsp;)</p>
               </div>
+              {/* Both addresses came off fulminous.tech onto
+                  fulminoussoftware.com on request. The general one is
+                  mirrored in lib/site-config as CONTACT.email, which is what
+                  StructuredData feeds to the Organization JSON-LD — the two
+                  move together or the markup and the page disagree. The
+                  numbers above are still the confirmed set; see the warning
+                  over CONTACT before touching those. */}
               <div className="footer__contact-block">
-                <p>help@fulminous.tech</p>
-                <p>hr@fulminous.tech</p>
+                <p>info@fulminoussoftware.com</p>
+                <p>hr@fulminoussoftware.com</p>
               </div>
             </div>
           </div>
