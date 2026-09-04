@@ -97,30 +97,106 @@ export function Footer() {
 
             <nav className="footer__col" aria-label="Services">
               <ul className="footer__list">
-                <li>AI Development Services</li>
-                <li>Mobile App Development</li>
-                <li>Web Development</li>
-                <li>Mobile Game Development</li>
-                <li>Ecommerce Development</li>
-                <li>UI &amp; UX Designing</li>
-                <li>Opensource Development</li>
-                <li>Quality Assurance</li>
-                <li>Consulting Services</li>
-                <li>Maintenance &amp; Support</li>
+                <li>
+                  <a className="footer__link" href={live("/artificial-intelligence-development-services")}>
+                    AI Development Services
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/mobile-application-development")}>
+                    Mobile App Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/website-development-services")}>
+                    Web Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/mobile-game-development-services")}>
+                    Mobile Game Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/ecommerce-development-services")}>
+                    Ecommerce Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/ui-ux-design-services")}>
+                    UI &amp; UX Designing
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/opensource-development")}>
+                    Opensource Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/software-testing-services")}>
+                    Quality Assurance
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/software-consulting-development-services")}>
+                    Consulting Services
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/software-maintenance-&-support-services")}>
+                    Maintenance &amp; Support
+                  </a>
+                </li>
               </ul>
             </nav>
 
             <nav className="footer__col" aria-label="More services">
               <ul className="footer__list">
-                <li>NFT Development</li>
-                <li>App Prototype &amp; Strategy</li>
-                <li>Wearable App Development</li>
-                <li>Progressive Web Apps</li>
-                <li>Dedicated Teams</li>
-                <li>IoT Development</li>
-                <li>Cloud Computing</li>
-                <li>Legacy Software Modernization</li>
-                <li>Cross Platform App Development</li>
+                <li>
+                  <a className="footer__link" href={live("/nft-development-services")}>
+                    NFT Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/app-prototype-&-strategy-services")}>
+                    App Prototype &amp; Strategy
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/wearable-app-development-services")}>
+                    Wearable App Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/progressive-web-apps-development-services")}>
+                    Progressive Web Apps
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/staff-augmentation-&-dedicated-teams-services")}>
+                    Dedicated Teams
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/iot-development-services")}>
+                    IoT Development
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/cloud-computing-development-services")}>
+                    Cloud Computing
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/legacy-software-modernization-services")}>
+                    Legacy Software Modernization
+                  </a>
+                </li>
+                <li>
+                  <a className="footer__link" href={live("/cross-platform-application-development-services")}>
+                    Cross Platform App Development
+                  </a>
+                </li>
               </ul>
             </nav>
 
@@ -214,9 +290,9 @@ export function Footer() {
               loading="lazy" className="office__map" src="/next-assets/UK Office.webp" alt="Map of UK office location" width={520} height={223} />
               <p className="office__name">UK Office</p>
               <p className="office__addr">
-                <strong>Address:</strong> 31 Lemington Gardens, IG39TX, Seven kings, London
+                <strong>Address:</strong> 19 Tate Rd, London E16 2HJ, United Kingdom
               </p>
-              <p className="office__phone">+44-786 704 8979</p>
+              <p className="office__phone">+44 734 433 5857</p>
             </div>
             <div className="office-divider" />
             <div className="office">
@@ -227,7 +303,7 @@ export function Footer() {
               <p className="office__addr">
                 <strong>Address:</strong> 1113, WA Gamble Rd, Manning, South Carolina, 29102
               </p>
-              <p className="office__phone">+44-786 704 8979</p>
+              <p className="office__phone">+1 (276) 496-2209</p>
             </div>
             <div className="office-divider" />
             <div className="office">
@@ -236,9 +312,9 @@ export function Footer() {
               loading="lazy" className="office__map" src="/next-assets/AUS Office.webp" alt="Map of Australia office location" width={520} height={223} />
               <p className="office__name">AUS Office</p>
               <p className="office__addr">
-                <strong>Address:</strong> 20 Mckinlay Ave Adelaide 5086, AUS
+                <strong>Address:</strong> 20 McKinlay Ave, Adelaide 5086, AUS
               </p>
-              <p className="office__phone">+44-786 704 8979</p>
+              <p className="office__phone">+44 734 433 5857</p>
             </div>
             <div className="office-divider" />
             <div className="office">
